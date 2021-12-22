@@ -1,0 +1,90 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Node {
+    public:
+        int data;
+    vector <Node*> children;
+};
+
+Node* construct(int arr[], int n) {
+    Node* root = NULL;
+
+    stack <Node*> st;
+
+    for (int i = 0; i < n; i++) {
+        if (arr[i] == -1) {
+            st.pop();
+        } else {
+            Node * temp = new Node;
+            temp-> data = arr[i];
+
+            if (st.size() > 0) {
+                st.top()-> children.push_back(temp);
+            } else {
+                root = temp;
+            }
+            st.push(temp);
+        }
+    }
+    return root;
+}
+
+class Pair
+{
+  public:
+   Node *root;
+   int state;
+   Pair(Node *root1, int state1){
+       root = root1;
+       state = state1;
+   }
+};
+
+void PreorderAndPostorder(Node *node)
+{
+    stack<Pair*> st;
+    Pair *new_pair = new Pair(node, -1);
+    st.push(new_pair);
+    
+    string Preorder = "", Postorder = "";
+    
+    while(!st.empty())
+    {
+        Pair *top = st.top();
+        
+        if(top->state == -1){                                      // if top state is -1 then it is first time processed then print it in preorder
+            
+            Preorder += to_string(top->root->data) + " ";
+            top->state++;
+        }
+        else if(top->state == top->root->children.size()){           // if top state reaches its children size then its children are processed and print it in postorder
+            
+            Postorder += to_string(top->root->data) + " ";
+            st.pop();
+        }
+        else if(top->state>=0 and top->state<top->root->children.size()){         // if top state is blw 0 and its children size then process its children and keep incrementing its state
+            
+            Pair *newPair = new Pair(top->root->children[top->state], -1);
+            st.push(newPair);
+            top->state++;
+        }
+    }
+    cout<<Preorder<<endl;
+    cout<<Postorder;
+}
+
+int main() {
+    int n;
+    cin >> n;
+
+    int arr[n];
+    for (int i = 0; i < n; i++)
+        cin >> arr[i];
+
+    Node *root = construct(arr, n);
+ 
+    PreorderAndPostorder(root);
+    
+    return 0;
+}

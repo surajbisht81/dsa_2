@@ -1,0 +1,54 @@
+/*1. You are given n space-separated strings, which represents a dictionary of words.
+2. You are given another string that represents a sentence.
+3. You have to determine if this sentence can be segmented into a space-separated sequence of one or more dictionary words.*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+bool word_break(set<string> &st, string sentence)
+{
+    int n = sentence.length();
+    int dp[n] = {0};                                            // making dp length equal to sentence length
+    
+    for(int i=0; i<n; i++)
+    {
+        for(int j=0; j<=i; j++)                                // we will check all the suffixes
+        {
+            string sub_str = sentence.substr(j, i-j+1);            // all subfixes one by one
+            if(st.find(sub_str)!=st.end()){                      // if this suffix is found in dictionary
+                if(j==0){
+                    dp[i] += 1;                                   // edge case when j=0, then j-1 will be out of bound
+                }else{
+                    dp[i] += dp[j-1];                              // else dp[j-1]
+                }
+            }
+        }
+    }
+    return dp[n-1]>0;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    set<string> st;                      // it is kind of dictionary
+    
+    for(int i=0; i<n; i++)
+    {
+        string str;
+        cin>>str;
+        st.insert(str);                 // put all the given words in dictionary
+    }
+    
+    string sentence;
+    cin>>sentence;
+    
+    if(word_break(st, sentence)){
+        cout<<"true";
+    }else{
+        cout<<"false";
+    }
+    return 0;
+}

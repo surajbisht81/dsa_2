@@ -1,0 +1,47 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int max_profit(int n, int price[], int fee)
+{
+   int old_boughtstate = -price[0];
+   int old_soldstate = 0;
+   
+   for(int i=1; i<n; i++)
+   {
+       int new_boughtstate = 0;
+       
+       if( old_soldstate - price[i] > old_boughtstate){
+           new_boughtstate = old_soldstate - price[i];
+       }else{
+           new_boughtstate = old_boughtstate;
+       }
+       
+       int new_soldstate = 0;
+       
+       if( price[i] + old_boughtstate - fee > old_soldstate){
+           new_soldstate = price[i] + old_boughtstate - fee;
+       }else{
+           new_soldstate = old_soldstate;
+       }
+       
+       old_boughtstate = new_boughtstate;
+       old_soldstate = new_soldstate;
+   }
+   return old_soldstate;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int price[n];
+    for(int i=0; i<n; i++)
+     cin>>price[i];
+     
+    int fee;
+    cin>>fee;
+    
+    cout<<max_profit(n, price, fee);
+    return 0;
+}Buy And Sell Stocks With Transaction Fee - Infinite Transactions Allowed

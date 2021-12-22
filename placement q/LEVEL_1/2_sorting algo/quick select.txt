@@ -1,0 +1,63 @@
+/*1. You are given an array(arr) of integers.
+2. You have to find the k-th smallest element in the given array using the quick-select algorithm.*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void swap(int arr[], int i, int j) {
+    cout<<"Swapping "<<arr[i]<<" and "<<arr[j]<<endl;
+    int temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+}
+
+int partitioning(int arr[], int lo, int hi, int pivot)
+{
+    cout<<"pivot -> "<<pivot<<endl;
+    int i=lo, j=lo;
+    while(i<=hi)
+    {
+        if(arr[i]> pivot)
+          i++;
+        else
+        {
+            swap(arr, i, j);
+             i++, j++;
+        }
+    }
+    cout<<"pivot index -> "<<(j - 1)<<endl;
+    return (j - 1);
+}
+
+int QuickSelect(int arr[], int lo, int hi, int k)
+{
+    if(lo==hi)
+     return lo;
+     
+    int pivot = arr[hi];
+    
+    int pi = partitioning(arr, lo, hi, pivot);
+    if(pi>k-1)
+      return QuickSelect(arr, lo, pi-1, k);
+    else if(pi< k-1)
+      return QuickSelect(arr, pi+1, hi, k);
+    else
+     return pi;
+}
+
+int main() {
+    
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    int k;
+    cin>>k;
+    
+     int idx=QuickSelect(arr, 0, n-1, k);
+     cout<<arr[idx];
+    return 0;
+}

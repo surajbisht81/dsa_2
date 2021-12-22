@@ -1,0 +1,65 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+bool IsSafe(int row, int col, vector<vector<int>> &used)
+{
+    if(row-2>=0 and col-1>=0 and used[row-2][col-1]==1)
+     return false;
+     
+    if(row-1>=0 and col-2>=0 and used[row-1][col-2]==1)
+     return false;
+     
+    if(row-2>=0 and col+1<used.size() and used[row-2][col+1]==1)
+     return false;
+     
+    if(row-1>=0 and col+2<used.size() and used[row-1][col+2]==1)
+     return false;
+     
+    return true;
+}
+
+void NKnight_Combination(int knight, int n, vector<vector<int>> &used, int last_cell)
+{
+    // base case
+    if(knight == n)
+    {
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                used[i][j]==1 ? cout<<"k\t" : cout<<"-\t";
+            }
+            cout<<endl;
+        }
+        cout<<endl;
+        return;
+    }
+    
+    // main code
+    for(int i=last_cell+1; i<n*n; i++)                                          // we can place knight in cell after last cell used cel
+    {
+        int row = i/n;                                                          // getting row and col from last cell used
+        int col = i%n;
+        
+        if(used[row][col]==0 and IsSafe(row, col, used))                        // is this cell is not used already and is safe to place
+        { 
+            used[row][col] = 1;                                                 // then use it and make call for next knight
+            NKnight_Combination(knight+1, n, used, row*n+col);
+            used[row][col] = 0;
+        }
+    }
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    vector<vector<int>> used(n);
+    for(int i=0; i<n; i++){
+        for(int j=0; j<n; j++){
+            used[i].push_back(0);
+        }
+    }
+    
+    NKnight_Combination(0, n, used, -1);        0 is current knight used, n is total knight given, used is int vector to show which cell is used, -1 is last cell used
+    return 0;
+}

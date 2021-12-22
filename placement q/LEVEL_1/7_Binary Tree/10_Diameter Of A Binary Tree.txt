@@ -1,0 +1,187 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node
+{
+    public:
+    int data;
+    Node *left, *right;
+    
+    Node(int data){
+        this->data = data;
+        left = NULL;
+        right = NULL;
+    }
+};
+
+class Pair
+{
+    public:
+    Node *node;
+    int state;
+    Pair(Node *root, int x){
+        node = root;
+        state = x;
+    }
+};
+
+Node *construct(int arr[])
+{
+    stack<Pair*> st;
+    Node *root = new Node(arr[0]);
+    
+    Pair *p = new Pair(root, 1);
+    st.push(p);
+    
+    int idx = 0;
+    
+    while(st.empty()==false)
+    {
+        Pair *top = st.top();
+        
+        if(top->state == 1){
+            
+            idx++;
+            
+            if(arr[idx] == INT_MIN){
+                top->node->left = NULL;
+            }
+            else{
+                Node *temp = new Node(arr[idx]);
+                top->node->left = temp;
+                Pair *p = new Pair(top->node->left, 1);
+                st.push(p);
+            }
+            
+            top->state++;
+        }
+        else if(top->state == 2){
+            
+            idx++;
+            
+            if(arr[idx] == INT_MIN){
+                top->node->right = NULL;
+            }
+            else{
+                Node *temp = new Node(arr[idx]);
+                top->node->right = temp;
+                Pair *p = new Pair(top->node->right, 1);
+                st.push(p);
+            }
+            
+            top->state++;
+        }
+        else{
+            
+            st.pop();
+        }
+    }
+    return root;
+}
+
+int dia = 0;
+
+// simplest of all approach
+int Diameter(Node *root)
+{
+    if(root==NULL)
+     return -1;
+     
+    int deepest, sec_deepest;
+    
+     deepest = Diameter(root->left);
+     int height = Diameter(root->right);
+     
+     if(height > deepest){
+         sec_deepest = deepest;
+         deepest = height;
+     }else{
+         sec_deepest = height;
+     }
+     
+    if( deepest+sec_deepest+2 > dia)
+      dia = deepest+sec_deepest+2;
+      
+    deepest +=1;
+    
+   return deepest;
+}
+
+// 2nd approach O(n^2) approach
+
+int height(Node *root){
+    if(root==NULL)
+     return -1;
+     
+ return max(height(root->left), height(root->right)) + 1;
+}
+
+int Diameter2(Node *root)
+{
+    if(root==NULL)       // if null return 0;
+     return 0;
+     
+    int left_dia = Diameter2(root->left);           // finding the left diameter
+    int right_dia = Diameter2(root->right);           // finding the right diameter
+    
+    int lh = height(root->left);       // finding the left height
+    int rh = height(root->right);       // finding the right height
+    
+    int max_dia = max(lh+rh+2, max(left_dia, right_dia));      // dia of current root will be max of dia of left, dia of right, and one node at left
+    return max_dia;                                            // and other at right subtree and finding the height of both subtree and adding them with 2;
+}
+
+// 3rd approach this is O(n)
+
+class Dia   // its a class so that it will give dia and height both simultaniously
+{
+public:
+  int ht;
+  int dia;
+};
+
+Dia *DiaPair(Node *root)
+{
+   if(root==NULL)
+   {
+       Dia *bp = new Dia;   // if it is root then reurn dia with height -1, and dia as 0
+       bp->ht = -1;
+       bp->dia = 0;
+       return bp;
+   }
+   Dia *lp = DiaPair(root->left);     // left dia
+   Dia *rp = DiaPair(root->right);    // right dia
+   
+   Dia *mp = new Dia;        // current dia
+   
+   mp->ht = max(lp->ht, rp->ht)+1;      // current dia height will be max of previous left pair height and previous right pair height +1
+   mp->dia = max(lp->ht+rp->ht+2, max(lp->dia, rp->dia));  // current node dia will be as formula
+   return mp;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    string str;
+    
+    for(int i=0; i<n; i++)
+    {
+       cin>>str;
+       
+      if(str != "n")
+         arr[i] = stoi(str);
+      else
+         arr[i] = INT_MIN;
+    }
+    
+    Node *root = construct(arr);
+    
+    // cout<<Diameter2(root);
+   
+    Dia *mp = DiaPair(root);
+    cout<<mp->dia;
+    return 0;
+}

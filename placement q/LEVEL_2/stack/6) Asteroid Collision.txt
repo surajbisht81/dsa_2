@@ -1,0 +1,54 @@
+/*We are given an array asteroids of integers representing asteroids in a row.
+
+For each asteroid, the absolute value represents its size, and the sign represents its direction (positive meaning right, negative meaning left). Each asteroid moves at the same speed.
+
+Find out the state of the asteroids after all collisions. If two asteroids meet, the smaller one will explode. If both are the same size, both will explode. Two asteroids moving in the same direction will never meet.
+
+ */
+
+
+class Solution {
+public:
+    vector<int> asteroidCollision(vector<int>& asteroids) {
+        
+        
+        stack<int> st;
+        
+        int n = asteroids.size();
+        
+        for(int i=0; i<n; i++)
+        {
+            int val = asteroids[i];
+            
+            if(val > 0){             // if value is +ve then push it
+                st.push(val);
+            }
+            else{ // else value is -ve then collision is possible only if st.top has +ve value
+                while(st.size() > 0 && st.top() > 0 && st.top() < -val){
+                    st.pop();            // if st.top is +ve and has smaller value then keep popping
+                }
+                
+                if(st.size() > 0 && st.top() == -val){     // is value is equal then pop only once
+                    st.pop();
+                }
+                else if(st.size() > 0 && st.top() > 0 && st.top() > -val){  //if value is larger then do nothing
+                    // do nothing
+                }
+                else{
+                    st.push(val);     // else, st top value is -ve or val is -ve then push it
+                }
+            }
+        }
+        
+        vector<int> ans;
+        
+        while(st.size() > 0){
+            ans.push_back(st.top());
+            st.pop();
+        }
+        
+        reverse(ans.begin(), ans.end());
+        
+        return ans;
+    }
+};

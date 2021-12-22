@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1585588530 source:c:\users\admin\desktop\dynamic programming\tile proble_min no of ways to fill board\main.cpp
+	<iostream>
+	<bits/stdc++.h>
+

@@ -1,0 +1,49 @@
+/*1. You are given an array of integers(arr) and a number K.
+2. You have to find length of the longest subarray whose sum is divisible by K.*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int Longest_Subarray(int arr[], int n, int k)
+{
+    int maxim = 0;
+    unordered_map<int, int> mp;
+    int sum = 0;
+    
+    mp[0] = -1;
+    
+    for(int i=0; i<n; i++)
+    {
+        sum += arr[i];
+        
+        int rem = sum % k;                    // getting the remainder
+        if(rem < 0){                          // if rem is -ve then add k 
+            rem = rem + k;
+        }
+        
+        if(mp.find(rem)!=mp.end()){                // if rem is found in map then calculate the maximum length
+            maxim = max(maxim, i-mp[rem]);
+        }else{                                     // otherwise if not found then add index against the remainder in map, we will not add index against rem
+            mp[rem] = i;                           // every time, we will add only if this rem is not found in past, (eg. 0 is found twice this time so we will
+        }                                         // keep the index same as previous one to calculate the maximum length)
+    }
+    
+    return maxim;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    int k;
+    cin>>k;
+    
+    cout<<Longest_Subarray(arr, n, k);
+    return 0;
+}

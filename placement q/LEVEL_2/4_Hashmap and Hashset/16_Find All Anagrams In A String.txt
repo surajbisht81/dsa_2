@@ -1,0 +1,73 @@
+/*1. You are given two strings s1 and s2.
+2. You have to find the count of s2's anagrams that are present in s1.
+3. Also, you have to print the start indices of such anagrams in s1.
+
+Note -> Both s1 ad s2 consist of lowercase English letters only.*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+bool compare(unordered_map<char, int> mp1, unordered_map<char, int> mp2)
+{
+    if(mp1.size() != mp2.size()){
+         return false;
+    }
+    
+    for(auto i=mp1.begin(); i!=mp1.end(); i++){
+        
+        char ch = (*i).first;
+        if(mp1[ch] != mp2[ch])
+         return false;
+    }
+    return true;
+}
+
+void Anagram(string str, string patt)
+{
+    unordered_map<char, int> mp_str, mp_patt;
+    
+    for(int i=0; i<patt.length(); i++)                    // first make pattern map and make frequency map first
+      mp_patt[patt[i]]++;
+     
+    for(int i=0; i<patt.length(); i++)                   // then make frequency map of string upto pattern length;
+      mp_str[str[i]]++;
+
+    int cnt = 0;     // count of anagrams
+    string ans = "";  // anagram index
+    int i;
+    
+    for(i=patt.length(); i<str.length(); i++)            // then start from patt length
+    {
+        if(compare(mp_str, mp_patt)==true){             // we compare both map if equal that's means anagram is present the index will be i- patt length
+            cnt++;
+            ans += to_string(i-patt.length()) + " ";
+        }
+        
+        char removing_char = str[i-patt.length()];    // then we continuously remove from (i-patt length) idex character and add ith character
+        char adding_char = str[i];
+        
+        mp_str[adding_char]++;
+        
+        if(mp_str[removing_char]==1){
+            mp_str.erase(removing_char);
+        }else{
+            mp_str[removing_char]--;
+        }
+    }
+    
+    if(compare(mp_str, mp_patt)==true){                   // if i reaches at the end then we have removed and added one character but didn't compare the map so compare
+            cnt++;                                        // it outside the for loop
+            ans += to_string(i-patt.length()) + " ";
+    }
+        
+    cout<<cnt<<endl<<ans;
+}
+
+int main()
+{
+    string str, patt;
+    cin>>str>>patt;
+    
+    Anagram(str, patt);
+    return 0;
+}

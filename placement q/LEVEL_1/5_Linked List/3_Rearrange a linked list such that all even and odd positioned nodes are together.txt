@@ -1,0 +1,59 @@
+Node *rearrangeEvenOdd(Node *head)
+{
+    if(head == NULL || head->next==NULL || head->next->next==NULL)   // if we have 0, 1, 2 elements then no need to rearrange the order
+      return head;    // return head as required
+      
+    Node *odd_head = head->next;                       // we will set first element as even and second element as odd list
+    Node *even = head, *odd = head->next;            // also preserve odd_head element to set it as next of even list
+    
+    while(even->next!=NULL and even->next->next!=NULL){      // this condition is checked using dry run
+        
+        even->next = even->next->next;
+        odd->next = odd->next->next;
+        
+        even = even->next;
+        odd = odd->next;
+    }
+    even->next = odd_head;
+    
+    if(odd)                          // this condition also checks if there are odd no of elements;
+     odd->next = NULL;
+    
+    return head;
+}
+
+
+// another approach of tech dose
+
+Node *rearrangeEvenOdd(Node *head)
+{
+    // just dry run this code during analysing
+    
+     if(head==NULL or head->next==NULL or head->next->next==NULL)
+      return head;
+      
+     Node *end = head;
+     int counter=0;
+     
+     while(end->next!=NULL)
+      {
+          end = end->next;
+          counter++;
+      }
+      
+    int count = (counter &1)? (counter/2)+1 : counter/2;    // if odd no of elements then counter/2 +1 else counter/2;
+    
+    Node *curr = head;
+    
+    while(count--){
+        
+        end->next = curr->next;
+        curr->next = curr->next->next;
+        
+        end->next->next = NULL;
+        
+        end = end->next;
+        curr = curr->next;
+    }
+    return head;
+}

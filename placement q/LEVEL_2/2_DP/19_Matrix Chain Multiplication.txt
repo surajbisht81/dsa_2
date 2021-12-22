@@ -1,0 +1,48 @@
+/*1. You are given an array(arr) of positive integers of length N which represents the dimensions of N-1 matrices such that the ith matrix is of dimension arr[i-1] x arr[i].
+2. You have to find the minimum number of multiplications needed to multiply the given chain of matrices.*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int Matrix_Chain_Multiplication(int arr[], int n)
+{
+    n = n-1;                                         // making dp table of size n-1
+    int dp[n][n];
+    
+    for(int g=0; g<n; g++)
+    {
+        for(int i=0, j=g; j<n; i++, j++)
+        {
+            if(g==0){                                          // if g==0 i.e., if only one matrix then cost is 0
+                dp[i][j] = 0;
+            }else if(g==1){                                     // if g==1 i.e., if two matrix then cost is as per formula
+                dp[i][j] = arr[i] * arr[j] * arr[j+1];
+            }else{
+                int minim = INT_MAX;                                // else finding the minimum
+                for(int k=i; k<j; k++){
+                    int left_cost = dp[i][k];                      // left cost, right cost and multiplication cost of matrices as per formula, check copy
+                    int right_cost = dp[k+1][j];
+                    int mul_cost = arr[i] * arr[k+1] * arr[j+1];
+                    int total = left_cost+right_cost+mul_cost;
+                    if(total < minim)
+                     minim = total;
+                }
+                dp[i][j] = minim;
+            }
+        }
+    }
+    return dp[0][n-1];
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    cout<<Matrix_Chain_Multiplication(arr, n);
+    return 0;
+}

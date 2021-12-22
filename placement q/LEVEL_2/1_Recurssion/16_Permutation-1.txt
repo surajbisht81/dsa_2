@@ -1,0 +1,42 @@
+/*1. You are give a number of boxes (nboxes) and number of non-identical items (ritems).
+2. You are required to place the items in those boxes and print all such configurations possible.*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void Permutations(int arr[], int n, int r, int original_r)
+{
+    // base case
+    if(r > original_r)                // if item(r) becomes greater than original_r then print the box items and return 
+    {
+        for(int i=0; i<n; i++)
+         cout<<arr[i];
+         
+        cout<<endl;
+        
+        return;
+    }
+    
+    for(int i=0; i<n; i++)                            // putting item in every blank box
+    {
+        if(arr[i]==0)                               // if box is blank then put item in box
+        {
+            arr[i] = r;
+            Permutations(arr, n, r+1, original_r);  // make call for next recursion with item as (r+1) 
+            arr[i] = 0;                              // backtracking, making box blank again;
+        }
+    }    
+}
+
+int main()
+{
+    int n, r;
+    cin>>n>>r;
+    
+    int arr[n];                 // declaring array so that item can be put into the array
+    for(int i=0; i<n; i++)
+     arr[i] = 0;                   // 0 in array means array or box is blank
+    
+    Permutations(arr, n, 1, r);     // passing 1 as 1st item with origianl r for base case
+    return 0;
+}

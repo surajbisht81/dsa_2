@@ -1,0 +1,40 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void Permutation(int box, int n, int item, int r, bool used[], string asf)
+{
+    // base case
+    if(box > n)                     // if box becomes greater than n 
+    {
+        if(item==r)                   // check if items are equal to r then print asf and return;
+        {
+            cout<<asf<<endl;
+        }
+        return;
+    }
+    
+    // main code
+    for(int i=0; i<r; i++)                                      // each box have choice wheter current item will go into it or not
+    {
+        if(used[i]==false)                                   // if ith item is not used then we can use it  in thr current box
+        {
+            used[i] = true;                                          // make it true so that next time this item can not be used again
+            Permutation(box+1, n, item+1, r, used, asf+to_string(i+1));  // make call, box will be +1, item will be increased, asf will be asf+(i+1), for 0 it is 1
+            used[i] = false;                                              // backtracking, make item not used
+        }
+    }
+    
+    Permutation(box+1, n, item, r, used, asf+"0");          // this is case when box will not include any item in it;
+}
+
+int main()
+{
+    int n, r;
+    cin>>n>>r;
+    
+    bool used[r];
+    memset(used, false, sizeof(used));
+    
+    Permutation(1, n, 0, r, used, "");        // 1 is current box, n is total no of boxes, 0 is how many items have been used till now, r total items
+    return 0;                                 // we can use, used is boolean array to check if particular item is used or not, "" is ans so far
+}

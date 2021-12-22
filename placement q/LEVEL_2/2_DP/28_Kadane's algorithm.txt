@@ -1,0 +1,69 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int Kadanes(int arr[], int n)
+{
+    int curr_max = arr[0];
+    int overall_max = arr[0];
+    
+    for(int i=1; i<n; i++)
+    {
+        if(curr_max >= 0){
+            curr_max += arr[i];
+        }
+        else{
+            curr_max = arr[i];
+        }
+        
+        if(curr_max > overall_max)
+         overall_max = curr_max;
+    }
+    return overall_max;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    cout<<Kadanes(arr, n);
+    return 0;
+}
+
+/*
+//handling all cases when all elements of array are negative
+#include<bits/stdc++.h>
+using namespace std;
+
+int Kadanes(int arr[], int n)
+{
+   int overall_max = arr[0];
+   int curr_max = arr[0];
+   
+   for(int i=1; i<n; i++){
+       
+       curr_max = max(arr[i], curr_max+arr[i]);
+       
+       if(curr_max > overall_max)
+        overall_max = curr_max;
+   }
+   
+   return overall_max;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    cout<<Kadanes(arr, n);
+    return 0;
+}*/

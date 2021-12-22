@@ -1,0 +1,53 @@
+/*Given an array nums of integers, return the number of non-empty continuous subarrays that satisfy the following condition:
+The leftmost element of the subarray is not larger than other elements in the subarray.*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int valid_subarray(int arr[], int n){
+    
+    // it is similar to next greater element, but we have to find out next smaller element
+    stack<int> st;
+    
+    int nse[n];
+    
+    for(int i=n-1; i>=0; i--)
+    {
+        while(st.size() > 0 && arr[st.top()] >= arr[i]){  // if stack top value has greater
+            st.pop();                                     // or equal value than current 
+        }                                                 // value then keep popping
+        
+        if(st.size() == 0){    // otherwise, if stack is empty that means, it has no 
+            nse[i] = n;        // smaller element so put n
+        }
+        else{
+            nse[i] = st.top();
+        }
+        
+        st.push(i);
+    }
+    
+    int ans = 0;
+    
+    for(int i=0; i<n; i++)
+    {
+        ans += nse[i] - i;
+    }
+    
+    return ans;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++){
+        cin>>arr[i];
+    }
+    
+    cout<<valid_subarray(arr, n);
+    return 0;
+}

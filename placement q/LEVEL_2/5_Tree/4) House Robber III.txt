@@ -1,0 +1,43 @@
+
+class Pair{
+  public:
+    int withRob;
+    int withoutRob;
+    
+    Pair(){
+        withRob = 0;
+        withoutRob = 0;
+    }
+};
+
+class Solution {
+public:
+    
+    Pair *rob_(TreeNode *root)
+    {
+        if(!root){
+            Pair *base = new Pair;
+            return base;
+        }
+        
+        Pair *left = rob_(root->left);
+        Pair *right = rob_(root->right);
+        
+        Pair *myPair = new Pair;
+        
+        // if i want to rob current node, then i have to take withoutrob of left and right
+        myPair->withRob = left->withoutRob + root->val + right->withoutRob;
+        
+        // if i don't want to rob current node, then i have to choose max of left and max of right and then add them
+        myPair->withoutRob = max(left->withRob, left->withoutRob) + max(right->withRob, right->withoutRob);
+        
+        return myPair;
+    }
+    
+    int rob(TreeNode* root) {
+        
+        Pair *ans = rob_(root);
+        
+        return max(ans->withRob, ans->withoutRob);
+    }
+};

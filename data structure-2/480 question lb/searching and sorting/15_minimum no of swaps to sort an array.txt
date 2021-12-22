@@ -1,0 +1,62 @@
+// simple approach just do selection sort tc=O(n^2) and sc = O(1);
+// in selection sort, we select minimum no in range i+1 to n-1 and if we find minimum element than i, then we swap i and that minimum element
+
+int minSwaps(vector<int>&nums){
+	    int n = nums.size();
+	    
+	    int res = 0;
+	    
+	    for(int i=0; i<n; i++)
+	    {
+	        int minim = nums[i];
+	        int k;
+	        for(int j=i+1; j<n; j++)
+	        {
+	            if(nums[j] < minim){
+	                k = j;
+	                minim = nums[j];
+	            }
+	        }
+	        
+	        if(minim != nums[i]){
+	            res++;
+	            swap(nums[i], nums[k]);
+	        }
+	    }
+	    
+	    return res;
+	}
+
+//--------------------------------------------------------------------------------------------------
+// This approach has tc O(nlogn) and space O(n) as we are using vector of pair
+// first insert all elements in vector of pair, pair second is the index then we sort the vector
+
+	int minSwaps(vector<int>&nums){
+	    
+	    int n = nums.size();
+	    
+	    vector<pair<int, int>> v(n);
+	    
+	    for(int i=0; i<n; i++){
+	        v[i] = {nums[i], i};
+	    }
+	    
+	    sort(v.begin(), v.end());
+	    
+	    int res = 0;
+	    
+            // we convert sorted array into original array, both will take same swaps, 
+	    for(int i=0; i<n; i++)
+	    {
+	        if(v[i].second == i)          // if element is in correct order then do nothing
+	         continue;
+	        
+	        else{
+	            res++;                       // else inc res and swap element with the element that is present in correct position of current element
+    	        swap(v[i], v[v[i].second]);
+    	        i--;                            // we do i-- because it is not garuntee that after swapping, then current element is in correct posion
+	        }
+	    }
+	    
+	    return res;
+	}

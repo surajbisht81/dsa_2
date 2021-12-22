@@ -1,0 +1,87 @@
+/*1. You are given a number N representing number of elements.
+2. You are given N space separated numbers (ELE : elements).
+3. Your task is to find & print  
+    3.1) Length of "Longest Increasing Subsequence"(LIS)*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+class Pair
+{
+    public:
+    int len;
+    int idx;
+    int val;
+    string asf;
+    
+    Pair(int len, int idx, int val, string asf){
+        this->len = len;
+        this->idx = idx;
+        this->val = val;
+        this->asf = asf;
+    }
+};
+
+void Print_LIS(int arr[], int n)
+{
+    int dp[n];
+    for(int i=0; i<n; i++)
+     dp[i] = 1;
+    
+    int maxim = INT_MIN;
+    
+    for(int i=0; i<n; i++)                                // LIS starts from i=1 in normal, but this case is for when we are given only one element
+    {                                                     // and finding the maximum length
+        if(i!=0)
+        for(int j=0; j<i; j++)
+        {
+            if(arr[i] >= arr[j] and dp[i] < dp[j]+1)
+             dp[i] = dp[j] + 1;
+        }
+        if(dp[i] > maxim)
+         maxim = dp[i];
+    }
+    
+    
+    
+    queue<Pair*> qu;
+    
+    for(int i=0; i<n; i++)                         //  run loop in dp array and finding the maximum length if max len if found then put it into the queue
+    {
+        if( dp[i] == maxim){
+            qu.push(new Pair(dp[i], i, arr[i], to_string(arr[i])+""));  // len is dp[i], index is i, value is arr[i] and answer so far is arr[i] + ""
+        }
+    }
+    
+    cout<<maxim<<endl;
+    
+    while(!qu.empty())
+    {
+        Pair *p = qu.front();
+        qu.pop();
+        
+        if(p->len == 1){                         // if pair length is 1 then print it 
+            cout<<p->asf<<endl;
+        }
+        
+        for(int i=(p->idx)-1; i>=0; i--){                        // running reverse loop for printing ans in given order
+            if( p->len-1 == dp[i] && p->val >= arr[i]){          // if current dp length is 1 less than pair length, and pair value is greater or equal to arr 
+                qu.push(new Pair(dp[i], i, arr[i], to_string(arr[i])+" -> "+p->asf));  // then put it into the queue
+            }
+        }
+    }
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    Print_LIS(arr, n);
+    return 0;
+}

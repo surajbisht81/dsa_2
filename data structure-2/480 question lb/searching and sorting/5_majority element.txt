@@ -1,0 +1,32 @@
+int majorityElement(int arr[], int size)
+    {
+        int me = arr[0];
+        int cnt = 1;
+        
+        for(int i=1; i<size; i++){
+            
+            if(me != arr[i]){
+                cnt--;
+            }else{
+                cnt++;
+            }
+            
+            if(cnt == 0){
+                cnt = 1;
+                me = arr[i];
+            }
+        }
+        
+        cnt = 0;
+        for(int i=0; i<size; i++){
+            if(me == arr[i]){
+                cnt++;
+            }
+        }
+        
+        if(cnt > size/2){
+            return me;
+        }else{
+            return -1;
+        }
+    }

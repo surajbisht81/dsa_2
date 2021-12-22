@@ -1,0 +1,50 @@
+/*1. You are given two strings S1, S2, and two numbers x and y.
+2. The cost of deleting a character from S1 is x and the cost of deleting a character from S2 is y.
+3. You can delete characters from both the strings.
+4. You have to find the minimum cost required to make the given two strings identical.*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int Min_Cost(string str1, string str2, int c1, int c2)
+{
+    // first finding the lcs of both strings
+    int n = str1.length();
+    int m = str2.length();
+    
+    int dp[n+1][m+1];
+    
+    for(int i=n; i>=0; i--)
+    {
+        for(int j=m; j>=0; j--)
+        {
+            if(i==n or j==m)
+             dp[i][j] = 0;
+            else{
+                if(str1[i]==str2[j])
+                 dp[i][j] = dp[i+1][j+1] + 1;
+                else
+                 dp[i][j] = max(dp[i+1][j], dp[i][j+1]);
+            }
+        }
+    }
+    int lcs = dp[0][0];
+    
+    // since the cost is constant so, characters which are not common in both add them in cost
+    int cost = (n-lcs)*c1 + (m-lcs)*c2;
+    
+    return cost;
+}
+
+int main()
+{
+    string str1, str2;
+    int c1, c2;
+    
+    cin>>str1>>str2;
+    cin>>c1>>c2;
+    
+    cout<<Min_Cost(str1, str2, c1, c2);
+    return 0;
+}

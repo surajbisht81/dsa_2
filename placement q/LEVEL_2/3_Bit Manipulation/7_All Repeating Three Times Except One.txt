@@ -1,0 +1,40 @@
+/*1. You are given an array of numbers.
+2. All numbers occur thrice in the array except one.
+3. You have to find the element that occurs once.*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    int tn = INT_MAX;                    // initially 111111 will be 3n type, because initially there is 0 bit at every place
+    int tnp1 = 0;                        // initially 000000 will be 3n+1 type, because initially there is 0 bit at every place and 0 is of 3n type
+    int tnp2 = 0;                        // initially 000000 will be 3n+2 type, because initially there is 0 bit at every place and 0 is of 3n type
+    
+    for(int i=0; i<n; i++)
+    {
+        int cwtn = arr[i] & tn;           // we will AND arr element with 3n type number it will give us the bit common in 3n
+        int cwtnp1 = arr[i] & tnp1;
+        int cwtnp2 = arr[i] & tnp2;
+        
+        tn = tn & (~cwtn);
+        tnp1 = tnp1 | cwtn;
+        
+        tnp1 = tnp1 & (~cwtnp1);
+        tnp2 = tnp2 | cwtnp1;
+        
+        tnp2 = tnp2 & (~cwtnp2);
+        tn = tn | cwtnp2;
+    }
+    
+    cout<<tnp1;
+    return 0;
+}

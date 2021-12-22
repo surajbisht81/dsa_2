@@ -1,0 +1,77 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Node {
+    public:
+        int data;
+    vector <Node*> children;
+};
+
+Node* construct(int arr[], int n) {
+    Node* root = NULL;
+
+    stack <Node*> st;
+
+    for (int i = 0; i < n; i++) {
+        if (arr[i] == -1) {
+            st.pop();
+        } else {
+            Node * temp = new Node;
+            temp-> data = arr[i];
+
+            if (st.size() > 0) {
+                st.top()-> children.push_back(temp);
+            } else {
+                root = temp;
+            }
+            st.push(temp);
+        }
+    }
+    return root;
+}
+
+static int dia = 0;
+
+//diameter is calculated as sum of root's child deepest node and second deepest node +2
+int Diameter(Node *root)
+{
+    int deepest_hgt = -1;           // initiall -1;
+    int second_deepest_hgt = -1;
+    
+    for(Node *child : root->children)      // exploring each and every child of root and finding the depth of that child
+    {
+        int child_hgt = Diameter(child);  
+        
+        if(child_hgt > deepest_hgt){    // if child_hgt is grater than deepest than update both accordingly
+            second_deepest_hgt = deepest_hgt;
+            deepest_hgt = child_hgt;
+        }
+        else if(child_hgt > second_deepest_hgt){
+            second_deepest_hgt = child_hgt;
+        }
+    }
+    
+    if( (deepest_hgt + second_deepest_hgt + 2) > dia){       
+        dia = (deepest_hgt + second_deepest_hgt + 2);
+    }
+    
+    deepest_hgt += 1;          // this is deepest node +1, +1 for extra edge between root and child whose depth is calculated
+    
+    return deepest_hgt;
+}
+
+int main() {
+    int n;
+    cin >> n;
+
+    int arr[n];
+    for (int i = 0; i < n; i++)
+        cin >> arr[i];
+
+    Node *root = construct(arr, n);
+ 
+    Diameter(root);
+    
+    cout<<dia;   
+    return 0;
+}

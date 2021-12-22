@@ -1,0 +1,98 @@
+
+/*1. You are given an array of n distinct integers.
+2. You have to divide these n integers into k non-empty subsets such that sum of integers of every 
+     subset is same.
+3. If it is not possible to divide, then print "-1".*/
+#include<bits/stdc++.h>
+using namespace std;
+
+bool isEqualSum(vector<vector<int>> &v)
+{
+   int sum = 0;
+   int prev_sum = 0;
+   
+   for(int i=0; i<v[0].size(); i++)
+    prev_sum += v[0][i];
+    
+   for(int i=1; i<v.size(); i++)
+   {
+       sum = 0;
+       for(int j=0; j<v[i].size(); j++)
+       {
+           sum += v[i][j];
+       }
+       if(prev_sum != sum)
+        return false;
+   }
+   return true;
+}
+
+void Print(vector<vector<int>> &v)
+{
+    for(int i=0; i<v.size(); i++)
+    {
+        cout<<"[";
+        for(int j=0; j<v[i].size()-1; j++)
+        {
+            cout<<v[i][j]<<", ";
+        }
+        cout<<v[i][v[i].size()-1];
+        cout<<"] ";
+    }
+    cout<<endl;
+}
+
+void KPartition_EqualSum(vector<int> arr, int k, vector<vector<int>> &v, int cnt, int idx)
+{
+    if(idx == arr.size()){       // if all elements are processed then idx will become equal to the size of vector(arr)
+        if(cnt == k)             // if no of partitions become equal to the k(given partition)
+        {
+          if(isEqualSum(v))      // then check if sum of all partitions are equal or not if equal then print and return for more combinations
+            Print(v);  
+         }
+         return;
+    }
+    
+    for(int i=0; i<v.size(); i++)                          // run loop for no of partitons
+    {
+        if(v[i].size() > 0)                               // if partition is already occupied then
+        {
+            v[i].push_back(arr[idx]);                      // add current element into the partition
+            KPartition_EqualSum(arr, k, v, cnt, idx+1);    // make call for next number(idx+1) and cnt will not be updated
+            v[i].pop_back();                               // for backtracking
+        }
+        else
+        {
+            v[i].push_back(arr[idx]);                       // add current element into the empty partition
+            KPartition_EqualSum(arr, k, v, cnt+1, idx+1);   // make call for next element(idx+1) and cnt will updated
+            v[i].pop_back();                                // for backtracking, 
+            break;                                          // break loop, because we dont want duplicates combination
+        }
+    }
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    vector<int> arr;
+    int sum = 0;
+    for(int i=0; i<n; i++){
+        int x;
+        cin>>x;
+        arr.push_back(x);
+        sum += x;
+    }
+    
+    int k;
+    cin>>k;
+    
+    vector<vector<int>> v(k);
+    
+    if(sum%k!=0 or n < k)        // if sum is not multiple of k or no of elements are less than no of partition, then return 0;
+     return 0;
+     
+    KPartition_EqualSum(arr, k, v, 0, 0);  // 2nd last 0 is for no of subsets count, and last 0 is for idx of vector of numbers
+    return 0;
+}

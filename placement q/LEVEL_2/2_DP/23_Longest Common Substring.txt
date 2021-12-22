@@ -1,0 +1,41 @@
+/*1. You are given two strings S1 and S2.
+2. You are required to print the length of the longest common substring of two strings.*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void LC_substring(string str1, string str2)
+{
+    int n = str1.length();
+    int m = str2.length();
+    
+    int dp[n+1][m+1];
+    
+    memset(dp, 0, sizeof(dp));
+    
+    int maxim = 0;
+    for(int i=1; i<=n; i++)
+    {
+        for(int j=1; j<=n; j++)
+        {
+            if(str1[i-1] == str2[j-1]){              // if suffix of prefixes matches then adding 1 to diagonal ans;
+                dp[i][j] = dp[i-1][j-1] + 1;
+            }else{                                    // else dp will contain 0 
+                dp[i][j] = 0;
+            }
+            
+            if(dp[i][j] > maxim)                    // finding the maximum of all the matrix;
+             maxim = dp[i][j];
+        }
+    }
+    cout<<maxim;
+}
+
+int main(){
+    string str1, str2;
+    cin>>str1>>str2;
+    
+    LC_substring(str1, str2);
+    return 0;
+}

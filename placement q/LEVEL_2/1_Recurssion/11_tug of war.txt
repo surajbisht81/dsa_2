@@ -1,0 +1,73 @@
+ You are given an array of n integers.
+2. You have to divide these n integers into 2 subsets such that the difference of sum of two subsets 
+     is as minimum as possible.
+3. If n is even, both set will contain exactly n/2 elements. If  is odd, one set will contain (n-1)/2 and 
+    other set will contain (n+1)/2 elements.
+3. If it is not possible to divide, then print "-1".
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+static int minim = INT_MAX;
+ vector<int> res1, res2;
+
+void TugOfWar(int arr[], int n, int idx, vector<int> set1, vector<int> set2, int set1_sum, int set2_sum)
+{
+    
+   if(idx == n)                                 // if we reach the final index of array
+   {
+       if( minim > abs(set1_sum - set2_sum)){  //  keep finding the minimum value 
+           minim = abs(set1_sum - set2_sum);
+           
+           res1 = set1;
+           res2 = set2;
+       }
+       return;
+   }
+   
+   if((n+1)/2 > set1.size()){                       // if set1 size is not half(if even) or half+1(if odd) then keep adding the values in set1
+   
+        set1.push_back(arr[idx]);                   // push back into the set1
+        TugOfWar(arr, n, idx+1, set1, set2, set1_sum+arr[idx], set2_sum);
+        set1.pop_back();                            // backtracking from set1
+   }
+   
+   if((n+1)/2 > set2.size()){                        // if set2 size is not half(if even) or half+1(if odd) then keep adding the values in set2
+       
+        set2.push_back(arr[idx]);                    // push back into the set2
+        TugOfWar(arr, n, idx+1, set1, set2, set1_sum, set2_sum+arr[idx]);
+        set2.pop_back();                              // backtracking from set2
+   }
+}
+
+void Print()
+{
+    cout<<"[";
+    for(int i=0; i<res1.size()-1; i++)
+     cout<<res1[i]<<", ";
+     
+    cout<<res1[res1.size()-1]<<"] [";
+    
+    for(int i=0; i<res2.size()-1; i++)
+     cout<<res2[i]<<", ";
+     
+    cout<<res2[res2.size()-1]<<"]";
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    vector<int> set1;
+    vector<int> set2;
+    
+    TugOfWar(arr, n, 0, set1, set2, 0, 0);  // first parameter is given array, 1st 0 is idx of array, set1, set2 are vector to store the elements
+    Print();
+    return 0;
+}

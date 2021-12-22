@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1581495154 source:c:\users\admin\desktop\data structure\graph\scc using kosaraju's algo\main.cpp
+	<iostream>
+	<list>
+	<stack>
+

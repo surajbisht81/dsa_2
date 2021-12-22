@@ -1,0 +1,59 @@
+/*1. You are given a number N, which represents the count of buttons pressed on a mobile numeric keypad.
+2. You can only press buttons that are up, left, right, down to the current button and the current button also.
+3. You can not press bottom row corner buttons(* and #).*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int Numeric_Keypad(int n)
+{
+    int dp[n+1][10];                          // 1 extra for 0 key press, n is no of press given and 10 is keys on keypad
+    memset(dp, 0, sizeof(dp));
+
+    vector<vector<int>> allowed(10);
+    
+    // this is the neighbour keys of current key
+    allowed[0].assign({0, 8});
+    allowed[1].assign({1, 2, 4});
+    allowed[2].assign({2, 1, 3, 5});
+    allowed[3].assign({3, 2, 6});
+    allowed[4].assign({4, 1, 5, 7});
+    allowed[5].assign({5, 2, 6, 4, 8});
+    allowed[6].assign({6, 5, 3, 9});
+    allowed[7].assign({7, 4, 8});
+    allowed[8].assign({8, 0, 7, 9, 5});
+    allowed[9].assign({9, 8, 6});
+    
+    // i is the no of times we can press keys
+    for(int i=1; i<=n; i++)                          
+    {
+        for(int j=0; j<=9; j++)
+        {
+            if(i==1){                       // if only 1 time we are allowed to press key then we can make number only 1 time e.g., 0, 1, 2, ... , 9
+                dp[i][j] = 1;
+            }
+            else{
+                for(int x : allowed[j]){                         // else we will check its neighbour and calculate how many times it's neighbour
+                     
+                     dp[i][j] += dp[i-1][x];                     // were pressed in i-1th time so that ith time (this time) current key is pressed
+                }
+            }
+        }
+    }
+    
+    // we are calculating the total no of ways to press keys in nth press
+    int sum = 0;
+    for(int i=0; i<=9; i++)
+     sum += dp[n][i];
+     
+    return sum;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    cout<<Numeric_Keypad(n);
+    return 0;
+}

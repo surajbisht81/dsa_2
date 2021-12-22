@@ -1,0 +1,129 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node
+{
+    public:
+    
+     int data;
+     Node *next;
+     
+     Node(int key){
+         data = key;
+         next = NULL;
+     }
+};
+
+class LinkedList{
+    
+    public:
+    Node *head;
+    Node *tail;
+    LinkedList(){
+        head = NULL;
+        tail = NULL;
+    }
+
+void addLast(int data){
+    
+    Node *temp = new Node(data);
+    if((head) == NULL){
+        head = tail = temp;
+    }
+    else{
+        
+        tail->next = temp;
+        tail = temp;
+    }
+}
+
+Node *mid_element(Node *head, Node *tail){
+    
+    Node *slow = head;
+    Node *fast = head;
+    
+    while(fast!=tail and fast->next!=tail){
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    
+    return slow;
+}
+
+LinkedList mergesort(LinkedList a, LinkedList b){
+    
+    LinkedList res;
+    
+    while(a.head!=NULL and b.head!=NULL){
+        
+        if(a.head->data <= b.head->data){
+            res.addLast(a.head->data);
+            a.head = a.head->next;
+        }
+        else{
+            res.addLast(b.head->data);
+            b.head = b.head->next;
+        }
+    }
+    
+    while(a.head!=NULL){
+        res.addLast(a.head->data);
+        a.head = a.head->next;
+    }
+    
+    while(b.head!=NULL){
+        res.addLast(b.head->data);
+        b.head = b.head->next;
+    }
+    return res;
+}
+
+LinkedList mergeLists(Node *head, Node *tail){
+    
+      if(head == tail){
+         LinkedList v;
+         v.addLast(head->data);
+         return v;
+      }
+      
+      Node *mid = mid_element(head, tail);
+      
+      LinkedList l1 = mergeLists(head, mid);
+      LinkedList l2 = mergeLists(mid->next, tail);
+      
+      LinkedList res = mergesort(l1, l2);
+      return res;
+}
+
+void display(){
+    
+     Node *curr = head;
+     while(curr!=NULL){
+         cout<<curr->data<<" ";
+         curr = curr->next;
+     }
+     cout<<endl;
+}
+
+};
+int main(){
+    
+    int n;
+    cin>>n;
+    
+    LinkedList l;
+    for(int i=0; i<n; i++)
+     {
+         int x;
+         cin>>x;
+         l.addLast(x);
+     }
+    
+
+    LinkedList res = res.mergeLists(l.head, l.tail);
+    res.display();
+    
+    l.display();
+    
+    return 0;
+}

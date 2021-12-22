@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1581744419 source:c:\users\admin\desktop\data structure\graph\graphs questions\transitive closure of a graph\main.cpp
+	<iostream>
+	<list>
+	<bits/stdc++.h>
+

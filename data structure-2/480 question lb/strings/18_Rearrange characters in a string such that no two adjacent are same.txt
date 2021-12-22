@@ -1,0 +1,87 @@
+/*Given a string with repeated characters, the task is to rearrange characters in a string so that no two adjacent characters are same.
+
+Note : It may be assumed that the string has only lowercase English alphabets.
+
+Examples:
+
+Input: aaabc 
+Output: abaca */
+
+
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long int 
+
+const int MAX_CHAR = 26;
+
+struct Key{
+    int freq;
+    char ch;
+    
+    bool operator<(const Key &k) const
+    { 
+        return freq < k.freq; 
+    }
+};
+
+void rearrange(string str)
+{
+    int n = str.length();
+    
+    int count[MAX_CHAR] = {0};
+    
+    for(int i=0; i<n; i++){
+        char ch = str[i];
+        count[ch-'a']++;
+    }
+    
+    priority_queue<Key> pq;
+    
+    for(char c='a'; c<='z'; c++)
+    {
+        if(count[c-'a']){
+            pq.push(Key{count[c-'a'], c});
+        }
+    }
+    
+    Key prev {-1, '#'};
+    string ans = "";
+    
+    while(!pq.empty()){
+        
+        Key k = pq.top();
+        pq.pop();
+        
+        ans += k.ch;
+        
+        if(prev.freq > 0){
+            pq.push(prev);
+        }
+        
+        (k.freq)--;
+        
+        prev = k;
+    }
+    
+    if (n != ans.length()) 
+        cout << " Not valid String " << endl; 
+  
+    else // valid string 
+        cout << ans << endl; 
+}
+
+int main()
+{
+   ll t;
+   cin>>t;
+   
+   while(t--)
+   {
+        string str;
+        cin>>str;
+        
+        rearrange(str);
+   }
+   
+   return 0;
+}

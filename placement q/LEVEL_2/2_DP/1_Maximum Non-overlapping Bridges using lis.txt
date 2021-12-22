@@ -1,0 +1,68 @@
+/*1. You are given a number n, representing the number of bridges on a river.
+2. You are given n pair of numbers, representing the north bank and south bank co-ordinates of each bridge.
+3. You are required to print the count of maximum number of non-overlapping bridges.*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+class Bridges
+{
+    public:
+    int nr;
+    int st;
+};
+
+bool compare(Bridges b1, Bridges b2)                         // compare function to sort the array of Bridges according to north bank if they are
+{
+    if(b1.nr != b2.nr){                                        // not equal otherwise sort them acc to south bank
+        return (b1.nr < b2.nr);
+    }else{
+        return (b1.st < b2.st);
+    }    
+}
+
+int Non_Overlapping_Bridges(Bridges arr[], int n)
+{
+    sort(arr, arr+n, compare);
+    
+    // just apply lis here according to south bank values, because noth bank is already sorted then by applying lis in south bank we will get 
+    // maximum non-overlapping bridges
+    int dp[n];
+    for(int i=0; i<n; i++)
+     dp[i] = 1;
+     
+    for(int i=1; i<n; i++)
+    {
+        for(int j=0; j<i; j++)
+        {
+            if(arr[j].st < arr[i].st and dp[i] < dp[j] + 1)
+             dp[i] = dp[j]+1;
+        }
+    }
+    
+    int res = 0;
+    for(int i=0; i<n; i++)
+      res = max(res, dp[i]);
+      
+    return res;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    Bridges arr[n];                         // array of Bridges class containing north and south bank
+    
+    for(int i=0; i<n; i++)             
+    {
+        int nr, st;
+        cin>>nr>>st;
+        
+        arr[i] = {nr, st};                     // putting the value in array of north and south
+    }
+    
+    cout<<Non_Overlapping_Bridges(arr, n);
+    return 0;
+}

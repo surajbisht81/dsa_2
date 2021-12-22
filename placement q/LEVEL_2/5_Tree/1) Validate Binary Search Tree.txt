@@ -1,0 +1,25 @@
+
+class Solution {
+public:
+    TreeNode *prev = NULL;
+    
+    bool isValidBST(TreeNode* root) {
+        
+        if(root == NULL){
+            return true;
+        }
+        
+        if(!isValidBST(root->left))     // if left subtree is not bst then return false;
+            return false;
+        
+        if(prev!=NULL && prev->val >= root->val)    // if prev is not null and prev val is greater or equal to current 
+            return false;                           // root val then return false
+        
+        prev = root;                                 // otherwise, change prev = root;
+        
+        if(!isValidBST(root->right))    // if right subtree is not bst then return false;
+            return false;
+        
+        return true;
+    }
+};

@@ -1,0 +1,74 @@
+/*1. You are given a string and a pattern. 
+2. You've to check if the string is of the same structure as pattern without using any regular 
+     expressions.
+Sample Input
+graphtreesgraph
+pep
+Sample Output
+p -> graph, e -> trees, . */
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void Pattern_Matching(string str, string patt, map<char, string>mp, string op)
+{
+    // base case
+    if(patt.length()==0)                                     // if pattern length is 0
+    {
+        if(str.length()==0)                                  // then check if string length is also 0 or not if 0 then process furthur
+        {
+            set<char> st;                                       // we do not need to print same charcter of pattern again, so using set
+            for(int i=0; i<op.length(); i++){
+             
+                if(st.find(op[i])==st.end()){
+                    
+                    cout<<op[i]<<" -> "<<mp[op[i]]<<", ";
+                    st.insert(op[i]);
+                }   
+            }
+            cout<<"."<<endl;
+        }
+        return;
+    }
+    
+    // main code
+    char ch = patt[0];                        // extracting the first character from pattern
+    string rest_of_patt = patt.substr(1);     // this is rest of the pattern for furthur recurssion
+    
+    if(mp.find(ch)!=mp.end())                  // if this character is found in the map already
+    {
+        string previous_mapping = mp[ch];                   // then getting the string which was mapped with character
+        if(str.length() >= previous_mapping.length()){      // checking if str length is greater or equal to previous mapped length then go furthur
+            
+            string prefix = str.substr(0, previous_mapping.length());      // extracting the prefix substr of string of length previous mapped string length
+            string remaining_str = str.substr(previous_mapping.length());  // remaining string will be
+            
+            if(prefix == previous_mapping)                                 // if prefix is equal to previous mapped then make call
+              Pattern_Matching(remaining_str, rest_of_patt, mp, op);
+        }
+    }
+    else
+    {
+        for(int i=0; i<str.length(); i++)                             // if character is not found in map then explore every string of character
+        {
+            string prefix = str.substr(0, i+1);                       // prefix substring 
+            string remaining_str = str.substr(i+1);                   // remaining substring
+            
+            mp[ch] = prefix;                                          // put prefix substring into the map
+            Pattern_Matching(remaining_str, rest_of_patt, mp, op);    // make call
+            
+            mp.erase(ch);                                             // backtracking, remove substring from map
+        }
+    }
+}
+
+int main()
+{
+    string str, patt;
+    cin>>str>>patt;
+    
+    map<char, string> mp;
+    Pattern_Matching(str, patt, mp, patt);    // one extra patt is for printing the output
+    return 0;
+}

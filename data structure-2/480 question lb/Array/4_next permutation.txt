@@ -1,0 +1,36 @@
+class Solution {
+public:
+    void nextPermutation(vector<int>& nums) {
+        
+        int n = nums.size();
+        int i, j;
+        
+        //getting the breakpoint  where there is a slope like in 13-542, in between 3 and 5 there is a breakpoint
+        for(i=n-2; i>=0; i--)    // traversing from back and getting breakpoint
+        {
+            if(nums[i] < nums[i+1]){
+                break;
+            }
+        }
+        
+        // if no breakpoint is found that's means, sequence is greatest, just reverst the sequence
+        if(i<0){
+            reverse(nums.begin(), nums.end());
+        }
+        else{
+            // else find the first greater element from the back which is greater than element at i
+            for(j=n-1; j>i; j--)
+            {
+                if(nums[j] > nums[i]){
+                    break;
+                }        
+            }
+            swap(nums[i], nums[j]);    // then swap the element found at j and i
+            
+            reverse(nums.begin()+i+1, nums.end());   // then reverse nums from i+1 to end to get permutation
+        }
+        
+        for(int i=0; i<n; i++)
+             cout<<nums[i]<<" ";
+    }
+};

@@ -1,0 +1,152 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node
+{
+    public:
+   int data;
+   Node *next;
+   
+   Node(int key)
+   {
+       data = key;
+       next = NULL;
+   }
+};
+
+void addFirst(Node **head, int key)
+{
+    Node *temp = new Node(key);
+    
+    if((*head)==NULL)
+      (*head) = temp;
+    else
+    {
+        temp->next = (*head);
+        (*head) = temp;
+    }
+}
+
+void addLast(Node **head, int key)
+{
+    Node *temp = new Node(key);
+    
+    if((*head)==NULL)
+      (*head) = temp;
+    else
+    {
+        Node *ptr = (*head);
+        while(ptr->next!=NULL)
+         ptr = ptr->next;
+         
+        ptr->next = temp;
+    }
+}
+
+int AdditionHelper(Node *one, int pv1, Node *two, int pv2, Node **head)  // pv's are the place value of each element in linked list
+{
+    if(one==NULL and two==NULL)         // if one and two both are null then return 0 as carry
+      return 0;
+      
+    int data = 0;
+    if(pv1 > pv2)       // place value of ll 1 is greater than place value of 2
+    {
+        int nc = AdditionHelper(one->next, pv1-1, two, pv2, head);   // one will move ahead and place value will decrease by 1
+        data = one->data + nc;               // and after backtracking, the data will be one->data + carry returned by recursion function
+    }
+    else if(pv1 < pv2)
+    {
+        int nc = AdditionHelper(one, pv1, two->next, pv2-1, head);
+        data = two->data + nc;  // here, data will be addition of 2nd ll node data as first will not there
+    }
+    else
+    {
+        int nc = AdditionHelper(one->next, pv1-1, two->next, pv2-1, head);   // if place value of both lists are same then move ahead both 
+        data = one->data + two->data + nc;    // here, data will be addition of both because both ll nodes are there
+    }
+        int node_data = data%10;    // node value will be remainder of sum
+        int carry = data/10;       // carry will be obtained
+        
+         Node *temp = new Node(node_data);     // here that node_data is added at beginning
+
+         temp->next = (*head);  // we have to make node at beggining here, 
+         (*head) = temp;
+    
+        return carry;
+}
+
+Node* Addition(Node *one, Node *two)
+{
+    Node *curr = one; 
+    int size1 = 0;    // first linked list size
+    while(curr->next!=NULL)
+     {
+         curr = curr->next;
+         size1++;
+     }
+     
+    curr = two;
+    int size2 = 0;      // second linked list size
+    while(curr->next!=NULL)
+     {
+         curr = curr->next;
+         size2++;
+     }
+    Node *head = NULL;    // this is node which will contain the resultant addition
+    int carry = AdditionHelper(one, size1, two, size2, &head);    // send head as reference otherwise output will not be shown
+    
+    if(carry > 0)      // if carry is not zero for most significant digits than add another node at beginning 
+    {
+        addFirst(&head, carry);
+    }
+    return head;   // return the added linked list
+}
+
+void Display(Node *head)
+{
+    while(head!=NULL)
+    {
+        cout<<head->data<<" ";
+        head = head->next;
+    }    
+    cout<<endl;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    Node *one = NULL;
+    for(int i=0; i<n; i++)
+    {
+        int x;
+        cin>>x;
+      addLast(&one, x);
+    }
+    Display(one);
+    
+    int m;
+    cin>>m;
+    
+    Node *two = NULL;
+    for(int i=0; i<m; i++)
+    {
+        int x;
+        cin>>x;
+      addLast(&two, x);
+    }
+    Display(two);
+    
+    Node *head = Addition(one, two);
+    
+    Display(head);
+    
+    int a, b;
+    cin>>a>>b;
+    addFirst(&head, a);
+    addLast(&head, b);
+    
+    Display(head);
+    return 0;
+}

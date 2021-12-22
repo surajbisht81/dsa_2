@@ -1,0 +1,67 @@
+/*1. You are given two arrays - 
+     The first array(keys), which is sorted and has distinct integers, represents search keys.
+   Second one(freq) represents frequency counts, where freq[i] is the number of searches to keys[i].
+2. A binary search tree is constructed containing all keys and the total cost of searches is minimum. 
+3. The cost of a BST node is the level of that node multiplied by its frequency.
+4. You have to find the minimum cost of all searches.*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void Optimal_BST(int n, int arr[], int freq[])
+{
+     int dp[n][n];                                                   // making dp table of same size
+     
+     int prefix[n];                                                // prefix sum array of freq to obtain the sum of frequency of element in advance
+     prefix[0] = freq[0];
+     for(int i=1; i<n; i++)
+      prefix[i] = prefix[i-1] + freq[i];
+      
+     for(int g=0; g<n; g++)
+     {
+         for(int i=0, j=g; j<n; i++, j++)
+         {
+             if(g==0){                                                 // if gap is 0 then dp will contain freq of that element in array
+                 dp[i][j] = freq[i];
+                 
+             }else if(g==1){                                 // if gap is 1 then dp will contain min of (a' + 2*b') vs (2*a' + b')
+                 int f1 = freq[i];
+                 int f2 = freq[j];
+                 dp[i][j] = min(f1+2*f2, f2+2*f1);
+                 
+             }else{
+                 
+                 int freq_sum = prefix[j] - prefix[i] + freq[i];            // getting frequency sum 
+                 int minim = INT_MAX;
+                 
+                 for(int k=i; k<=j; k++)                                  // obtaining minimum, k will start from i to j(i.e., every element get a chance to become root)
+                 {
+                     int left = (k==i) ? 0 : dp[i][k-1];                  // if k is equal to i then left part is 0 
+                     int right = (k==j) ? 0 : dp[k+1][j];                  // if k is equal to j then right part is 0 
+                     
+                     if(left+right < minim)
+                      minim = left+right;
+                 }
+                 dp[i][j] = minim + freq_sum;                             // dp will contain, minim plus freq_sum of element;
+             }
+         }
+     }
+     
+     cout<<dp[0][n-1];
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n], freq[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    for(int i=0; i<n; i++)
+     cin>>freq[i];
+     
+    Optimal_BST(n, arr, freq);
+    return 0;
+}

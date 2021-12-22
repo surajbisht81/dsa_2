@@ -1,0 +1,39 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+long Count_Distinct_Subsequences(string str)
+{
+     int n = str.length();
+     
+     // making dp of n+1 length extra 1 for "." subsequence when no char comes
+     long dp[n+1];
+     dp[0] = 1;  // when no char comes then total subsequence is 1
+     
+     // creating a hash map for storing previous character index;
+     unordered_map<char, int> mp;
+     
+     for(int i=1; i<=n; i++)
+     {
+        dp[i] = 2* dp[i-1];                   // subsequence for current length will be double of previous length;
+        
+        // but if this character is already occured then delete some subsequence which are repeated;
+        char ch = str[i-1];
+        
+        if(mp.find(ch)!=mp.end()){
+            int j = mp[ch];                // getting the index of previous found character
+            dp[i] = dp[i] - dp[j-1];            // we are supposed to delete the no of subsequences which were repeated in j-1 index;
+        }
+        
+        mp[ch] = i;                             // putting char with i index into the map
+     }
+     return dp[n] - 1;                           // we want non-empty subsequence so deleting 1 because "." is empty subsequence
+}
+
+int main()
+{
+    string str;
+    cin>>str;
+    
+    cout<<Count_Distinct_Subsequences(str);
+    return 0;
+}

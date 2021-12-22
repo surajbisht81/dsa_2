@@ -1,0 +1,42 @@
+/*1. You are given an array(arr) which contains only 0's and 1's.
+2. You have to find the maximum number of consecutive 1's in the given array if you can flip at most one zero.*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void Maximu_subarray(int arr[], int n)
+{
+    int cnt = 0;
+    int ans = 0;
+    int j = -1;
+    
+    for(int i=0; i<n; i++)
+    {
+        if(arr[i]==0)
+         cnt++;
+         
+        while(cnt > 1)
+        {
+            j++;
+            
+            if(arr[j]==0)
+             cnt--;
+        }
+        
+        ans = max(ans, i-j);
+    }
+    cout<<ans;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    Maximu_subarray(arr, n);
+    return 0;
+}

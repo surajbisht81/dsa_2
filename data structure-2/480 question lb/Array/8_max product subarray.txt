@@ -1,0 +1,21 @@
+long long maxProduct(int *arr, int n) {
+	    
+	    long long prod = arr[0];
+	    long long maxim = arr[0];
+	    long long minim = arr[0];
+	    
+	    for(int i=1; i<n; i++)
+	    {
+	        if(arr[i] < 0){
+	            swap(maxim, minim);
+	        }
+	        
+	        maxim = max((long long)arr[i], maxim * arr[i]);
+	        minim = min((long long)arr[i], minim * arr[i]);
+	        
+	        if(maxim > prod){
+	            prod = maxim;
+	        }
+	    }
+	    
+	    return prod;

@@ -1,0 +1,53 @@
+/*1. You are given a number n, representing the count of coins.
+2. You are given n numbers, representing the denominations of n coins.
+3. You are given a number "amt".
+4. You are required to calculate and print the combinations of the n coins (same coin can be used 
+     again any number of times) using which the amount "amt" can be paid.*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void Coin_Combination(int n, int coins[], int idx, int amt, int sum, string asf)
+{
+    // base case
+    if(idx == n)
+    {
+        if(sum == amt){
+           cout<<asf<<"."<<endl;        
+        }
+        return;
+    }
+    
+    // main code
+    
+    // eg lets say amt is 12 and first coin is 2 then 2 six times aa sakta hai ya 5 times aa sakta hai, ya 4 times ya 3,2,1 time 
+    for(int i=(amt-sum)/coins[idx]; i>=1; i--)
+    {
+        string Pair = "";                             // desired asf print krne ke liye ans mai 2-2-2-2-2-2 b likhna hai 
+        for(int j=i; j>=1; j--)
+         Pair = Pair + to_string(coins[idx]) + "-";
+        
+        // make call
+        Coin_Combination(n, coins, idx+1, amt, sum+coins[idx]*i, asf+Pair);   // agar 2 ko six times le rahe hai to sum will be sum+coins[idx]*i;
+    }
+    
+    // ye jab coin use hua hi nahi
+    Coin_Combination(n, coins, idx+1, amt, sum, asf);
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int coins[n];
+    for(int i=0; i<n; i++)
+     cin>>coins[i];
+     
+    int amt;
+    cin>>amt;
+    
+    // This time we have infinite supply of coins eg we can make 12 with 2 rupee coin as 2-2-2-2-2-2;
+    Coin_Combination(n, coins, 0, amt, 0, "");  // n is total no of coins, coins is coins denomination, 0 is idx of current rupee, amt is total given amt,
+    return 0;                                     // 0 is current sum of amount, "" s asf
+}

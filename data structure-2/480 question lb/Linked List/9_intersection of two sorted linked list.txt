@@ -1,0 +1,42 @@
+void push(Node **head, int data)
+{
+    Node *temp = new Node(data);
+    temp->next = (*head);
+    (*head) = temp;
+}
+
+Node* findIntersection(Node* head1, Node* head2)
+{
+    Node *head = NULL;
+    Node *tail = head;
+    
+    Node *i = head1, *j = head2;
+    
+    // when one list is end the we are done
+    while(i!=NULL && j!=NULL){
+        
+        if(i->data == j->data){             // if both list data is same then add it to the result
+            if(head == NULL){
+                push(&head, i->data);
+                tail = head;
+            }
+            else{
+                push(&(tail->next), i->data);
+                tail = tail->next;
+            }
+            
+            i = i->next;           // advance both the lists
+            j = j->next;
+        }
+        
+        else if(i->data < j->data){               // if data is not same then whichever list data is less advance it because list is sorted
+            i = i->next;
+        }
+        
+        else{
+            j = j->next;
+        }
+    }
+    
+    return head;
+}

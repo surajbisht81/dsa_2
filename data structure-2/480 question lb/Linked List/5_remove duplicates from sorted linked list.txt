@@ -1,0 +1,74 @@
+//---------------------------------------
+// first method
+
+Node *removeDuplicates(Node *head)
+{
+     if(!head || !head->next){                    // edge cases
+         return head;
+     }
+     
+     Node *curr = head;
+     Node *prev, *next;
+     
+     while(curr!=NULL && curr->next != NULL)            // till curr is not null and curr->next is not null
+     {
+         prev = curr;                                 // put prev as curr and next as curr->next
+         next = curr->next;
+         
+         while(next!=NULL && curr->data == next->data){              // while next is not null and curr data is equal to next data
+             curr = next;
+             next = next->next;
+         }
+         
+         prev->next = next;                                           // put prev->next as next 
+         curr = next;
+     }
+     
+     return head;
+}
+
+
+// ----------------------- 2nd method --------------------------------
+
+
+Node *removeDuplicates(Node *head)
+{
+   
+    // Two references to head
+    // temp will iterate to the
+    // whole Linked List
+    // prev will point towards
+    // the first occurence of every element
+    Node *temp = head,*prev=head;
+ 
+    // Traverse list till the last node
+    while (temp != NULL) 
+    {
+ 
+       // Compare values of both pointers
+       if(temp->data != prev->data)
+       {
+          
+         /* if the value of prev is
+         not equal to the value of
+         temp that means there are no
+         more occruences of the prev data->
+         So we can set the next of
+         prev to the temp node->*/
+         prev->next = temp;
+         prev = temp;
+       }
+       
+        /*Set the temp to the next node*/
+        temp = temp->next;
+    }
+   
+  /*This is the edge case if there
+  are more than one occurrences
+  of the last element*/
+  if(prev != temp)
+  {
+        prev->next = NULL;
+    }
+  return head;
+}

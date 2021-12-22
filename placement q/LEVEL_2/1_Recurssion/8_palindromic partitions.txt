@@ -1,0 +1,45 @@
+1. You are given a string of length n.
+2. You have to partition the given string in such a way that every partition is a palindrome.
+
+#include<bits/stdc++.h>
+using namespace std;
+
+bool isPalindrome(string str)
+{
+   if(str.length()==1)
+    return true;
+    
+    for(int i=0; i<str.length(); i++){
+        if(str[i] != str[str.length()-i-1])
+         return false;
+    }
+    return true;
+}
+
+void Palindromic_partition(string str, string asf)
+{
+    if(str.length()==0)       // if str.length() becomes 0 then print answer so far and return;
+    {
+        cout<<asf<<endl;
+        return;
+    }
+    
+    for(int i=0; i<str.length(); i++)            // making call for entire string 
+    {
+        string prefix_str = str.substr(0, i+1);     // splitting every substring of str and checking if this substr is palindrome
+        string rest_of_str = str.substr(i+1);         // rest of string after splitting
+        
+        if(isPalindrome(prefix_str)){             // if splitted string is palindrome then process furthur else do not
+            Palindromic_partition(rest_of_str, asf+"("+prefix_str+") ");       
+        }
+    }
+}
+
+int main()
+{
+    string str;
+    cin>>str;
+    
+    Palindromic_partition(str, "");
+    return 0;
+}

@@ -1,0 +1,28 @@
+/*You are given an integer array arr of length n that represents a permutation of the integers in the range [0, n - 1].
+
+We split arr into some number of chunks (i.e., partitions), and individually sort each chunk. After concatenating them, the result should equal the sorted array.
+
+Return the largest number of chunks we can make to sort the array. */
+
+class Solution {
+public:
+    int maxChunksToSorted(vector<int>& arr) {
+        
+        // in this solution, we are finding the maximum effect of value of each index,
+        //eg. [4, 3, 2, 1, 0] in this eg., 4 has max effect upto index 4 but 3, 2, 1 and 0 has
+        // effect 
+        
+        int maxim = 0;
+        int chunk = 0;
+        
+        for(int i=0; i<arr.size(); i++){
+            
+            maxim = max(maxim, arr[i]);
+            
+            if(i == maxim) 
+                chunk++;
+        }
+        
+        return chunk;
+    }
+};

@@ -1,0 +1,22 @@
+class Solution{   
+public:
+    int getPairsCount(int arr[], int n, int k) {
+        
+        int cnt = 0;
+        
+        unordered_map<int, int> mp;
+        
+        for(int i=0; i<n; i++)
+        {
+            int x = k - arr[i];           
+            
+            if(mp.find(x)==mp.end()){      // if x is not found in map then increment freq of arr[i] in map
+                mp[arr[i]] += 1;
+            }
+            else{
+                cnt += mp[x];           // else increase the cnt by mp[x], because x is the term which was repeated mp[x] times in array
+                mp[arr[i]] += 1;             // also increse the array[i]
+            }
+        }
+        return cnt;
+    }

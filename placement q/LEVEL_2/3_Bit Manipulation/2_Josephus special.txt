@@ -1,0 +1,26 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int max_power(int n){
+    int res = 1;
+    while(res*2 <= n){
+        res = res * 2;
+    }
+    return res;
+}
+
+int Josephus(int n)
+{
+    int powerOf2 = max_power(n);        // getting the maximum power of 2 i.e. 2^x
+    int l = n - powerOf2;               // getting the extra part from n (e.g., for n=15, max power of 2 is 3 i.e., 2^3=8 then 15-8=7)
+    return 2*l + 1;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    cout<<Josephus(n);
+    return 0;
+}

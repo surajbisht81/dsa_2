@@ -1,0 +1,97 @@
+/*1. You are given a partially written GenericTree class.
+2. You are required to complete the body of removeLeaves function. The function is expected to remove all leaves from the tree. */
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node
+{
+    public:
+    int data;
+    vector<Node*> children;
+};
+
+Node* construct(int arr[], int n)
+{
+    Node *root = NULL;
+    
+    stack<Node*> st;
+    
+    for(int i=0; i<n; i++)
+    {
+        if(arr[i] == -1)
+        {
+            st.pop();
+        }
+        else
+        {
+            Node *temp = new Node;
+            temp->data = arr[i];
+            
+            if(st.size()>0){
+                st.top()->children.push_back(temp);
+            }
+            else{
+                root = temp;
+            }
+            st.push(temp);
+        }
+    }
+    return root;
+}
+
+void display(Node *root)
+{
+    cout<<root->data<<" -> ";
+    
+    for(Node *child : root->children)
+    {
+        cout<<child->data<<", ";
+    }
+    cout<<"."<<endl;
+    
+    for(Node *child : root->children)
+    {
+        display(child);
+    }
+}
+
+void RemoveLeaves(Node *root)
+{
+    for(int i=0; i<root->children.size(); i++)              // processing every child of root;
+    {
+        Node *child = root->children[i];                // this is ith child of root
+        
+        if(child->children.size()==0)                      // if this ith child's size is 0 then remove it
+         {
+             for(int j=i; j<root->children.size(); j++)        // we are just running loop in its parent and 
+               root->children[j] = root->children[j+1];     // swapping jth node with j+1 th node so that jth node having children size 0 is removed
+               
+            root->children.pop_back();                  // but after swapping all nodes, last node duplicates itself, so remove it by popping last
+            i--;                                          // i will increment in for loop, so to overcome that do i--;
+         }
+    }
+    
+    for(Node *child : root->children)                  // now process every child, and checking the same thing
+    {
+        RemoveLeaves(child);
+    }
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    Node *root = construct(arr, n);
+
+    RemoveLeaves(root);
+    display(root);
+    
+    return 0;
+}

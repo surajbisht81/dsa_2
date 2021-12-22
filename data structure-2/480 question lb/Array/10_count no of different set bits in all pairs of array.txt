@@ -1,0 +1,29 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    int n;
+    cin>>n; 
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    long res = 0;
+    
+    for(int i=0; i<32; i++)
+    {
+        long count_set = 0;
+        for(int j=0; j<n; j++)
+        {
+            if(arr[j] & (1<<i)){
+                count_set++;
+            }
+        }
+        long count_unset = n - count_set;
+        long diff = count_set * count_unset * 2;
+        res += diff;
+    }
+    cout<<res;
+    return 0;
+}

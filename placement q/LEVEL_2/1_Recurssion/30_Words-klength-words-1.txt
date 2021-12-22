@@ -1,0 +1,55 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void word_k_length(string unique, int idx, int select, int k, char used[])
+{
+    if(idx==unique.length())                           // if all chars of unique string are processed
+    {
+        if(select == k)                                // if selected chars are equal to k the print
+        {
+            for(int i=0; i<k; i++)
+             cout<<used[i];
+             
+            cout<<endl;
+        }
+        return;
+    }
+    
+    for(int i=0; i<k; i++)                                         // run loop for each spots
+    {
+        if(used[i]=='-')                                          // if this spot is not used then use it 
+        {
+            char ch = unique[idx];                                 // get the first char of unique string
+            used[i] = ch;
+            word_k_length(unique, idx+1, select+1, k, used);
+            used[i] = '-';                                          // backtracking, for char at different spots
+        }
+    }
+    
+    word_k_length(unique, idx+1, select, k, used);
+}
+
+int main()
+{
+    string str;
+    int k;
+    cin>>str>>k;
+    
+    string unique = "";
+    
+    unordered_map<char, int> mp;
+    for(int i=0; i<str.length(); i++)
+    {
+        if(mp[str[i]]==0){
+            mp[str[i]] = 1;
+            unique += str[i];
+        }
+    }
+    
+    char used[k];
+    for(int i=0; i<k; i++)
+     used[i] = '-';
+     
+    word_k_length(unique, 0, 0, k, used);     // 1st 0 is the idx of unique string, 2nd 0 is no of selected chars, k is total selections given, used is ans array
+    return 0;
+}

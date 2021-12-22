@@ -1,0 +1,58 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void Smallest_Substring(string str)
+{
+    set<char> st;
+    int n = str.length();
+    
+    for(int i=0; i<n; i++){
+        st.insert(str[i]);
+    }
+    
+    int k = st.size();
+    unordered_map<char, int> mp;
+    
+    int left = 0, right = 0, window = 0;
+    int ans = INT_MAX;
+    
+    while(left<n)
+    {
+        while(right<n and window<k){
+            
+            char ch = str[right];
+            mp[ch]++;
+            
+            if(mp[ch]==1){
+                window++;
+            }
+            right++;
+        }
+        
+        if(window==k)
+         ans = min(ans, right-left);
+         
+        mp[str[left]]--;
+        
+        if(mp[str[left]]==0){
+            window--;
+            mp.erase(str[left]);
+        }
+         
+        left++;
+    }
+    
+    if(ans==INT_MAX)
+     cout<<"0";
+    else
+     cout<<ans;
+}
+
+int main()
+{
+    string str;
+    cin>>str;
+    
+    Smallest_Substring(str);
+    return 0;
+}

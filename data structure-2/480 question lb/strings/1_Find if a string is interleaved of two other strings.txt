@@ -1,0 +1,87 @@
+
+/*Given three strings A, B and C. Write a function that checks whether C is an interleaving of A and B. C is said to be interleaving A and B, if it contains all 
+characters of A and B and order of all characters in individual strings is preserved. */
+
+// This is memorization and T.C is O(M*N) unique keys in map, where M and N are length of string A and string B respectively
+
+unordered_map<string, bool> mp;    // by default bool is false in global
+
+bool isInterleave(string A, string B, string C) 
+{
+    if(A.empty() && B.empty() && C.empty()){
+        return true;
+    }
+    
+    if(C.empty()){
+        return false;
+    }
+    
+    string str = A + "|" + B + "|" + C;
+    if(mp[str] == true){
+        return mp[str];
+    }
+    
+    bool first = (A.length() > 0 && A[0]==C[0]) &&   isInterleave(A.substr(1), B, C.substr(1));
+    bool second = (B.length() > 0 && B[0]==C[0]) && isInterleave(A, B.substr(1), C.substr(1));
+    
+    
+    return mp[str] = (first or second);
+}
+
+
+// 2nd method tabulation of dp
+bool isInterleave(string A, string B, string C) 
+{
+    int m = A.length();
+    int n = B.length();
+    int p = C.length();
+    
+    if(m+n != p)
+     return false;
+     
+    bool IL[m+1][n+1];
+    memset(IL, false, sizeof(IL));
+    
+    for(int i=0; i<=m; i++)
+    {
+        for(int j=0; j<=n; j++)
+        {
+            // two empty strings have an
+            // empty string as interleaving
+            if(i==0 && j==0){
+                IL[i][j] = true;
+            }
+            // A is empty
+            else if(i==0){
+                IL[i][j] = (B[j-1] == C[i+j-1]) ? IL[i][j-1] : false;
+            }
+            // B is empty
+            else if(j==0){
+                IL[i][j] = (A[i-1] == C[i+j-1]) ? IL[i-1][j] : false;
+            }
+            
+            // Current character of C matches
+            // with current character of A,
+            // but doesn't match with current
+            // character of B
+            else if(A[i-1]==C[i+j-1] && B[j-1]!=C[i+j-1]){
+                IL[i][j] = IL[i-1][j];
+            }
+            
+            // Current character of C matches
+            // with current character of B,
+            // but doesn't match with current
+            // character of A
+            else if(A[i-1]!=C[i+j-1] && B[j-1]==C[i+j-1]){
+                IL[i][j] = IL[i][j-1];
+            }
+            
+            // Current character of C matches
+            // with that of both A and B
+            else if(A[i-1]==C[i+j-1] && B[j-1]==C[i+j-1]){
+                IL[i][j] = IL[i-1][j] || IL[i][j-1];
+            }
+        }
+    }
+    return IL[m][n];
+}

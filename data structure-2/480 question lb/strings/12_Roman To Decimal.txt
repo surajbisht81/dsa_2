@@ -1,0 +1,42 @@
+int val(char ch)
+{
+    if(ch=='I'){
+        return 1;
+    }else if(ch == 'V'){
+        return 5;
+    }else if(ch == 'X'){
+        return 10;
+    }else if(ch == 'L'){
+        return 50;
+    }else if(ch == 'C'){
+        return 100;
+    }else if(ch == 'D'){
+        return 500;
+    }else if(ch == 'M'){
+        return 1000;
+    }
+}
+
+// there is a pattern which we have to observe, if a smaller value is present in front of other character then minus that value from ans
+// and if an equal or greater value is present in front of prev character then just add it
+// so we will traverse from the back so that we can check if current character is actually smaller or greater than current char
+int romanToDecimal(string &str) {
+    int ans = 0;
+    
+    int n = str.length();
+    int p = 0;
+    
+    for(int i=n-1; i>=0; i--)
+    {
+        if(val(str[i]) < p ){                   // if current char is smaller than previous char(or value) then subtract it and update the prev, one
+            ans = ans - val(str[i]);
+            p = val(str[i]);
+        }
+        else{                           // else just add it
+            ans += val(str[i]);
+            p = val(str[i]);
+        }
+    }
+    
+    return ans;
+}

@@ -1,0 +1,78 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Node {
+    public:
+        int data;
+    vector <Node*> children;
+};
+
+Node* construct(int arr[], int n) {
+    Node* root = NULL;
+
+    stack <Node*> st;
+
+    for (int i = 0; i < n; i++) {
+        if (arr[i] == -1) {
+            st.pop();
+        } else {
+            Node * temp = new Node;
+            temp-> data = arr[i];
+
+            if (st.size() > 0) {
+                st.top()-> children.push_back(temp);
+            } else {
+                root = temp;
+            }
+            st.push(temp);
+        }
+    }
+    return root;
+}
+
+static int FLOOR;
+
+void ceilAndFloor(Node *root, int k)
+{
+    if(root->data < k){
+        
+        FLOOR = max(FLOOR, root->data);
+    }
+    
+    for(Node *child : root->children)
+    {
+        ceilAndFloor(child, k);
+    }
+}
+
+int KthLargest(Node *root, int k)    // To find the kth largest value, we will use floor and ceil of a number conecept 
+{
+    FLOOR = INT_MIN;        // To finding floor value, it if first set to int_min;
+    int factor = INT_MAX;   // this is the variable whose floor is to be calculated
+    
+    for(int i=0; i<k; i++)    // we are finding kth largest
+    {
+        ceilAndFloor(root, factor);   // this will update the FLOOR vaiable as floor of factor 
+        factor = FLOOR;               // next time, factor will get the FLOOR so that in next iteration, calculated FLOOR's floor is calculated
+        FLOOR = INT_MIN;        // for finding next FLOOR, it is set to int_min;
+    }
+    return factor;
+}
+
+int main() {
+    int n;
+    cin >> n;
+
+    int arr[n];
+    for (int i = 0; i < n; i++)
+        cin >> arr[i];
+
+    Node *root = construct(arr, n);
+
+    int k;
+    cin >> k;
+    
+    cout<<KthLargest(root, k);
+     
+    return 0;
+}

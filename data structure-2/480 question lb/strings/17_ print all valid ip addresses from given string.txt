@@ -1,0 +1,69 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+bool isValid(string str)
+{
+    if(str.length()==0 || str.length()>3){
+        return false;
+    }
+    
+    if(str.length()>1 && str[0]=='0'){
+        return false;
+    }
+    
+    return stoi(str)>=0 && stoi(str)<=255;
+}
+
+void convert(string str, vector<string> &res)
+{
+    for(int i=1; i<=3 && i<str.length(); i++)
+    {
+        string first = str.substr(0, i);
+        
+        if(isValid(first))
+        {
+            for(int j=1; j<=3 && i+j<str.length(); j++)
+            {
+                string second = str.substr(i, j);
+                
+                if(isValid(second))
+                {
+                    for(int k=1; k<=3 && i+j+k<str.length(); k++)
+                    {
+                        string third = str.substr(i+j, k);
+                        
+                        string fourth = str.substr(i+j+k);
+                        
+                        if(isValid(third) && isValid(fourth))
+                        {
+                            res.push_back(first + "." + second + "." + third + "." + fourth);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+int main()
+{
+	string A = "25525511135";
+	string B = "25505011535";
+
+    vector<string> res;
+	convert(A, res);
+	
+	for(auto x: res){
+	    cout<<x<<" ";
+	}
+	
+	res.clear();
+	convert(B, res);
+
+    cout<<endl;
+    for(auto x: res){
+        cout<<x<<" ";
+    }
+    
+	return 0;
+}

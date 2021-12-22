@@ -1,0 +1,68 @@
+/*1. You are given a string(str) and a number K.
+2. You have to find the length of longest substring of the given string that contains at most K unique characters.*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void Longest_Substring(string str, int k)
+{
+    unordered_map<char, int> mp;
+    
+    int i=0, j=0;
+    int ans = 0;
+    int n = str.length();
+    
+    while(true)
+    {
+        bool flag1 = true, flag2 = true;
+        while(i < n)
+        {
+            flag1 = false;
+            char ch = str[i];             // first getting char from string and put it in map and calculating size of map, if less or equal to k then keep checking the
+            mp[ch]++;                     // ans and if map size becomes greater than k then break
+            
+            i++;
+            
+            if(mp.size() <= k){          // in other problems, we are just breaking out of loop and do not checking if mp.size() <= k 
+                ans = max(ans, i-j);     // because in those questions, we are required excatly k unique characters, but in this question, we are said to find atmost k                                          //char, so if given string has not k unique characters then, ans will be zero, but we need atmost k characters.
+            }else{
+                break;
+            }
+        }
+        
+        // releasing the chars from starting(j) until we get map size again equal to k
+        while(j< i)
+        {
+            flag2 = false;
+            char ch = str[j];           // getting the char from j and removing it from map, if at any time this char freq is 0 then erase it from map so that size of 
+            j++;                       // map is reduces otherwise map size will not reduce 
+            
+            mp[ch]--;
+            
+            if(mp[ch]==0)
+             mp.erase(ch);
+             
+            if(mp.size() > k){           // if we are still getting the map size greater than k the keep changing ans as max of ans and i-j
+                ans = max(ans, i-j);
+            }else{
+                break;                 // else break 
+            }
+        }
+        
+        if(flag1==true && flag2==true)
+         break;
+    }
+    cout<<ans;
+}
+
+int main()
+{
+    string str;
+    cin>>str;
+     
+    int k;
+    cin>>k;
+    
+    Longest_Substring(str, k);
+    return 0;
+}

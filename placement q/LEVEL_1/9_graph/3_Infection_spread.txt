@@ -1,0 +1,89 @@
+/*1. You are given a graph, representing people and their connectivity.
+2. You are also given a src person (who got infected) and time t.
+3. You are required to find how many people will get infected in time t, if the infection spreads to neighbors of infected person in 1 unit of time.*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+class Graph
+{
+  public:
+   int V;
+   vector<pair<int, int> > *Edges;
+   
+   Graph(int v){
+     V = v;
+     Edges = new vector<pair<int, int>>[V];
+   }
+   void addEdge(int, int, int);
+   void Infection_Spread(int, int);
+};
+
+void Graph :: addEdge(int src, int dst, int wgt)
+{
+    Edges[src].push_back(make_pair(dst, wgt));
+    Edges[dst].push_back(make_pair(src, wgt));
+}
+
+void Graph :: Infection_Spread(int src, int t)
+{
+     queue<pair<int, int>> qu;
+     qu.push({src, 1});
+     
+     int visited[V];
+     memset(visited, 0, sizeof(visited));
+     
+     int count=0;
+     
+     while(!qu.empty())
+     {
+         pair<int, int> p = qu.front();   
+         qu.pop();
+         
+         if(visited[p.first] > 0){          // if current element is visited already then continue;
+             continue;
+         }
+         else{
+             visited[p.first] = p.second;   // else visit it and update the value in visited
+         }
+         
+         if(visited[p.first]>t)         // if for any element, it's visited value is greater than given time then break out the loop
+          break;
+          
+         count++;          // every time increment the count
+         
+         for(auto it=Edges[p.first].begin(); it!=Edges[p.first].end(); it++)
+         {
+             int new_src = (*it).first;
+             if(visited[new_src] == 0){              // if current element if not visited then include it's neighbour;
+                 qu.push({new_src, p.second+1});
+             }
+         }
+     }
+     cout<<count;
+}
+
+int main()
+{
+    int vertices;
+    cin>>vertices;
+    
+    int edges;
+    cin>>edges;
+    
+    Graph g(vertices);
+    
+    for(int i=0; i<edges; i++)
+    {
+        int src, dst, wgt;
+        cin>>src>>dst>>wgt;
+        
+        g.addEdge(src, dst, wgt);    
+    }
+    
+    int src, t;
+    cin>>src>>t;
+    
+    g.Infection_Spread(src, t);
+    return 0;
+}

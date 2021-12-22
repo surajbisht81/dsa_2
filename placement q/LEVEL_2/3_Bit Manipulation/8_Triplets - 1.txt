@@ -1,0 +1,40 @@
+/*1. You are given an array(arr) of N numbers.
+2. You have to select three indices i,j,k following this condition -> 
+      0 <= i < j <= k < arr.length
+3. Two numbers X and Y as defined as :
+      X = arr[i] ^ arr[i+1] ^ ... ^ arr[j - 1]
+      Y = arr[j] ^ arr[j+1] ^ ... ^ arr[k]
+4. You have to print the number of triplets where X is equal to Y.*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    int cnt = 0;                  // count of triplets
+    
+    // basically the goal is to find out the i and k where xor of i to k inclusive is 0, we can put j anywhere inbetween i and k
+    for(int i=0; i<n; i++)            
+    {
+        int val = arr[i]; 
+        
+        for(int k=i+1; k<n; k++)                // k will be from i+1 to n and check if val of i to k is 0 or not if 0 then increse the cnt by k-i;
+        {
+            val ^= arr[k];
+            
+            if(val==0){
+                cnt += k-i;
+            }
+        }
+    }
+    cout<<cnt;
+    return 0;
+}

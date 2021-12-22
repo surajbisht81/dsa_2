@@ -1,0 +1,52 @@
+/*1. You are given an array(arr) of integers.
+2. You have to find if the elements of the given array can be arranged to form an arithmetic progression.
+3. Arithmetic progression is defined as a sequence of numbers where the difference between any two consecutive numbers is the same. */
+
+#include<bits/stdc++.h>
+using namespace std;
+
+bool AP(int arr[], int n)
+{
+    if(n==1)
+     return true;
+     
+    set<int> st;
+    int minim = INT_MAX;
+    int maxim = INT_MIN;
+    
+    for(int i=0; i<n; i++)
+    {
+        minim = min(minim, arr[i]);
+        maxim = max(maxim, arr[i]);
+        
+        st.insert(arr[i]);
+    }
+    
+    int cd = (maxim - minim)/(n-1);
+    
+    for(int i=0; i<n; i++)
+    {
+        int ele = minim + cd*i;
+        if(st.find(ele) == st.end())
+         return false;
+    }
+    return true;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+     if(AP(arr, n)){
+         cout<<"true";
+     }
+     else{
+         cout<<"false";
+     }
+     return 0;
+}

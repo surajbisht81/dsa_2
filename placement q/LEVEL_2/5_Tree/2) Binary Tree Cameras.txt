@@ -1,0 +1,41 @@
+
+class Solution {
+public:
+    // -1: I am covered, no need to worry about me
+    // 0: it has camera, i can cover my child, me and my parent as well
+    // 1: need cover, it will tell it's parent to install a camera to cover it
+    int minCameraCover_(TreeNode* root, int *camera) {
+        
+        if(!root) return -1;
+        
+        int left = minCameraCover_(root->left, camera);
+        int right = minCameraCover_(root->right, camera);
+        
+        if(left==-1 && right==-1){     // if -1 from both child then it will tell it's parent to install a camera
+            return 1;
+        }
+        
+        if(left==1 || right==1){    // if any of left or right require camera then it has to install a camera and it will return
+            (*camera)++;            // 0 telling its parent that you are covered by me
+            return 0;
+        }
+        
+        if(left==0 || right==0){    // if any of left or right is 0, means this node is covered by its child then
+            return -1;              // it will tell it's parent that i am covered, no need to worry about me
+        }
+        
+        return -1;
+    }
+    
+    int minCameraCover(TreeNode *root){
+        int camera = 0;
+        
+        int val = minCameraCover_(root, &camera);
+        
+        // lastly, if root node is not covered, and val is 1 that means, it need cover, and its children are already covered
+        // so it has to install camera
+        if(val == 1) camera++;
+        
+        return camera;
+    }
+};

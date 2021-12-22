@@ -1,0 +1,72 @@
+/*1. You are given number N and 2*N number of strings that represent a list of N tickets(source and destination).
+2. You have to find the itinerary in order using the given list of tickets.
+Sample Input
+4
+Chennai Banglore 
+Bombay Delhi 
+Goa Chennai 
+Delhi Goa 
+
+Sample Output
+Bombay -> Delhi -> Goa -> Chennai -> Banglore.
+*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    unordered_map<string, string> mp;
+    
+    // taking inputs
+    for(int i=1; i<=n; i++)
+    {
+        string A, B;
+        cin>>A>>B;
+        
+        mp[A] = B;
+    }
+    
+    unordered_map<string, bool> pot_src;
+    
+    // we are putting true to src place and false to every other place
+    for(auto it=mp.begin(); it!=mp.end(); it++)
+    {
+        string src = (*it).first;
+        string dst = (*it).second;
+        
+        pot_src[dst] = false;              // destiation can never be original src so put false
+        
+        if(pot_src.find(src)!=pot_src.end()){      // if current src if found in past in pt_src map then it can never be original src
+            pot_src[src] = false;
+        }
+        else{                       // else make current src as original src
+            pot_src[src] = true;
+        }
+    }
+    
+    string src;      // original src
+    
+    for(auto it=pot_src.begin(); it!=pot_src.end(); it++)
+    {
+        if(pot_src[(*it).first] == true){                    // if we find true agains place then it is src and break
+            src = (*it).first;
+            break;
+        }
+    }
+    
+    while(true)
+    {
+        if(mp.find(src)!=mp.end()){              // first we will print src then make src as destination of current place till current src is found in map 
+            cout<<src<<" -> ";
+            src = mp[src];
+        }
+        else{
+            cout<<src<<".";         // if src is not found in map thats means no other destinations are left this src is last destination remaining
+            break;
+        }
+    }
+}

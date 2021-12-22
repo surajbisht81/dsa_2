@@ -1,0 +1,47 @@
+/*1. You are given an array(arr) of length N which represents N number of balloons.
+2. Each balloon is painted with a number on it.
+3. You have to collect maximum coins by bursting all the balloons.
+4. If you burst a balloon with index i, you will get (arr[i-1] * arr[i] * arr[i+1]) number of coins.
+5. If arr[i-1] and arr[i+1] don't exist, then you may assume their value as 1.*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int Burst_Balloon(int arr[], int n)
+{
+    int dp[n][n];
+    
+    for(int g=0; g<n; g++)                                                            // again using gap strategy
+    {
+        for(int i=0, j=g; j<n; i++, j++)
+        {
+            int maxim = INT_MIN;                                                     // finding the maximum value
+            for(int k=i; k<=j; k++)                                                  // k starts from i to j (each balloon will get chance to burst last)
+            { 
+                int left = (k==i) ? 0 : dp[i][k-1];                                  // left profit is dp[i][k-1] if k is not equal to i
+                int right = (k==j) ? 0: dp[k+1][j];                                  // right profit is dp[k+1][j] if k is not equal to j
+                
+                int val = (i==0 ? 1 : arr[i-1]) * arr[k] * (j==n-1 ? 1 : arr[j+1]);  // if k is last balloon to burst then, profit is arr[k] * arr[i-1] if i is not equal to 0 and arr[j+1] if j is not equal to n-1
+                
+                if(left+right+val > maxim)
+                 maxim = left+right+val;
+            }
+            dp[i][j] = maxim;
+        }
+    }
+    return dp[0][n-1];
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    cout<<Burst_Balloon(arr, n);
+    return 0;
+}

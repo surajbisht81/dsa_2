@@ -1,0 +1,17 @@
+
+/* this question can be solved using size as well but for that we require two traversals of linked list
+ the easiest way is to apply two pointers standing at head front ;
+
+ void kthfromend(int k){
+        
+        Node *slow = head;
+        Node *fast = head;
+        for(int i=0; i<k; i++)
+          fast = fast->next;
+          
+        while(fast->next!=NULL){
+            fast = fast->next;
+            slow = slow->next;
+        }
+        cout<<slow->data<<endl;
+    }

@@ -1,0 +1,114 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long int 
+
+// O(n) space and time
+int main()
+{
+   ll t;
+   cin>>t;
+   
+   while(t--)
+   {
+        int n;
+        cin>>n;
+        
+        string str;
+        cin>>str;
+        
+        vector<int> v;
+        // storing the position of '[' in vector
+        for(int i=0; i<n; i++)
+        {
+            if(str[i] == '['){
+                v.push_back(i);
+            }
+        }
+        
+        int res = 0;
+        int pos = 0;
+        int count = 0;
+        
+        for(int i=0; i<n; i++){
+            
+            // if '[' is encountered, we will increase the count and pos also because current '[' is used now 
+            if(str[i] == '['){
+                count++;
+                pos++;
+            }
+            // else decrease the count
+            else if(str[i] == ']'){
+                count--;
+            }
+            
+            // its a condition of imbalance string till now.
+            if(count < 0){
+                
+                // store the swaps required
+                res += v[pos] - i;
+                swap(str[v[pos]], str[i]);           // also swap the breacket
+                pos++;                               // and increase the pos because '[' at previous pos is used now
+                
+                count = 1;       // after swapping current ']' at current ith index with '[' current ith char becomes '[' so update count as 1
+            }
+        }
+        
+        cout<<res<<"\n";
+   }
+   
+   return 0;
+}
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+second method - O(n) time and O(1) space
+
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long int 
+
+int main()
+{
+   ll t;
+   cin>>t;
+   
+   while(t--)
+   {
+        int n;
+        cin>>n;
+        
+        string str;
+        cin>>str;
+        
+        int countLeft = 0;         // count of '[' left bracket
+        int countRight = 0;        // count of ']' right bracket
+        int imbalance = 0;         // count of imbalance brackets
+        int res = 0;               // no of swaps required to balance the string
+        
+        for(int i=0; i<n; i++)
+        {
+            // if we encounter '[' increase the left bracket counter
+            if(str[i] == '['){
+                countLeft++;
+                
+                // also check if imbalance is there (i.e., if string is imbalance)
+                if(imbalance > 0){
+                    res += imbalance;               // then update the res as no of imbalance 
+                    imbalance--;                    //imbalance decremented by 1 as it solved only one imbalance of Left and Right
+                }
+            }
+            // if ']' then increase the counter of right bracket
+            else if(str[i] == ']'){
+                countRight++;
+                
+                // here check the imbalance if string is imbalance or not
+                imbalance = (countRight - countLeft);
+            }
+        }
+        
+        cout<<res<<"\n";
+   }
+   
+   return 0;
+}

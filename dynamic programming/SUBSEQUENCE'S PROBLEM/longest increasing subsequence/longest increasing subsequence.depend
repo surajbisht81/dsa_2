@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1584207087 source:c:\users\admin\desktop\data structure\z-special data strucure\longest increasing subsequence\main.cpp
+	<iostream>
+	<bits/stdc++.h>
+
+1584207239 source:f:\cbackup\dynamic programming\subsequence's problem\longest increasing subsequence\main.cpp
+	<iostream>
+	<bits/stdc++.h>
+

@@ -1,0 +1,51 @@
+/*1. You are given a string which represents digits of a number
+2. You have to create the maximum number by performing at-most k swap operations on its digits.*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void Swap(string &str, int i, int j)
+{
+    char ch = str[i];
+    str[i] = str[j];
+    str[j] = ch;
+}
+
+void LargestNumber(string str, int k, int &maxim)
+{
+    // base case
+    if(stoi(str) > maxim)                         // updating the maxim number every time 
+    {
+        maxim = stoi(str);
+    }
+    
+    if(k==0)                                        // if k becomes 0 then return;
+     return;
+    
+    for(int i=0; i<str.length()-1; i++)            // outer loop will run for every index 
+    {
+        for(int j=i+1; j<str.length(); j++)        // inner loop will run for i+1th character, and check if jth character is greater than ith char
+        {
+            if(str[i] < str[j])                   // if yes, then swap the ith char with jth char
+            {
+                Swap(str, i, j);
+                LargestNumber(str, k-1, maxim);    // make call for next level of swapping with k-1 swaps remaining
+                Swap(str, i, j);                   // backtracking because string has to be restored as it is
+            }
+        }
+    }
+}
+
+int main()
+{
+    string str;
+    cin>>str;
+    
+    int k;
+    cin>>k;
+    
+    int maxim = stoi(str);
+    LargestNumber(str, k, maxim);
+    cout<<maxim;
+    return 0;
+}

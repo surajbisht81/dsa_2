@@ -1,0 +1,97 @@
+/*1. You are given a number n, representing the count of elements.
+2. You are given n numbers.
+3. You are given a number "tar".
+4. You are required to calculate and print true or false, if there is a subset the elements of which add up to "tar" or not.
+5. Also, you have to print the indices of elements that should be selected to achieve the given target.
+6. You have to print all such configurations.*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+class Pair
+{
+    public:
+    int i;
+    int j;
+    string psf;
+    Pair(int i, int j, string psf){
+        this->i = i;
+        this->j = j;
+        this->psf = psf;
+    }
+};
+
+void print_Subsets(int arr[], int n, int tar)
+{
+    bool dp[n+1][tar+1];                             // calculating the dp table n+1 for 0 (no item) and tar+1 col for 0(no target)
+    
+    for(int i=0; i<=n; i++)                  // computing the dp table
+    {
+        for(int j=0; j<=tar; j++)
+        {
+            if(i==0 and j==0)
+             dp[i][j] = true;
+            else if(i==0)
+             dp[i][j] = false;
+            else if(j==0)
+             dp[i][j] = true;
+            else{
+                dp[i][j] = dp[i-1][j];
+                if(j>=arr[i-1])
+                 dp[i][j] |= dp[i-1][j-arr[i-1]];
+            }
+        }
+    }
+    
+    if(dp[n][tar]==true){
+        cout<<"true"<<endl;
+    }else{
+        cout<<"false"<<endl;
+    }
+    
+    queue<Pair*> qu;
+    qu.push(new Pair(n, tar, ""));                  // initially queue will include the last row and last col cell indices and "" ans
+    
+    while(!qu.empty())
+    {
+        Pair *p = qu.front();
+        qu.pop();
+        
+        int row = p->i, col = p->j;
+        string ans = p->psf;
+        
+        if(row==0 or col==0){                                                        // if we reach 0th col or 0th row then print ans
+            cout<<ans<<endl;
+        }
+        else{           //else put pair in queue
+            if(col>=arr[row-1]){                                                      // if col(target) val is greater or equal to array value                                         
+                bool inc = dp[row-1][ col- arr[row-1]];                                // then include it and get the dp value for that row nd col
+                if(inc==true){
+                   qu.push(new Pair(row-1, col-arr[row-1], to_string(row-1)+" "+ans));  // if dp is true, then push pair of row-1th(upper) row
+                }                                                                       // corresponding col and that row index of array
+            }
+        
+            bool exc = dp[row-1][col];                        // checking by excluding this number, we get the required ans or not
+            if(exc==true){                                   // if true then do not this number in our ans;
+                qu.push(new Pair(row-1, col, ans));
+            }
+        }
+    }
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    int tar;
+    cin>>tar;
+    
+    print_Subsets(arr, n, tar);
+    return 0;
+}

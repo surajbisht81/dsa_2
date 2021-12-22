@@ -1,0 +1,117 @@
+#include<bits/stdc++.h> 
+using namespace std; 
+
+bool ispalindrome(string s) 
+{ 
+    int j = s.length()-1;
+    
+    for(int i=0, l=j; i<=l; i++, l--){
+        if(s[i]!=s[l]){
+            return false;
+        }
+    }
+    return true;
+}
+
+string reverse(string original, int cnt)
+{
+    string rev = original.substr(original.length()-cnt);
+    
+    reverse(rev.begin(), rev.end());
+    return rev;
+}
+
+int main() 
+{ 
+	string s = "aa"; 
+	string original = s;
+	
+	// no of characters to add at front
+	int cnt = 0;
+	
+	// loop while length of string is not zero, we will check if string is palindrome or not, if yes then break
+	// otherwise, erase the last character from string and increase the cnt and then check if now the string is palindrome or not
+	while(s.length() > 0)
+	{
+	    if(ispalindrome(s))
+	    {
+	        break;
+	    }
+	    else
+	    {
+	        s.erase(s.begin() + s.length()-1);
+	        cnt++;
+	    }
+	}
+	
+	cout<<cnt<<"\n";
+	
+	string rev = reverse(original, cnt);
+	
+	// add the reverse string with original string
+	cout<< (rev+original) <<"\n";
+	return 0;
+} 
+
+
+//2nd method ---------------------------------------------------------------------------------------------------------------------------------------
+
+O(n) TC
+
+#include <bits/stdc++.h> 
+using namespace std; 
+ 
+string reverse(string str)
+{
+    reverse(str.begin(), str.end());
+    return str;
+}
+
+//logic : 
+// we will calculate the lps array of str+"#"+reverseOf(str) because, we want to find out the longest palindromic prefix length, and after
+// deleting the string length with longest palindromic length we will get our ans as these min characters from the end are needed to be appended
+// at the front. so to find out the proper prefix we will use lps of kmp but before that we have to concatenate the "#" and reverse of string
+// so that the suffix should match with prefix
+
+int getMinCharToAddedToMakeStringPalin(string str)
+{
+    int n = str.length();
+    int lps[2*n+1];
+    memset(lps, 0, sizeof(lps));
+    
+    string rev = reverse(str);
+    str = str + "#" + rev;
+    
+    int i=1, len = 0;
+    
+    while(i < str.length()){
+        
+        if(str[i] == str[len]){
+            len++;
+            lps[i] = len;
+            i++;
+        }
+        else{
+            if(len > 0){
+                len = lps[len-1];
+            }
+            else{
+                lps[i] = 0;
+                i++;
+            }
+        }
+    }
+    
+    return (n - lps[str.length()-1]);
+}
+ 
+int main() 
+{ 
+	string str = "AACECAAAA"; 
+	int ans = getMinCharToAddedToMakeStringPalin(str); 
+	
+	int n = str.length();
+	cout<<"\nstring is : "<<str.substr(n-ans) + str;
+	
+	return 0; 
+} 

@@ -1,0 +1,147 @@
+1. You are given a partially written BinaryTree class.
+2. You are required to complete the body of createLeftCloneTree function. The function is expected to create a new node for every node equal in value to it and inserted between itself and it's left child
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node
+{
+    public:
+    int data;
+    Node *left, *right;
+    
+    Node(int data){
+        this->data = data;
+        left = NULL;
+        right = NULL;
+    }
+};
+
+class Pair
+{
+    public:
+    Node *node;
+    int state;
+    Pair(Node *root, int x){
+        node = root;
+        state = x;
+    }
+};
+
+Node *construct(int arr[])
+{
+    stack<Pair*> st;
+    Node *root = new Node(arr[0]);
+    
+    Pair *p = new Pair(root, 1);
+    st.push(p);
+    
+    int idx = 0;
+    
+    while(st.empty()==false)
+    {
+        Pair *top = st.top();
+        
+        if(top->state == 1){
+            
+            idx++;
+            
+            if(arr[idx] == INT_MIN){
+                top->node->left = NULL;
+            }
+            else{
+                Node *temp = new Node(arr[idx]);
+                top->node->left = temp;
+                Pair *p = new Pair(top->node->left, 1);
+                st.push(p);
+            }
+            
+            top->state++;
+        }
+        else if(top->state == 2){
+            
+            idx++;
+            
+            if(arr[idx] == INT_MIN){
+                top->node->right = NULL;
+            }
+            else{
+                Node *temp = new Node(arr[idx]);
+                top->node->right = temp;
+                Pair *p = new Pair(top->node->right, 1);
+                st.push(p);
+            }
+            
+            top->state++;
+        }
+        else{
+            
+            st.pop();
+        }
+    }
+    return root;
+}
+
+// using recursion
+Node* TransferToLeftClone(Node *root)
+{
+    if(root == NULL)
+     return NULL;
+    Node *left_clone = TransferToLeftClone(root->left);      // recursing left node
+    Node *right_clone = TransferToLeftClone(root->right);    // recursing right node
+    
+    Node *new_node = new Node(root->data);    // making clone for current node, making node with data as root data
+    
+    new_node->left = left_clone;    // new node left will point to left clone
+    new_node->right = NULL;         // ans its right will remain NULL
+    root->left = new_node;          // and lastly, root right will point to this created new node;
+     
+    return root;
+}
+
+void Display(Node *root)
+{
+    if(root==NULL)
+     return;
+     
+    if(root->left==NULL and root->right==NULL){
+        cout<<". <- "<<root->data<<" -> ."<<endl;
+    }    
+    else if(root->left==NULL){
+        cout<<". <- "<<root->data<<" -> "<<root->right->data<<endl;
+    }
+    else if(root->right==NULL){
+        cout<<root->left->data<<" <- "<<root->data<<" -> . "<<endl;
+    }
+    else{
+        cout<<root->left->data<<" <- "<<root->data<<" -> "<<root->right->data<<endl;
+    }
+    Display(root->left);
+    Display(root->right);
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    string str;
+    
+    for(int i=0; i<n; i++)
+    {
+       cin>>str;
+       
+      if(str != "n")
+         arr[i] = stoi(str);
+      else
+         arr[i] = INT_MIN;
+    }
+    
+    Node *root = construct(arr);
+    
+    root = TransferToLeftClone(root);
+    Display(root);
+    return 0;
+}

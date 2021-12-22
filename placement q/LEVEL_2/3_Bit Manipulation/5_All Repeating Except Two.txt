@@ -1,0 +1,41 @@
+/*1. You are given an array of numbers.
+2. You have to find 2 non-repeating numbers in an array.
+3. All repeating numbers are repeating even number of times.*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+ 
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+    
+    int xxory = 0; 
+    for(int val : arr)
+     xxory ^= val;                     // first calculating xor of all elements
+     
+    int rsb = xxory & (-xxory);        // getting the right most set bit of xor of all elements
+    
+    int x = 0, y = 0;
+    
+    for(int val : arr)
+    {
+        if( (val & rsb)==0){           // if AND of element with rsb, we get 0 that means rsb of elements is 0        
+            x ^= val;
+        }else{                        // else rsb of element is 1;
+            y ^= val;
+        }
+    }
+    
+    if(x < y){
+        cout<<x<<endl<<y;
+    }else{
+        cout<<y<<endl<<x;
+    }
+    return 0;
+}

@@ -1,0 +1,36 @@
+/*You are given an integer array arr.
+
+We split arr into some number of chunks (i.e., partitions), and individually sort each chunk. After concatenating them, the result should equal the sorted array.
+
+Return the largest number of chunks we can make to sort the array.*/
+
+class Solution {
+public:
+    int maxChunksToSorted(vector<int>& arr) {
+        
+        //calculating the right minimum for every index;
+        
+        int right_min[arr.size()+1];
+        right_min[arr.size()] = INT_MAX;
+        
+        for(int i=arr.size()-1; i>=0; i--){
+            right_min[i] = min(right_min[i+1], arr[i]);
+        }
+        
+        
+        int chunks = 0;
+        int left_max = INT_MIN;
+        
+        
+        // iterating every index and checking if left max is smaller than or equal to right min then chunk can be created also
+        // updating left_max with array element every time
+        for(int i=0; i<arr.size(); i++){
+            left_max = max(left_max, arr[i]);
+            
+            if(left_max <= right_min[i+1])
+                chunks++;
+        }
+        
+        return chunks;
+    }
+};

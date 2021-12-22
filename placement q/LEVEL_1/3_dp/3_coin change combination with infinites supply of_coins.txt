@@ -1,0 +1,41 @@
+/*1. You are given a number n, representing the count of coins.
+2. You are given n numbers, representing the denominations of n coins.
+3. You are given a number "amt".
+4. You are required to calculate and print the number of combinations of the n coins using which the 
+     amount "amt" can be paid.*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int coin_change(int arr[], int n, int amt)
+{
+   int dp[amt+1];
+   memset(dp, 0, sizeof(dp));
+   dp[0] = 1;
+   
+   for(int i=0; i<n; i++)
+   {
+       for(int j=arr[i]; j<=amt; j++)
+       {
+           dp[j] += dp[j-arr[i]];
+       }
+   }
+   return dp[amt];
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    int amt;
+    cin>>amt;
+    
+    cout<<coin_change(arr, n, amt);
+    return 0;
+}

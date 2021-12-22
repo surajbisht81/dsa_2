@@ -1,0 +1,111 @@
+/*1. You are given two strings S1 and S2.
+2. You have to find the number of unique ways in which you can transform S1 to S2.
+3. Transformation can be achieved by removing 0 or more characters from S1, such that the sequence formed by the remaining characters of S1 is identical to S2.*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int Distinct_Transformation(string src, string trg, int si, int ti, vector<vector<int>> &dp)
+{
+    if(si == src.length()){                                            // if src idx becomes equal to src length then check 
+        
+        if(ti == trg.length()){                                        // if target length is also equal to target idx then return 1 else return 0;
+            return 1;
+        }else{
+            return 0;
+        }
+    }else if( ti == trg.length()){                                  // if src idx is not equal to src length but target idx has reached target length equal then return 0
+        return 1;
+    }
+    
+    if(dp[si][ti] != -1){                                                // memorization
+         return dp[si][ti];
+    }
+    
+    char char_s = src[si];
+    char char_t = trg[ti];
+    
+    int res = 0;
+    
+    if(char_s != char_t){                                                 // if src character is not same as target character
+        
+        res = Distinct_Transformation(src, trg, si+1, ti, dp);           // then src character will be removed
+    }else{                                                                // else we can either remove or add src character
+        
+        int res1 = Distinct_Transformation(src, trg, si+1, ti, dp);       // removing src character
+        int res2 = Distinct_Transformation(src, trg, si+1, ti+1, dp);     // removing src and target characters
+        
+        res = res1 + res2;
+    }
+    
+    dp[si][ti] = res;
+    
+    return res;
+}
+
+int main()
+{
+    string src, trg;
+    cin>>src>>trg;
+    
+    vector<vector<int>> dp(src.length());
+    for(int i=0; i<src.length(); i++){
+        for(int j=0; j<trg.length(); j++){
+            dp[i].push_back(-1);
+        }
+    }
+    
+    cout<<Distinct_Transformation(src, trg, 0, 0, dp);
+    return 0;
+}
+
+
+// Tabulation method
+
+/*#include<bits/stdc++.h>
+using namespace std;
+
+int Distinct_Transformation(string src, string trg)
+{
+    // putting target string at row side and src string at column side
+     int m = src.length();
+     int n = trg.length();
+     
+     int dp[n+1][m+1];         // 1 extra space for blanck character
+     
+     for(int i=n; i>=0; i--)
+     {
+         for(int j=m; j>=0; j--)
+         {
+             if(i==n){                                                // if it is last row then put 1 because in last row we have blank target but src is not
+                 dp[i][j] = 1;
+             }
+             else if(j==m){
+                 dp[i][j] = 0;                                        // if it is last col then put 0 because in last col we have blank src but target is not
+             }
+             else{
+                 
+                 if(trg[i] != src[j]){                              // if characters do not match then removing character from src, go right
+                     
+                     dp[i][j] = dp[i][j+1];
+                     
+                 }else{
+                     
+                     dp[i][j] = dp[i][j+1] + dp[i+1][j+1];               // else we can remove or not remove the src character
+                     
+                 }
+             }
+         }
+     }
+     
+     return dp[0][0];
+}
+
+int main()
+{
+    string src, trg;
+    cin>>src>>trg;
+    
+    cout<<Distinct_Transformation(src, trg);
+    return 0;
+}*/

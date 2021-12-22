@@ -1,0 +1,96 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node
+{
+    public:
+    int data;
+    vector<Node*> children;
+};
+
+Node* construct(int arr[], int n)
+{
+    Node *root = NULL;
+    
+    stack<Node*> st;
+    
+    for(int i=0; i<n; i++)
+    {
+        if(arr[i] == -1)
+        {
+            st.pop();
+        }
+        else
+        {
+            Node *temp = new Node;
+            temp->data = arr[i];
+            
+            if(st.size()>0){
+                st.top()->children.push_back(temp);
+            }
+            else{
+                root = temp;
+            }
+            st.push(temp);
+        }
+    }
+    return root;
+}
+
+vector<Node*> RootToLeafPath(Node *root, int k)
+{
+    if(root->data == k)
+    {
+        vector<Node*> v;
+        v.push_back(root);
+        return v;
+    }
+    
+    vector<Node*> v;
+    for(Node *child : root->children)
+    {
+        v = RootToLeafPath(child, k);
+        if(v.size()>0)
+         {
+             v.push_back(root);
+             return v;
+         }
+    }
+    return v;
+}
+
+int Distance(Node *root, int a, int b)
+{
+    vector<Node*> path1 = RootToLeafPath(root, a);               // get the node to root path for both the key
+    vector<Node*> path2 = RootToLeafPath(root, b);
+    
+    int i = path1.size() - 1;
+    int j = path2.size() - 1;
+    
+    while(i>=0 and j>= 0 and path1[i]->data==path2[j]->data)     // keep decreasing the i and j until node data do not match for both paths
+    {
+        i--;
+        j--;
+    }
+    j++, i++;
+    
+    return i+j;    // finally return sum of i and j
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    Node *root = construct(arr, n);
+    
+    int a, b;
+    cin>>a>>b;
+    cout<<Distance(root, a, b);
+    
+    return 0;
+}

@@ -1,0 +1,60 @@
+/*1. You are given a number n, the size of a chess board.
+2. You are required to place n number of queens in the n * n cells of board such that no queen can kill another.
+     Note - Queens kill at distance in all 8 directions
+3. Complete the body of printNQueens function - without changing signature - to calculate and print all safe configurations of n-queens
+     Use sample input and output to get more idea.*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void NQueen(int n, int row, vector<vector<bool>> &board, int cols, int ndiag, int rdiag, string asf)
+{
+    // base case
+    if(row == n){
+        cout<<asf<<"."<<endl;
+        return;
+    }
+    
+     // main code
+     
+     for(int col=0; col<n; col++)
+     {
+         // if this cell's column, ndiag and rdiag are unset then it is safe for placing queen
+         if( (cols & (1<<col))==0 && (ndiag & (1<<(row+col)))==0 && (rdiag & (1<<(row-col+n-1)))==0){
+             
+             cols ^= (1<<col);                 // set the bit in cols, indicating that this col is used and we can not use it in future 
+             ndiag ^= (1<<(row+col));          // similar for ndiag and rdiag
+             rdiag ^= (1<<(row-col+n-1));
+             
+             board[row][col] = true;                                                                         // this board is not required if we think of it carefully
+             NQueen(n, row+1, board, cols, ndiag, rdiag, asf + to_string(row) + "-" + to_string(col) + ", ");
+             
+             board[row][col] = false;
+             
+             cols ^= (1<<col);                     // while backtracking, we will make the changes normal
+             ndiag ^= (1<<(row+col));
+             rdiag ^= (1<<(row-col+n-1));
+         }
+     }
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int cols = 0;
+    int ndiag = 0;
+    int rdiag = 0;
+    
+    vector<vector<bool>> board(n);
+    for(int i=0; i<n; i++){
+        for(int j=0; j<n; j++){
+            board[i].push_back(false);
+        }
+    }
+    
+    NQueen(n, 0, board, cols, ndiag, rdiag, "");    // 0 is the current row
+    return 0;
+}

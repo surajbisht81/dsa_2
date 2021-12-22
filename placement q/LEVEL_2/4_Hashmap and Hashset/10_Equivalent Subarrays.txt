@@ -1,0 +1,64 @@
+/*1. You are given an array of integers(arr).
+2. You have to find the count of equivalent subarrays.
+3. A subarray is equivalent if,
+   count of unique integers in the subarray = count of unique integers in the given array.*/
+   
+   
+#include<bits/stdc++.h>
+using namespace std;
+
+void Equivalent_subarray(int arr[], int n)
+{
+    set<int> st;
+    for(int i=0; i<n; i++){
+        st.insert(arr[i]);
+    }
+    
+    int k = st.size();
+    
+    int left=0, right=0;
+    int window=0;
+    
+    unordered_map<int, int> mp;
+    int ans = 0;
+    
+    while(left < n)
+    {
+        while(right < n && window < k)
+        {
+            mp[arr[right]]++;
+            
+            if(mp[arr[right]]==1){
+                window++;
+            }
+            right++;
+        }
+        
+        if(window == k){
+            ans += n-right+1;
+        }
+        
+        mp[arr[left]]--;
+        
+        if(mp[arr[left]]==0){
+            mp.erase(arr[left]);
+            window--;
+        }
+         
+        left++;
+    }
+    cout<<ans;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    Equivalent_subarray(arr, n);
+    return 0;
+}

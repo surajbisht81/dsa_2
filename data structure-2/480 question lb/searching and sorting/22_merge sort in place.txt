@@ -1,0 +1,75 @@
+// O(n^2)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+void mergeSort(int arr[], int left, int mid, int right)
+{
+    // start1 is left array starting idx
+    // start2 is right array starting idx
+    
+    int start1 = left;
+    int start2 = mid+1;
+    
+    // as left array and right array are sorted in itself so if mid element is smaller than start2 element that's means everything is sorted
+    if(arr[mid] <= arr[start2]){
+        return;
+    }
+    
+    // till start1 is less than mid(mid is varying here) and start2 till end
+    while( (start1<=mid) && (start2<=right))
+    {
+        if(arr[start1] <= arr[start2]){             // if left element is smaller then do for next element of left array
+            start1++;
+        }
+        else{
+            int value = arr[start2];              // we are actually using the concept of inserting sort we are shifting all the elemnts from
+            int idx = start2;                     // start to start2, 
+            
+            while(idx != start1)
+            {
+                arr[idx] = arr[idx-1];
+                idx--;
+            }
+            
+            arr[start1] = value;                  //and finally storing the minimum element start2 at start1
+            
+            start1++;          // do operation for next element
+            mid++;
+            start2++;         
+        }
+    }
+}
+
+void merge(int arr[], int left, int right)
+{
+    // this function will remain same as in merge sort 
+    int mid;
+    
+    if(left < right)
+    {
+        mid = (left + right)/2;
+        
+        merge(arr, left, mid);
+        merge(arr, mid+1, right);
+        
+        mergeSort(arr, left, mid, right);
+    }
+}
+
+void print(int arr[], int n)
+{
+    for(int i=0; i<=n; i++){
+        cout<<arr[i]<<" ";
+    }
+}
+
+int main() {
+    
+    int arr[] = { 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
+    int arr_size = sizeof(arr) / sizeof(arr[0]);
+    
+    merge(arr, 0, arr_size-1);
+    print(arr, arr_size-1);
+    return 0;
+}

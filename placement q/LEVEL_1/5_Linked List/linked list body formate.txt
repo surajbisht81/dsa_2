@@ -1,0 +1,49 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node
+{
+    public:
+    int data;
+    Node *next;
+    Node(int key)
+    {
+        data = key;
+        next = NULL;
+    }
+};
+
+class LinkedList
+{
+    public:
+    Node *head;
+    Node *tail;
+    int size;
+    
+    LinkedList()
+    {
+        this->head = NULL;
+        this->tail = NULL;
+        this->size = 0;
+    }
+    
+};
+
+int main()
+{
+    string str;
+    
+    LinkedList l;
+    while(1)
+    {
+        cin>>str;
+        
+        if(str == "quit")
+        {
+            l.display();
+            break;
+        }
+        
+    }
+    return 0;
+}

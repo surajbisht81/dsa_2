@@ -1,0 +1,63 @@
+// left view is first node of every level of tree
+// we can use level order traversal and print first node of each level
+vector<int> leftView(Node *root)
+{
+    vector<int> ans;
+    
+    if(root==NULL){
+        return ans;
+    }   
+    
+    queue<Node*> qu;
+    qu.push(root);
+    
+    while(!qu.empty())
+    {
+        int n = qu.size();                       // getting the size
+        
+        for(int i=0; i<n; i++)                   // loop till n      
+        {
+            Node *p = qu.front();
+            qu.pop();
+            
+            if(i==0){                              // if i is 0, means it is first node of current level then print it
+                ans.push_back(p->data);
+            }
+            
+            if(p->left) qu.push(p->left);
+            if(p->right) qu.push(p->right);
+        }
+    }
+    
+    return ans;
+}
+
+
+----------------------------------------------------- 2nd method using recursive method ---------------------------------------
+// we can keep track of a variable, whenever that variable is less than current level then print node data otherwise do not print
+
+int temp = -1;
+
+void leftViewUtil(Node *root, vector<int> &ans, int level)
+{
+    if(root == NULL){
+        return;
+    }
+    
+    if(level > temp){                           // temp is global variable, and its value is changing only when it is smaller than level
+        ans.push_back(root->data);              // if it is smaller than level then printing node value, and updating it so that next time when same level nodes come
+        temp = level;                           // then temp value will be same as level value so node value will not be printed
+    }
+    
+    leftViewUtil(root->left, ans, level+1);
+    leftViewUtil(root->right, ans, level+1);
+}
+
+vector<int> leftView(Node *root)
+{
+    temp = -1;
+    vector<int> ans;
+    
+    leftViewUtil(root, ans, 0);
+    return ans;
+}

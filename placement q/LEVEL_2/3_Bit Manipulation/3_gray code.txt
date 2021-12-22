@@ -1,0 +1,65 @@
+/*1. The gray code is a binary numeral system where two successive numbers differ in only one bit.
+2. Given a non-negative integer n representing the total number of bits in the code, print the 
+     sequence of gray code. A gray code sequence must begin with 0.
+ 
+ Example:
+ Input: 2
+ Output: [0,1,3,2]
+ Explanation:
+ 00 - 0
+ 01 - 1
+ 11 - 3
+ 10 - 2*/
+
+
+#include<bits/stdc++.h>
+ using namespace std;
+ 
+ vector<string> grayCode(int n) {
+     
+     if(n==1){
+         
+         // for base, gray code is only 0 and 1
+        vector<string> base;
+        base.push_back("0");
+        base.push_back("1");
+        return base;
+     }
+     
+     vector<string> rres = grayCode(n-1);                      // getting the recursion result for n-1
+     vector<string> res;                                      // result of n
+     
+     // we have to put 0 and 1 at retults of n-1;
+     for(int i=0; i<rres.size(); i++){                      
+         string str = rres[i];
+         str = "0" + str;
+         res.push_back(str);
+     }
+     
+     // but 1 should be put ahead of rres if we traverse from end to get gray code
+     for(int i=rres.size()-1; i>=0; i--){
+         string str = rres[i];
+         str = "1" + str;
+         res.push_back(str);
+     }
+     return res;
+ }
+     
+ 
+ int main(int argc, char** argv){
+     int n;
+     cin>>n;
+     vector<string> res = grayCode(n);
+     cout<<"[";
+     for(int i=0; i<res.size(); i++){
+         
+          string str = res[i];
+          bitset<32> b(str);                         // for converting binary to decimal number
+          int dec=b.to_ulong();
+          cout<<dec;
+         if(i != res.size() - 1){
+             cout<<", ";
+         }
+     }
+     cout<<"]";
+ }

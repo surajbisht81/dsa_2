@@ -1,0 +1,69 @@
+/*Input:
+S = aabb
+Output:  ab */
+
+class Solution{
+    public:
+    string removeConsecutiveCharacter(string S)
+    {
+        string ans = "";
+        int n = S.length();
+        
+        for(int i=0; i<n; i++)
+        {
+            if(i+1 < n && S[i] == S[i+1])
+            {
+                while(i+1<n && S[i]==S[i+1])
+                 i++;
+            }
+            ans += S[i];
+        }
+        
+        return ans;
+    }
+};
+
+
+//--------------------------------------------------------------------------------
+leetcode Remove All Adjacent Duplicates in String II
+
+#include <bits/stdc++.h>
+using namespace std;
+
+
+void remove_k(string temp, int n, int k)
+{
+    string str = temp;
+    int i=0;
+    
+    int count[n] = {0};
+    
+    while(i<n)
+    {
+        if(i==0 or str[i]!=str[i-1]) // if(its a first idx or if previous character is not matchng with current character then increase the count of curr char)
+        {
+            count[i] = 1;
+        }
+        else  // str[i]==str[i+1]
+        {
+            count[i] = count[i-1]+1;  // increase the count of current character as previous count + 1;
+            if(count[i]==k)
+            {
+               str.erase(i-k+1, k);     // erase the substring starting from i-k+1 idx of length k;
+               i = i-k;                 // decreasing the value of i by k and automatically freq of that character will be decreased;
+            }
+        }
+        i++;   // every time increasing the value of i by 1
+    }
+    cout<<str<<endl;
+}
+
+int main() {
+    
+    string str = "pbbcggttciiippooaais";
+    int n = str.length();
+    
+    int k = 2;
+    remove_k(str, n, k);
+    return 0;
+}

@@ -1,0 +1,39 @@
+/*Given a number n. The task is to find the smallest number whose factorial contains at least n trailing zeroes.
+*/
+class Solution
+{
+    public:
+        bool check(int mid, int n)
+        {
+           int cnt = 0;
+           int f = 5;
+           
+           while((mid/f) > 0){
+               cnt += mid/f;
+               f = f*5;
+           }
+           
+           return (cnt >= n);
+        }
+        
+        int findNum(int n)
+        {
+            int low = 0;
+            int high = 5*n;                         // why high = 5*n, its mestory
+            
+            int ans = -1;
+            
+            while(low <= high)
+            {
+                int mid = (low + high) >>1;                   // we will check if mid has trailing zero, if yes then keep our ans and search for
+                
+                if(check(mid, n)){                              // lower value of mid, otherwise check for higher value of mid
+                    ans = mid;
+                    high = mid - 1;
+                }
+                else{
+                    low = mid + 1;
+                }
+            }
+            return ans;
+        }

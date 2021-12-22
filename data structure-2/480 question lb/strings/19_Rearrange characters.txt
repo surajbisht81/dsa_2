@@ -1,0 +1,48 @@
+/*Given a string S with repeated characters (only lowercase). The task is to rearrange characters in a string such that no two adjacent characters are same.*/
+/*Output:
+For each test case in a new line print "1" (without quotes) if the generated string doesn't contains any same adjacent characters, else if no such string is possible
+ to be made print "0" (without quotes).*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long int 
+
+int main()
+{
+   ll t;
+   cin>>t;
+   
+   while(t--)
+   {
+        string str;
+        cin>>str;
+        
+        unordered_map<char, int> mp;
+        
+        for(int i=0; i<str.length(); i++)
+        {
+            char ch = str[i];
+            
+            mp[ch]++;
+        }
+        
+        int len = str.length()/2 + 1;
+        
+        bool flag = true;
+        for(auto x : mp)
+        {
+            if(x.second >= len){
+                flag = false;
+                break;
+            }    
+        }
+        
+        if(flag)
+         cout<<"1"<<endl;
+        else
+         cout<<"0"<<endl;
+   }
+   
+   return 0;
+}

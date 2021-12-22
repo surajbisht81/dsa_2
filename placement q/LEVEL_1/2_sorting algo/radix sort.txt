@@ -1,0 +1,71 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void print(int arr[], int n)
+{
+    for(int i=0; i<n; i++)
+     cout<<arr[i]<<" ";
+    cout<<endl;
+}
+void countsort(int arr[], int n, int exp)
+{
+   int freq[10]={0};
+   
+   // finding the freq array;
+   for(int i=0; i<n; i++)
+   {
+       int val = (arr[i]/exp) % 10;
+       freq[val]++;
+   }
+   
+   // finding the prefix freq array;
+   for(int i=1; i<10; i++)
+    freq[i] += freq[i-1];
+    
+   int res[n];  // this is res array which will contain the sorted array;
+   
+   for(int i=n-1; i>=0; i--)
+   {
+       int j= (arr[i]/exp) % 10;            // j is the index of freq array which contains arr[i];
+       int val = freq[j]-1;           // 1 is subtracted from freq[j] because freq[j] contains index+1 of arr[i];
+       res[val]=arr[i];
+       freq[j]--;
+   }
+   
+   // putting all the sorted values of res into the array;
+   for(int i=0; i<n; i++)
+     arr[i]=res[i];
+     
+    cout<<"After sorting on "<<exp<<" place -> ";
+    print(arr, n);
+}
+
+void radixsort(int arr[], int n)
+{
+    int maxim = INT_MIN;
+    for(int i=0; i<n; i++)             // finding the maximum no so that we can make loop till max no of digits
+      maxim = max(maxim, arr[i]);
+      
+    int exp=1;                   // it is for getting a particular digit;
+    while(exp<=maxim)
+    {
+       countsort(arr, n, exp);     // making call of count sort 
+       exp = exp*10;                // every time exp will get multiplied by 10 so that next time next digit is processed;
+    }
+}
+
+int main() {
+    
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    radixsort(arr, n);
+  
+    for(int i=0; i<n; i++)
+     cout<<arr[i]<<" ";
+    return 0;
+}

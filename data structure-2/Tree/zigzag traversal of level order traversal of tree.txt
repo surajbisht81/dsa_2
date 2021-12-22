@@ -1,0 +1,60 @@
+
+void leftToright(Node *root, int level, vector<int> &v)
+{
+    if(!root)
+     return;
+     
+    if(level==1)
+     v.push_back(root->data);
+    
+    else if(level>1)
+    {
+        leftToright(root->left, level-1, v);
+        leftToright(root->right, level-1, v);
+    }
+}
+void rightToleft(Node *root, int level, vector<int> &v)
+{
+    if(!root)
+     return;
+     
+    if(level==1)
+     v.push_back(root->data);
+    
+    else if(level>1)
+    {
+        rightToleft(root->right, level-1, v);
+        rightToleft(root->left, level-1, v);
+    }
+}
+int getheight(Node *root)
+{
+    if(!root)
+    return 0;
+    
+    int l = getheight(root->left);
+    int r = getheight(root->right);
+    return max(l, r)+1;
+}
+vector <int> zigZagTraversal(Node* root)
+{
+   vector<int> v;
+   int level=1;
+   int i=0; 
+   int height = getheight(root);
+   while(height--)
+   {
+       if(i%2==0)
+        {
+            leftToright(root, level, v);
+            i=1;
+        }
+        else
+        {
+            rightToleft(root, level, v);
+            i=0;
+        }
+        level++;
+   }
+   return v;
+}

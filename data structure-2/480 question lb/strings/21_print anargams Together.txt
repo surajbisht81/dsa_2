@@ -1,0 +1,66 @@
+vector<vector<string> > Anagrams(vector<string>& arr) 
+{
+     map< map<char, int>, vector<string >> big;        // insead of map inside the map, we can also take the string, and that string will be the sorted string
+    
+    for(int j=0; j<arr.size(); j++)
+    {
+        string str = arr[j];
+        
+        map<char, int> small;
+        for(int i=0; i<str.length(); i++)
+        {
+            char ch = str[i];
+            small[ch]++;
+        }
+        
+        if(big.find(small) == big.end()){
+            vector<string> v;
+            v.push_back(str);
+            big[small] = v;
+        }
+        else{
+            vector<string> v = big[small];
+            v.push_back(str);
+            big[small] = v;
+        }
+    }
+    
+    vector<vector<string>> ans;
+    
+    for(auto x : big)
+    {
+        vector<string> v = x.second;
+        ans.push_back(v);
+    }
+    
+    return ans;
+}
+
+
+-----------------------------------------------------------------------
+2nd method
+TC : O(N*|S|*log|S|)
+SC : O(N*|S|)
+
+vector<vector<string> > Anagrams(vector<string>& string_list) 
+{
+    vector<vector<string> > result;
+
+    // hash map to maintain groups of anagrams
+    unordered_map <string,vector<string> > umap; 
+    
+    for(int i =0; i<string_list.size(); i++ )
+    {
+        string s = string_list[i];
+     
+        // sort each string
+        sort(s.begin(),s.end());
+        
+        // add original string to corresponding sorted string in hash map
+        umap[s].push_back(string_list[i]);
+    }
+    for(auto itr= umap.begin(); itr!=umap.end(); itr++)
+        result.push_back(itr->second);
+    
+    return result;
+}

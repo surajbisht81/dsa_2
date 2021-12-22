@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1581839630 source:c:\users\admin\desktop\data structure\graph\graphs questions\shortest path to reach one prime to other\main.cpp
+	<iostream>
+	<list>
+	<vector>
+	<bits/stdc++.h>
+	<queue>
+

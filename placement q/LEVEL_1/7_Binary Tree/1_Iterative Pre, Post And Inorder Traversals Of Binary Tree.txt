@@ -1,0 +1,148 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node
+{
+    public:
+    int data;
+    Node *left, *right;
+    
+    Node(int data){
+        this->data = data;
+        left = NULL;
+        right = NULL;
+    }
+};
+
+class Pair
+{
+    public:
+    Node *node;
+    int state;
+    Pair(Node *root, int x){
+        node = root;
+        state = x;
+    }
+};
+
+Node *construct(int arr[])
+{
+    stack<Pair*> st;
+    Node *root = new Node(arr[0]);
+    
+    Pair *p = new Pair(root, 1);
+    st.push(p);
+    
+    int idx = 0;
+    
+    while(st.empty()==false)
+    {
+        Pair *top = st.top();
+        
+        if(top->state == 1){
+            
+            idx++;
+            
+            if(arr[idx] == INT_MIN){
+                top->node->left = NULL;
+            }
+            else{
+                Node *temp = new Node(arr[idx]);
+                top->node->left = temp;
+                Pair *p = new Pair(top->node->left, 1);
+                st.push(p);
+            }
+            
+            top->state++;
+        }
+        else if(top->state == 2){
+            
+            idx++;
+            
+            if(arr[idx] == INT_MIN){
+                top->node->right = NULL;
+            }
+            else{
+                Node *temp = new Node(arr[idx]);
+                top->node->right = temp;
+                Pair *p = new Pair(top->node->right, 1);
+                st.push(p);
+            }
+            
+            top->state++;
+        }
+        else{
+            
+            st.pop();
+        }
+    }
+    return root;
+}
+
+void IterativePreInPost(Node *root)
+{
+    stack<Pair*> st;
+    Pair *p = new Pair(root, 1);
+    st.push(p);
+    
+    string pre = "";
+    string in = "";
+    string post = "";
+    
+    while(!st.empty())            // while stack is not empty
+    {
+        Pair *top = st.top();      // accessing the top element of stack
+        
+        if(top->state == 1){                              // if state of top is 1, that's mean we are asked to print preorder
+            
+            pre += to_string(top->node->data) + " ";       
+            
+            if(top->node->left){                            // putting top left with state 1 if it exist
+                Pair *p = new Pair(top->node->left, 1);
+                st.push(p);
+            }
+            top->state++;           // incresing top element state becasue next time we will access tree's right node
+        }
+        else if(top->state == 2){          // if state of top is 2, that's mean we are asked to print inorder
+            
+            in += to_string(top->node->data) + " ";
+            
+            if(top->node->right){             // same as above
+              Pair *p = new Pair(top->node->right, 1);
+              st.push(p);
+            }
+            top->state++;
+        }
+        else{
+            post += to_string(top->node->data) + " ";      // if state is 3, that's mean we are asked to print postorder
+            st.pop();         // after that pop element 
+        }
+    }
+    
+    cout<<pre<<endl<<in<<endl<<post;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    string str;
+    
+    for(int i=0; i<n; i++)
+    {
+       cin>>str;
+       
+      if(str != "n")
+         arr[i] = stoi(str);
+      else
+         arr[i] = INT_MIN;
+    }
+    
+    Node *root = construct(arr);
+    
+    IterativePreInPost(root);
+    
+    return 0;
+}

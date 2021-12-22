@@ -1,0 +1,161 @@
+/*1. You are given a string(str) and a number K.
+2. You have to find the count of valid substrings of the given string.
+3. Valid substring is defined as a substring that has exactly K unique characters.*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void Count_Substrings_KEquals1(string str, int k)
+{
+    unordered_map<char, int> mp;
+    
+    int i=0;
+    int j=0;
+    
+    int res = 0;
+    int n = str.length();
+    
+    while(true)
+    {
+        bool flag1 = true, flag2 = true;
+        
+        while(i<n && mp.size() <= k)
+        {
+            flag1 = false;
+            char ch = str[i];
+            mp[ch]++;
+            
+            i++;
+            
+            if(mp.size() > k){
+                 mp.erase(ch);
+                i--;
+                break;
+            }
+        }
+        
+        while(j<i && mp.size()==k)
+        {
+            flag2 = false;
+            if(mp.size()==k){
+                res += i-j;
+            }
+            
+            char ch = str[j];
+            mp[ch]--;
+            
+            j++;
+            
+            if(mp[ch]==0){
+                mp.erase(ch);
+            }
+            
+            if(mp.size() < k){
+                break;
+            }
+        }
+        
+        if(flag1==true && flag2==true)
+         break;
+    }
+    
+    cout<<res;
+}
+
+void Count_Substrings(string str, int k)
+{
+    unordered_map<char, int> big;
+    unordered_map<char, int> small;
+    
+    
+    int ib=0;
+    int is=0;
+    int j=0;
+    
+    int res = 0;
+    
+    int n = str.length();
+    while(true)
+    {
+        bool flag1 = true, flag2 = true, flag3=true;
+        
+        while(ib < n && big.size() <= k)
+        {
+            flag1 = false;
+            char ch = str[ib];
+            big[ch]++;
+            
+            ib++;
+            
+            if(big.size() > k){
+                big.erase(ch);
+                ib--;
+                break;
+            }
+        }
+        
+        while(is<ib && small.size() <=k-1)
+        {
+            flag2 = false;
+            char ch = str[is];
+            small[ch]++;
+            
+            is++;
+            
+            if(small.size() > k-1)
+            {
+                small.erase(ch);
+                is--;
+                break;
+            }
+        }
+        
+        while(j < is && small.size()==k-1)
+        {
+            flag3 = false;
+            char ch = str[j];
+            
+            if(big.size()==k && small.size()==k-1){
+                res += (ib-is);
+            }
+            
+            small[ch]--;
+            big[ch]--;
+            
+            j++;
+            
+            if(small[ch]==0)
+             small.erase(ch);
+            
+            if(big[ch]==0)
+             big.erase(ch);
+             
+            if(big.size() < k || small.size() < k-1)
+             break;
+        }
+        
+        if(flag1==true and flag2==true and flag3==true)
+         break;
+    }
+    
+    cout<<res;
+}
+
+int main()
+{
+    string str;
+    cin>>str;
+    
+    int k;
+    cin>>k;
+    
+    if(k==1){
+        Count_Substrings_KEquals1(str, k);
+    }
+    else{
+        Count_Substrings(str, k);
+    }
+
+    return 0;
+}

@@ -1,0 +1,88 @@
+/*Given an n x n matrix where each of the rows and columns are sorted in ascending order, return the kth smallest element in the matrix.*/
+
+class Solution {
+public:
+    
+    // count of elements less than k 
+    int Count_Elements(vector<vector<int>> &matrix, int ele)
+    {
+        int n = matrix.size();
+        int cnt = 0;
+        
+        int row = 0, col = n-1;           // we are traversing from 0th row and n-1th col
+        
+        while(row<n && col>=0)            // while boundary conditions are maintained
+        {
+            if(matrix[row][col] < ele){      // if element at current row and current col is less than the ele the increase cnt
+                cnt += col+1;                // by col+1
+                row++;                       // and increase the row to check in the next row
+            }
+            else{
+                col--;                       // else go left in same row to check left element 
+            }
+        }
+        
+        return cnt;
+    }
+    
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+        
+        // using binary search from min_element to max_element of matrix
+        
+        int n = matrix.size();
+        
+        int left = matrix[0][0];          // min_element in matrix
+        int right = matrix[n-1][n-1];     // max_element in matrix
+        
+        while(left <= right)
+        {
+            int mid = (left+right)/2;
+            
+            if(Count_Elements(matrix, mid) < k){     // if count of elements in matrix is less than k then go to right 
+                left = mid+1;
+            }
+            else{                                    // else if cnt >= k then right will be mid-1;
+                right = mid-1;
+            }
+        }
+        
+        return right;             // return left or right as according to wish
+    }
+};
+
+T.C = O(nlog(max_element-min_element));
+
+
+// 2nd method
+
+class Solution {
+public:
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+     
+        priority_queue<int> pq;                // take max priority queue
+        
+        int n = matrix.size();
+        
+        for(int i=0; i<n; i++)
+        {
+            for(int j=0; j<n; j++)
+            {
+                 if(pq.size() < k){                  // till the size of pq is less than k just push element into it
+                     pq.push(matrix[i][j]);
+                 }       
+                 else{                 // else if top is grater than current element then first pop element from pq 
+                                        // and then push current elemnt into the pq
+                     if(pq.top() > matrix[i][j]){
+                         pq.pop();
+                         pq.push(matrix[i][j]);
+                     }
+                     
+                 }
+            }
+        }
+        
+        return pq.top();
+    }
+};
+
+T.C = O( n^2 log(k));

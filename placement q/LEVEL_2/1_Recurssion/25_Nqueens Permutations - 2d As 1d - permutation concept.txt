@@ -1,0 +1,98 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+bool IsSafe(int row, int col, vector<vector<int>> &used, int n)
+{
+    for(int i=row, j=col; i>=0; i--){
+        if(used[i][j]>0)
+         return false;
+    }
+    
+    for(int i=row, j=col; i<n; i++){
+        if(used[i][j]>0)
+         return false;
+    }
+    
+    for(int i=row, j=col; j>=0; j--){
+        if(used[i][j]>0)
+         return false;
+    }
+    
+    for(int i=row, j=col; j<n; j++){
+        if(used[i][j]>0)
+         return false;
+    }
+    
+    for(int i=row, j=col; i>=0 and j>=0; i--, j--){
+        if(used[i][j]>0)
+         return false;
+    }
+    
+    for(int i=row, j=col; i>=0 and j<n; i--, j++){
+        if(used[i][j]>0)
+         return false;
+    }
+    
+    for(int i=row, j=col; i<n and j<n; i++, j++){
+        if(used[i][j]>0)
+         return false;
+    }
+    
+    for(int i=row, j=col; i<n and j>=0; i++, j--){
+        if(used[i][j]>0)
+         return false;
+    }
+    
+    return true;
+}
+
+void NQueen_Permutation(int queen, int n, vector<vector<int>> &used)
+{
+    // base case
+    if(queen == n)
+    {
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                if(used[i][j]>0){
+                    cout<<"q"<<used[i][j]<<"\t";
+                }else{
+                    cout<<"-"<<"\t";
+                }
+            }
+            cout<<endl;
+        }
+        cout<<endl;
+        return;
+    }
+    
+    // main code
+    for(int i=0; i<n*n; i++)                                                  // in permutation, we have entire grid to place queen
+    {
+        int row = i/n;                                                        // getting row and col 
+        int col = i%n;
+        
+        if(used[row][col]==0 and IsSafe(row, col, used, n))                    // if this cell is not used already and is safe to place queen 
+        {
+            used[row][col] = queen+1;                                           // then place queen with queen no
+            NQueen_Permutation(queen+1, n, used);
+            used[row][col] = 0;
+        }
+    }
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    vector<vector<int>> used(n);
+    for(int i=0; i<n; i++){
+        for(int j=0; j<n; j++){
+            used[i].push_back(0);
+        }
+    }
+    
+    // its permutation 
+    NQueen_Permutation(0, n, used);                   // 0 is current queen, n is total queens used is integer vector
+    return 0;
+}

@@ -1,0 +1,26 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void dfs(int i, int n)
+{
+    if(i > n)   // if somehow, number(i) becomes greater than n then return
+     return;
+     
+    cout<<i<<endl;     // first print the no
+    
+    for(int j=0; j<10; j++)  // after that making call for children of that number, like print 1 first then make call for 10, 100, 1000, 101, 102, so on;
+    {
+        dfs( 10* i + j,  n);     
+    }
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    for(int i=1; i<=9; i++)       // making call for every no
+     dfs(i, n);
+    
+    return 0;
+}

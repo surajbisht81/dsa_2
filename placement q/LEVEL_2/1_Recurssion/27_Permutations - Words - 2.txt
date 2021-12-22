@@ -1,0 +1,65 @@
+/*1. You are given a word (may have one character repeat more than once).
+2. You are required to generate and print all arrangements of these characters. 
+
+Sample Input
+aabb
+Sample Output
+aabb
+abab
+abba
+baab
+baba
+bbaa*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void Permutation_Word(int idx, string str, char spots[], unordered_map<char, int> &mp)
+{
+    // base case
+    if(idx == str.length())                                                     // if all indexes are traversed then print the spots and return
+    {
+        for(int i=0; i<str.length(); i++)
+         cout<<spots[i];
+        cout<<endl;
+        return;
+    }
+    
+    // main code
+    char ch = str[idx];                                                         // getting character at idx position of str
+    int last_occ = mp[ch];                                                      // getting the last occured position of this character
+    
+    for(int i=last_occ+1; i<str.length(); i++)                                  // we will put this character at the index after last ocuured index
+    {
+        if(spots[i]=='-')                                                       // if spots is not occupied then put character at spots
+        {
+            spots[i] = ch;
+            mp[ch] = i;                                                         // make last occured position of this character as i
+            Permutation_Word(idx+1, str, spots, mp);                            // make call for next index character
+            spots[i] = '-';                                                     // backtracking and making spots as '-' again and character last 
+            mp[ch] = last_occ;                                                  // occured index as same as we found initially
+        }
+    }
+}
+
+int main()
+{
+    string str;
+    cin>>str;
+    
+    int n = str.length();
+    
+    
+    // solving this problem using permutations concept, putting items at the level
+    char spots[n];
+    for(int i=0; i<n; i++)
+     spots[i] = '-';                             // this is character array which will store the ans 
+     
+    unordered_map<char, int> mp;                 // map will store the last occured index of character and initially last occured for 
+    for(int i=0; i<n; i++){                     // every character is -1
+        mp[str[i]] = -1;
+    }
+    
+    Permutation_Word(0, str, spots, mp);
+    return 0;
+}

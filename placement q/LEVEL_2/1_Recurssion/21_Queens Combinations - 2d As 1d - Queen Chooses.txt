@@ -1,0 +1,52 @@
+/* we are converting 2D into 1D*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void Queen_Combination(int queen, int n, vector<vector<bool>> &chess, int last_cell)
+{
+    // base case
+     if(queen == n)                     // if queen placed becomes total queen given then print the chess where it is true(where queen is places)
+     {
+         for(int i=0; i<n; i++){
+             for(int j=0; j<n; j++){
+                 if(chess[i][j]==true){
+                     cout<<"q\t";
+                 }
+                 else{
+                     cout<<"-\t";
+                 }
+             }
+             cout<<endl;
+         }
+         cout<<endl;
+         return;
+     }
+     
+     
+     // main code
+     for(int i=last_cell+1; i<n*n; i++)           // we can place current queen in cell after last_cell used;
+     {
+         int row = i/n;                        // as it is 2D so converting 1D to 2D, getting row from 1D i
+         int col = i%n;                        // as it is 2D so converting 1D to 2D, getting col from 1D i
+         
+         chess[row][col] = true;                    // no need to check wheter chess is already true or not, because we are placing queen after last cell used
+         Queen_Combination(queen+1, n, chess, i);   // making call will next queen, and last cell used as i
+         chess[row][col] = false;                    // backtracking
+     }
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    vector<vector<bool>> chess(n);
+    for(int i=0; i<n; i++){
+        for(int j=0; j<n; j++){
+            chess[i].push_back(false);
+        }
+    }
+    Queen_Combination(0, n, chess, -1);           // 0 is no of queen places so far, n is total no of queen, chess is boolean array, -1 is last cell used
+    return 0;
+}

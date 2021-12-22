@@ -1,0 +1,58 @@
+/*1. You are given an integer N.
+2. You have to find the N-th number whose binary representation is a palindrome.
+
+Note -> First binary number whose representation is a palindrome is 1.*/
+#include<bits/stdc++.h>
+using namespace std;
+
+int getRev(int n)
+{
+    int res = 0;
+    
+    while(n != 0)
+    {
+        int leftMostBit = (n & 1);
+        
+        res = (res | leftMostBit);
+        
+        n  = (n>>1);
+        res = (res<<1);
+    }
+    
+    res = (res>>1);
+    
+    return res;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int cnt = 1; 
+    int len = 1;
+    
+    while(cnt < n)
+    {
+        len++;
+        int elementsInLen = (1 << ((len-1)/2));
+        cnt += elementsInLen;
+    }
+    
+    cnt = cnt - (1 << ((len-1)/2));
+    int offset = n - cnt - 1;
+    
+    int ans = 0;
+     ans = (1<<(len-1));
+    
+    ans |= (offset<<(len/2));
+    
+    int shiftingans = (ans >> (len/2));
+    
+    int rev = getRev(shiftingans);
+    
+    ans |= rev;
+    
+    cout<<ans;
+    return 0;
+}

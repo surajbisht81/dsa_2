@@ -1,0 +1,53 @@
+/*1. You are given an integer n, which represents n friends numbered from 1 to n.
+2. Each one can remain single or can pair up with some other friend.
+3. You have to print all the configurations in which friends can remain single or can be paired up.*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+static int cnt = 1;
+
+void Friends_Pairing(int i, int n, bool used[], string asf)
+{
+    if(i > n)             // if i is greater than n then print answer and return
+    {
+        cout<<cnt<<"."<<asf<<endl;
+        cnt++;
+        return;
+    }
+        
+     if(used[i] == true)
+     {
+        Friends_Pairing(i+1, n, used, asf);    
+     }
+     else{
+         
+     used[i] = true;                                            // initially make current no. true so that it can not make pair with other next time
+     Friends_Pairing(i+1, n, used, asf+"("+to_string(i)+") ");  // this is call for no which want to remain single, and making call for next no.
+     
+     for(int j=i+1; j<=n; j++)                       // this is loop for making pair of current no. with other numbers
+     {
+         if(used[j]==false)                    // if next no  is already used in pairing or in single then it can not be used again
+         {
+            used[j] = true;                     // if not so, then  make that no. true in used array
+            
+            Friends_Pairing(i+1, n, used, asf+"("+to_string(i)+","+to_string(j)+") ");   // make call for next level of no., asf will be pairing of
+                                                                                        // current no and next no. which we will get from loop
+            used[j] = false;                              // backtracking 
+         }
+     }
+     used[i] = false;                    // again backtacking for i;
+    }
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+   
+    bool used[n+1];
+    memset(used, false, sizeof(used));
+    Friends_Pairing(1, n, used, "");        // 1 is first no, used is boolean array used for keep tracking of the no which is already used or not;
+    return 0;
+}

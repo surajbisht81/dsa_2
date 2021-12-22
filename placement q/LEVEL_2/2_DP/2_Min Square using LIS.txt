@@ -1,0 +1,36 @@
+/*1. You are given a number N.
+2. You have to find the minimum number of squares that sum to N.
+3. You can always represent a number as a sum of squares of other numbers.
+   For eg -> In worst case N can be represented as (1*1) + (1*1) + (1*1)..... N times.*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int Min_Square(int n)
+{
+   int dp[n+1];                  // take dp array of size n+1, extra 1 is for dp[0]
+   dp[0] = 0;                   // there are 0 ways to make 0 with square of numbers
+   dp[1] = 1;                     // there is 1 way of making 1 and that is 1^2;
+   
+   for(int i=2; i<=n; i++)            // loop from 2 to number
+   {
+       int minim = INT_MAX;          // we have to find minimum,
+       for(int j=1; j*j<=i; j++)     // we can append 1^2, 2^2, 3^2 ans so on at the end of previously calculated number so make loop 
+       {
+           int rem = i - j*j;         
+           if(dp[rem] < minim)
+            minim = dp[rem];
+       }
+       dp[i] = minim+1;
+   }
+   return dp[n];
+}
+
+int main()
+{
+    int n;                   // given number
+    cin>>n;
+    
+    cout<<Min_Square(n); 
+    return 0;
+}

@@ -1,0 +1,56 @@
+/*1. You are given two strings s1 and s2.
+2. You have to determine if they are isomorphic or not.
+3. Two strings are called isomorphic if -
+   -> Every character of s1 can be mapped with characters of s2.
+   -> A character of s1 can be mapped to only one character.
+   -> All occurrences of a character must be replaced with another character while preserving the order of characters.*/
+   
+#include<bits/stdc++.h>
+using namespace std;
+
+bool Isomorphic(string str1, string str2)
+{
+    if(str1.length() != str2.length()){
+        return false;
+    }
+    
+    unordered_map<char, char> mapping;                     // for mapping char of str1 with char of str2
+    unordered_map<char, bool> boolean;                     // for mapping char of str2 with true or false saying that this char is used in past or not
+    
+    for(int i=0; i<str1.length(); i++)
+    {
+        char ch1 = str1[i];
+        char ch2 = str2[i];
+        
+        if(mapping.find(ch1)==mapping.end())                // if we don't find char of str1 in mapping that's means this is not used in past
+        {
+            if(boolean[ch2]==true)                         // we have to check if char of str2 is used before or not is used before that means we are again using char
+             return false;                                // of str2 with other char of str1 which is not right so return false
+             
+            mapping[ch1] = ch2;                            // if char of str2 is not used in past then use it and also map char of str2 with char of str1
+            boolean[ch2] = true;
+        }
+        else                                  // if we find char of str1 in mapping in past then we need to check if the mapped character matches with current char
+        {
+            if(mapping[ch1] != ch2)                // if this is false(means current char is not matching with mapped char of str1 return false)
+             return false;
+        }
+    }
+    
+    return true;
+}
+
+int main()
+{
+    string str1, str2;
+    cin>>str1>>str2;
+    
+    if(Isomorphic(str1, str2)){
+        cout<<"true";
+    }
+    else{
+        cout<<"false";
+    }
+    
+    return 0;
+}

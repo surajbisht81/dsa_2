@@ -1,0 +1,87 @@
+ #include <bits/stdc++.h> 
+using namespace std; 
+
+struct Node { 
+	int data; 
+	Node *next, *prev; 
+}; 
+
+Node* getNode(int data) 
+{ 
+	Node* new_node = (Node*)malloc(sizeof(Node)); 
+
+	new_node->data = data; 
+	new_node->next = new_node->prev = NULL; 
+	return new_node; 
+} 
+
+// function to insert new_node at the beginging of head_ref;
+void push(Node** head_ref, Node* new_node) 
+{ 
+	// since we are adding at the beginning, 
+	// prev is always NULL 
+	new_node->prev = NULL; 
+
+	// link the old list off the new node 
+	new_node->next = (*head_ref); 
+
+	// change prev of head node to new node 
+	if ((*head_ref) != NULL) 
+		(*head_ref)->prev = new_node; 
+
+	// move the head to point to the new node 
+	(*head_ref) = new_node; 
+} 
+
+// we can't reverse doubly ll in the same manner as we did in singly ll, we just need to make another list and put node in that list according to the reverse pattern
+Node* revListInGroupOfGivenSize(Node* head, int k) 
+{ 
+    Node *res = NULL;
+    Node *curr = head, *next = NULL;
+    int cnt = 0;
+    
+    while(curr!=NULL && cnt < k){
+        next = curr->next;
+        push(&res, curr);
+        
+        curr = next;
+        cnt++;
+    }
+    
+    if(next != NULL){
+        head->next = revListInGroupOfGivenSize(next, k);
+        head->next->prev = head;
+    }
+    
+    return res;
+} 
+
+void printList(Node* head) 
+{ 
+	while (head != NULL) { 
+		cout << head->data << " "; 
+		head = head->next; 
+	} 
+} 
+
+int main() 
+{  
+	Node* head = NULL; 
+ 
+	push(&head, getNode(2)); 
+	push(&head, getNode(4)); 
+	push(&head, getNode(8)); 
+	push(&head, getNode(10)); 
+	
+	int k = 2; 
+
+	cout << "Original list: "; 
+	printList(head); 
+ 
+	head = revListInGroupOfGivenSize(head, k); 
+
+	cout << "\nModified list: "; 
+	printList(head); 
+
+	return 0; 
+} 

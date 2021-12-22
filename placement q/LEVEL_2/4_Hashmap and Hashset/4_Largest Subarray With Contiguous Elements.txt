@@ -1,0 +1,53 @@
+/*1. You are given an array(arr) of integers. Values may be duplicated.
+2. You have to find the length of the largest subarray with contiguous elements.
+
+Note -> The contiguous elements can be in any order(not necessarily in increasing order).*/
+
+
+#include<bits/stdc++.h>
+using namespace std; 
+
+void Largest_Subarray_Contiguous_element(int arr[], int n)
+{
+    int ans = 1;
+    set<int> st;               // set is used for keep tracking of duplicacy.
+    
+    
+    for(int i=0; i<n-1; i++)
+    {
+        int maxim = arr[i];
+        int minim = arr[i];
+        
+        st.insert(arr[i]);
+        for(int j=i+1; j<n; j++)
+        {
+            if(st.find(arr[j])!=st.end())
+             break;
+             
+            st.insert(arr[j]);
+            
+            minim = min(minim, arr[j]);        // we will keep change maximum and minimum element 
+            maxim = max(maxim, arr[j]);
+            
+            if(maxim-minim == j-i){          // and if this condition become true then update the ans.
+                ans = max(ans, j-i+1);
+            }
+        }
+        st.clear();           // after execution of jth loop, clear all elements from set
+    }
+    
+    cout<<ans;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    Largest_Subarray_Contiguous_element(arr, n);
+    return 0;
+}

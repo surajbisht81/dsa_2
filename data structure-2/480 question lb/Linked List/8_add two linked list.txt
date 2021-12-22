@@ -1,0 +1,66 @@
+class Solution
+{
+    public:
+    
+    int addTwoList(Node *first, int pv1, Node *second, int pv2, Node **head)
+    {
+        if(first==NULL && second==NULL){
+            return 0;
+        }
+        
+        int data = 0;
+        
+        if(pv1 > pv2){
+            int nc = addTwoList(first->next, pv1-1, second, pv2, head);
+            data = nc + first->data;   
+        }
+        
+        else if(pv2  > pv1){
+            int nc = addTwoList(first, pv1, second->next, pv2-1, head);
+            data = nc + second->data;
+        }
+        
+        else{
+            int nc = addTwoList(first->next, pv1-1, second->next, pv2-1, head);
+            data = nc + second->data + first->data;
+        }
+        
+        int new_data = data%10;
+        int carry = data/10;
+        
+        Node *temp = new Node(new_data);
+        temp->next = (*head);
+        (*head) = temp;
+        return carry;
+    }
+    
+    struct Node* addTwoLists(struct Node* first, struct Node* second)
+    {
+        int first_size = 0;
+        int second_size = 0;
+        
+        Node *curr = first;
+        while(curr->next != NULL){
+            first_size++;
+            curr = curr->next;
+        }
+        
+        curr = second;
+        while(curr->next != NULL){
+            second_size++;
+            curr = curr->next;
+        }
+        
+        Node *head = NULL;
+        
+        int carry = addTwoList(first, first_size, second, second_size, &head);
+        
+        if(carry > 0){
+            Node *temp = new Node(carry);
+            temp->next = head;
+            head = temp;
+        }
+        
+        return head;
+    }
+};

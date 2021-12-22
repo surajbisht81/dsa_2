@@ -1,0 +1,65 @@
+/*1. You are given an array(arr) of integers and a number k.
+2. You have to find maximum subarray sum in the given array.
+3. The subarray must have at least k elements.*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int Max_Sum(int arr[], int n, int k)
+{
+    int res = INT_MIN;                    // initially res is minimum
+    
+    int new_arr[n];
+    new_arr[0] = arr[0];                   // new array for kadanes algorithm, (max sum of elements ending at ith index of subarray)
+    
+    int curr_sum = arr[0];
+    for(int i=1; i<n; i++)
+    {
+        if(curr_sum >= 0){
+            curr_sum += arr[i];
+        }
+        else{
+            curr_sum = arr[i];
+        }
+        new_arr[i] = curr_sum;                // i is index where max sum is stored, till ith index
+    }
+    
+    int exactlyk = 0;                       // sum for exactly k size window
+    
+    for(int i=0; i<k; i++)
+     exactlyk += arr[i];
+     
+    if(exactlyk > res)
+     res = exactlyk;                  // if exactly k window sum is greater than res then update res
+     
+    for(int i=k; i<n; i++)
+    {
+        exactlyk += arr[i] - arr[i-k];               // now shift the window
+        
+        if(exactlyk > res){                           // if exactly k size window now grater than res then update res
+            res = exactlyk;
+        }
+        
+        int morethank = exactlyk + new_arr[i-k];        // more than k size window is equal to exactly k window + sum before k size window
+        
+        if(morethank > res)                             // again check if this morethank is greater than res then update res
+         res = morethank;
+    }
+    return res;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    int k;
+    cin>>k;
+    
+    cout<<Max_Sum(arr, n, k);
+    return 0;
+}

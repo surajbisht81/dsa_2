@@ -1,0 +1,65 @@
+1. You are given two integers n and k, where n represents number of elements and k represents 
+     number of subsets.
+2. You have to partition n elements in k subsets and print all such configurations.
+
+#include<bits/stdc++.h>
+using namespace std;
+
+static int level=1;
+
+void Print(vector<vector<int>> &v)
+{
+    for(int l=0; l<v.size(); l++){
+        cout<<"[";
+        for(int m=0; m<v[l].size()-1; m++){
+            
+            cout<<v[l][m]<<", ";
+        }
+        cout<<v[l][v[l].size()-1]<<"]"<<" ";
+    }
+}
+void KPartition(int i, int n, int k, int cnt, vector<vector<int>> &v)
+{
+    if(i > n){
+       if(cnt==k)          // if no of subsets is equal to k then print the subsets
+        {
+          cout<<level<<". ";
+          Print(v);
+          cout<<endl;
+          level++;
+        }
+        return;
+    }
+    
+    for(int j=0; j<v.size(); j++)          // we will traverse throught the vector v;
+    {
+        if(v[j].size() > 0)               // and is size of any subset is greater than 0 then
+        {
+            v[j].push_back(i);            // push back current i into that subset,
+            //making recursive call;
+            KPartition(i+1, n, k, cnt, v);        // make call for next no(i+1) and here cnt will remain same beause no new subset is created
+            
+            //backtracking;
+            v[j].pop_back();        // pop backing the no while backtracking
+        }
+        else
+        {
+            v[j].push_back(i);           // if size of subset is 0 then also push back 
+            
+            KPartition(i+1, n, k, cnt+1, v);      // but this time new subset is created
+            
+            v[j].pop_back();
+            break;              // break is because, we want to put (i)th no in only one empty subset not in all empty subsets
+        }
+    }
+}
+
+int main()
+{
+    int n,k;       // n is no of elements and k is no of subsets
+    cin>>n>>k;
+    
+    vector<vector<int>> v(k);         // vector of vector is used for storing the subsets that's why size is k
+    KPartition(1, n, k, 0, v);      // initially first no is 1, 
+    return 0;
+}

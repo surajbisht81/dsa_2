@@ -1,0 +1,84 @@
+1. You are given a partially written GenericTree class.
+2. You are required to complete the body of mirror function. The function is expected to create a mirror image of the tree.
+
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node
+{
+    public:
+    int data;
+    vector<Node*> children;
+};
+
+Node* construct(int arr[], int n)
+{
+    Node *root = NULL;
+    
+    stack<Node*> st;
+    
+    for(int i=0; i<n; i++)
+    {
+        if(arr[i] == -1)
+        {
+            st.pop();
+        }
+        else
+        {
+            Node *temp = new Node;
+            temp->data = arr[i];
+            
+            if(st.size()>0){
+                st.top()->children.push_back(temp);
+            }
+            else{
+                root = temp;
+            }
+            st.push(temp);
+        }
+    }
+    return root;
+}
+
+void display(Node *root)
+{
+    cout<<root->data<<" -> ";
+    
+    for(Node *child : root->children)
+    {
+        cout<<child->data<<", ";
+    }
+    cout<<"."<<endl;
+    
+    for(Node *child : root->children)
+    {
+        display(child);
+    }
+}
+
+void mirror(Node *root)
+{
+    for(Node *child : root->children)
+    {
+        mirror(child);
+    }
+    reverse(root->children.begin(), root->children.end());
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    Node *root = construct(arr, n);
+    
+    display(root);
+    mirror(root);
+    display(root);
+    
+    return 0;
+}

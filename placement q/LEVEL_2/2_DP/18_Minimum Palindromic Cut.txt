@@ -1,0 +1,66 @@
+/*1. You are given a string.
+2. You have to find the minimum number of cuts required to convert the given string into palindromic partitions.
+3. Partitioning of the string is a palindromic partitioning if every substring of the partition is a palindrome.*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int Min_Palindromic_Cut(string str)
+{
+    int n = str.length();
+    
+    bool dp[n][n];
+    
+    // first calculating the 2D boolean dp containing which part of string is palindrome or not
+    for(int g=0; g<n; g++){
+        for(int i=0, j=g; j<n; i++,j++){
+            
+            if(g==0){
+                dp[i][j] = true;
+            }else if(g==1){
+                if(str[i]==str[j]){
+                    dp[i][j] = true;
+                }else{
+                    dp[i][j] = false;
+                }
+            }else{
+                
+                if(str[i]==str[j]){
+                    dp[i][j] = dp[i+1][j-1];
+                }else{
+                    dp[i][j] = false;
+                }
+            }
+        }
+    }
+    
+    // To optimize it in O(n^2), use suffix array 
+    int suffix[n];
+    suffix[0] = 0;                   // one character is always palindrome
+    
+    for(int i=1; i<n; i++){          // we are starting from 2 characters or more
+        if(dp[0][i]==true){          // if entire string is palindrome then no partition is required
+            suffix[i] = 0;
+        }else{
+            
+          int minim = INT_MAX;       // else finding the minimum, in previous indexes of suffix array uptill 1th index
+          for(int j=i; j>0; j--){
+             if(dp[j][i]==true){                      // we will check minimum if suffix string is palindrome
+                 minim = min(minim, suffix[j-1]);
+             }
+          }
+          suffix[i] = minim+1;                       // then lastly suffix will contain minimum + 1 value;
+         }
+    }
+    
+    return suffix[n-1];
+}
+
+int main()
+{
+    string str;
+    cin>>str;
+    
+    cout<<Min_Palindromic_Cut(str);
+    return 0;
+}

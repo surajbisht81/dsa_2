@@ -1,0 +1,67 @@
+void printLeft(Node *root, vector<int> &ans)
+{
+    if(!root) return;
+    
+    // 3 cases may arise, 1) left and right both are present, in this case only go to left part
+    // 2) if left is present only then go to left part and 3) right is present only then go to right part that's why if else is written here
+    if(root->left){
+        ans.push_back(root->data);
+        printLeft(root->left, ans);
+    }
+    else if(root->right){
+        ans.push_back(root->data);
+        printLeft(root->right, ans);
+    }
+}
+
+void printLeaves(Node *root, vector<int> &ans)
+{
+    if(!root) return;
+    
+    // if root->left and root->right both are not present then print this node
+    if(!root->left && !root->right){
+        ans.push_back(root->data);
+    }
+    else{
+        printLeaves(root->left, ans);          // then print left and right nodes 
+        printLeaves(root->right, ans);
+    }
+}
+
+void printRight(Node *root, vector<int> &ans)
+{
+    if(!root) return;
+    
+    // 3 cases may arise, 1) right and left both are present then only go to right part and print node value in postorder,
+    // 2) only right is present then go to right  and else go to left and print in post order 
+    if(root->right){
+        printRight(root->right, ans);
+        ans.push_back(root->data);
+    }
+    else if(root->left){
+        printRight(root->left, ans);
+        ans.push_back(root->data);
+    }
+}
+
+vector <int> printBoundary(Node *root)
+{
+     vector<int> ans;
+     
+     if(!root) return ans;
+     
+     // pushing root;
+     ans.push_back(root->data);
+     
+     //pushing left boundary
+     printLeft(root->left, ans);
+     
+     //pushing leaves 
+     printLeaves(root->left, ans);         // we are printint root->left subtree leaves
+     printLeaves(root->right, ans);        // we are printing root->right subtree leaves
+     
+     //pushing right
+     printRight(root->right, ans);
+     
+     return ans;
+}

@@ -1,0 +1,73 @@
+// O(n*m) time complaxity and O(1) space
+class Solution{
+public:
+	void merge(int arr1[], int arr2[], int n, int m) {
+	    
+	    int i=0;
+	    
+            // till i<n and for every ith element of arr1, we will check if it is greater than arr2[0] and if yes then swap them and also sort the second array
+            // arr2 because this algorithm is based on sorting of both array, However, sorting of 2nd array will take only O(m) time 
+	    while(i < n )
+	    {
+	        if(arr1[i] > arr2[0]){
+	            int temp = arr1[i];
+	            arr1[i] = arr2[0];
+	            arr2[0] = temp;
+	            
+	            for(int j=1; j<m; j++){
+	                if(arr2[j-1] > arr2[j]){          // we will check if j-1 is greater than j and if yes then move j-1 to forward and next time it will again
+	                    swap(arr2[j-1], arr2[j]);     // checked with j+1th element
+	                }
+	            }
+	        }
+	        i++;             // increase i
+	    }
+	    
+	    
+	}
+};
+
+
+//----------------------------------------------------------------------------------------------------
+
+// O(log(n+m)) time because we are dividing (n+m) by 2 after every iteration;
+
+class Solution{
+public:
+int nextGap(int gap)
+    {
+        if (gap <= 1)
+            return 0;
+        return ceil((1.0*gap)/(1.0*2));
+    }
+ 
+	void merge(int arr1[], int arr2[], int n, int m) {
+	    
+	    int gap = n+m;           // gap will be n+m and every time it will be divided by 2  till it is 1
+	    int i, j;
+	    for (gap = nextGap(gap); gap > 0; gap = nextGap(gap)) 
+	    {
+	        
+                // swapping in first array
+	        for( i=0; i+gap<n; i++){
+	            if(arr1[i] > arr1[i+gap]){
+	                swap(arr1[i], arr1[i+gap]);
+	            }
+	        }
+	        
+                // if gap is greater than n then do j=gap-n else j=0, and swap array1 element with array2 element till i<n && j<m;
+	        for( j = gap > n ? gap-n : 0; i<n && j<m; i++, j++){
+	            if(arr1[i] > arr2[j]){
+	                swap(arr1[i], arr2[j]);
+	            }
+	        }
+	        
+            // swapping in second array
+            for( j=0; j+gap<m; j++){
+	            if(arr2[j] > arr2[j+gap]){
+	                swap(arr2[j], arr2[j+gap]);
+	            }
+            }
+	    }
+	}
+};

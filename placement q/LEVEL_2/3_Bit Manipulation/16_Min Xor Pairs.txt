@@ -1,0 +1,43 @@
+/*1. You are given an array of distinct integers.
+2. You have to print all pairs of integers in the array whose XOR value is minimum.*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    sort(arr, arr+n);         // sorting the array first
+    
+    // minimum xor can be found in ajacent elements only.
+    
+    vector<pair<int, int>> ans;
+    int minim = INT_MAX;
+    
+    for(int i=0; i<n-1; i++)
+    {
+        int res = arr[i] ^ arr[i+1];
+        
+        if(res < minim){
+            minim = res;
+            vector<pair<int, int>> ans1;
+            ans1.push_back({arr[i], arr[i+1]});
+            ans = ans1;
+        }
+        else if(res == minim){
+            ans.push_back({arr[i], arr[i+1]});
+        }
+    }
+    
+    for(int i=0; i<ans.size(); i++)
+    {
+        cout<<ans[i].first<<", "<<ans[i].second<<endl;
+    }
+    return 0;
+}

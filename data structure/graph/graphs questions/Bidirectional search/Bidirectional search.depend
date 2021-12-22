@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1582129317 source:c:\users\admin\desktop\data structure\graph\graphs questions\bidirectional search\main.cpp
+	<iostream>
+	<bits/stdc++.h>
+	<list>
+	<vector>
+

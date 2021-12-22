@@ -1,0 +1,42 @@
+class Solution {
+  public:
+   typedef pair<int, pair<int, int>> ppi;
+   
+    vector<vector<int>> sortedMatrix(int N, vector<vector<int>> arr) {
+        
+        priority_queue<ppi, vector<ppi>, greater<ppi>> pq;
+        
+        for(int i=0; i<N; i++)
+        {
+            pq.push({arr[i][0], {i, 0}});
+        }
+        
+        vector<vector<int>> output;
+        
+        vector<int> x;
+        
+        while(!pq.empty())
+        {
+            ppi curr = pq.top();
+            pq.pop();
+            
+            int i = curr.second.first;
+            int j = curr.second.second;
+            
+            int ele = curr.first;
+            
+            x.push_back(ele);
+            
+            if(x.size() == N){
+                output.push_back(x);
+                x.clear();
+            }
+            
+            if(j+1 < N)
+            {
+                pq.push({arr[i][j+1], {i, j+1}});
+            }
+        }
+        return output;
+    }
+};

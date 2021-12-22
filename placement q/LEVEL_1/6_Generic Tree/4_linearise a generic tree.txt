@@ -1,0 +1,126 @@
+/*1. You are given a partially written GenericTree class.
+2. You are required to complete the body of linearize function. The function is expected to create a linear tree i.e. every node will have a single child only*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node
+{
+    public:
+    int data;
+    vector<Node*> children;
+};
+
+Node* construct(int arr[], int n)
+{
+    Node *root = NULL;
+    
+    stack<Node*> st;
+    
+    for(int i=0; i<n; i++)
+    {
+        if(arr[i] == -1)
+        {
+            st.pop();
+        }
+        else
+        {
+            Node *temp = new Node;
+            temp->data = arr[i];
+            
+            if(st.size()>0){
+                st.top()->children.push_back(temp);
+            }
+            else{
+                root = temp;
+            }
+            st.push(temp);
+        }
+    }
+    return root;
+}
+
+void display(Node *root)
+{
+    cout<<root->data<<" -> ";
+    
+    for(Node *child : root->children)
+    {
+        cout<<child->data<<", ";
+    }
+    cout<<"."<<endl;
+    
+    for(Node *child : root->children)
+    {
+        display(child);
+    }
+}
+
+Node *get_tail(Node *root)
+{
+    while(root->children.size()==1)         // while root child size is 1 // it is like linked list
+     root = root->children[0];
+     
+    return root;
+}
+
+void Linearise(Node *root)
+{
+    for(Node *child : root->children)        // making call to child of root
+    {
+        Linearise(child);                     // recursiverly linearising the child
+    }
+    
+    int n = root->children.size();
+    while(root->children.size()>1)                   // for current root, while loop will run till children size is greater than 1
+    {
+        Node *last = root->children[n-1];           // getting the last child
+        root->children.pop_back();                    // removing the last child
+        n--;
+        Node *second_last = root->children[n-1];        // getting the second last child 
+        
+        Node *tail = get_tail(second_last);               // getting the tail of second last child
+        tail->children.push_back(last);                   // adding last node to the child of tail;
+    }
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    Node *root = construct(arr, n);
+    
+    Linearise(root);
+    display(root);
+    
+    return 0;
+}
+
+
+// 2nd method
+/*// 2nd method of O(n) tc;
+
+Node *Linearise2(Node *root)
+{
+    if(root->children.size()==0)
+     return root;
+     
+    int n = root->children.size();                                 // getting the size of root node;
+    Node *last_keyOf_lastChild = Linearise2(root->children[n-1]);  // getting last key of last child using recursive call Linearise2 which is accepting last child
+    
+    while(n > 1){                                     //while size of root is greater than 1
+        
+        Node *last_child = root->children[n-1];       // getting the last child of root;
+        root->children.pop_back();                   // and removing the last child;
+        n--;                                           // decrementing the n by 1;
+        
+        Node *second_last = Linearise2(root->children[n-1]);   // getting the last key of second last node using linearise2
+        second_last->children.push_back(last_child);           // adding the last_node to the last key of second last node
+    }
+    return last_keyOf_lastChild;              // returning the last key of last child because we are expecting that linearise2 function is linearising 
+}                                               // and also returing the last key; */

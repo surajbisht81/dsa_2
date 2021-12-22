@@ -1,0 +1,63 @@
+/*1. You are given an array of length n containing numbers from 1 to n.
+2. One number is present twice in array and one is missing.
+3. You have to find these two numbers.*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    //This question is similar to previous question, we all need to do is xor every elements of array and again xor from 1 to n so that we get
+    // xor of missing and duplicate number and applying same concept and trick as applied in previous one
+    int xxory = 0;
+    for(int val : arr){
+        xxory ^= val;
+    }
+    
+    for(int i=1; i<=n; i++){
+        xxory ^= i;
+    }
+    
+    int rsb = xxory & (-xxory);
+    
+    int x = 0;
+    int y = 0;
+    
+    for(int val : arr){
+        if( (rsb & val)==0){
+            x ^= val;
+        }else{
+            y ^= val;
+        }
+    }
+    
+    // we have to xor x and y with 1 to n also, because these are the numbers which are crating the duplicacy
+    for(int i=1; i<=n; i++){
+        if( (rsb & i)==0){
+            x ^= i;
+        }else{
+            y ^= i;
+        }
+    }
+    
+    for(int val : arr){
+        if(x==val){
+            cout<<"Missing Number -> "<<y<<endl;
+            cout<<"Repeating Number -> "<<x<<endl;
+            break;
+        }else if(y==val){
+            cout<<"Missing Number -> "<<x<<endl;
+            cout<<"Repeating Number -> "<<y<<endl;
+            break;
+        }
+    }
+    return 0;
+}

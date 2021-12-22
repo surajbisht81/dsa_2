@@ -1,0 +1,22 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int Josephus(int n, int k)
+{
+    if(n==1)       // if only 1 person is left then return 0th person
+     return 0;
+     
+    int x = Josephus(n-1, k);  // calculating the recusive call, getting the answer of futute call
+    
+    int y = (x + k) % n;   // converting the ans of previous call to the current person
+    return y;     // returning the answer
+}
+
+int main()
+{
+    int n, k;
+    cin>>n>>k;
+    
+    cout<<Josephus(n, k);
+    return 0;
+}

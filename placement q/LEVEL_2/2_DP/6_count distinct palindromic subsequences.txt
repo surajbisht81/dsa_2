@@ -1,0 +1,84 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int Distinct_Palindromic_Subsequence(string str)
+{
+    int n = str.length();
+    
+    int dp[n][n];
+    
+    int prefix[n], suffix[n];                                                   // prefix and suffix array to store previous and greater index of current char
+    unordered_map<char, int> mp;
+    
+    prefix[0] = -1;
+    mp[str[0]] = -1;
+    for(int i=1; i<n; i++)
+    {
+        if(mp.find(str[i])!=mp.end()){                   // if character is already present in map then assign prefix of this as previous value
+            prefix[i] = mp[str[i]];
+            mp[str[i]] = i;                              // change the map of this character as i
+        }
+        else{
+            prefix[i] = -1;
+            mp[str[i]] = i;
+        }
+    }
+    
+    mp.clear();
+    
+    suffix[n-1] = n;
+    mp[str[n-1]] = n;
+    for(int i=n-2; i>=0; i--)
+    {
+        if(mp.find(str[i])!=mp.end()){
+            suffix[i] = mp[str[i]];
+            mp[str[i]] = i;
+        }
+        else{
+            suffix[i] = n;
+            mp[str[i]] = i;
+        }
+    }
+    
+    for(int g=0; g<n; g++)                                               // gap strategy
+    {
+        for(int i=0, j=g; j<n; i++, j++)
+        {
+            if(g==0)                                                      // if only one character then ans is 1
+             dp[i][j] = 1;
+            
+            else if(g==1){                                                // if two character then only 2 subsequences
+                dp[i][j] = 2;
+            }
+            else{                                                         // if 3 characters
+                if(str[i] != str[j])                                      // if corners characters are not equal then apply this formula
+                  dp[i][j] = dp[i+1][j] + dp[i][j-1] - dp[i+1][j-1];
+                
+                else{                                                     // if corner character are equal then 3 options
+                  int high = prefix[j];                                   // getting the prefix of corner character
+                  int low = suffix[i];                                    // getting the suffix of corner character
+                
+                  if(low==high){                                          // if prefix and suffix index are equal then only 1 character is in blw
+                     dp[i][j] = 2*dp[i+1][j-1] + 1;
+                  }
+                  else if(low > high){                                    // if low is greater than high then no character is in blw
+                     dp[i][j] = 2*dp[i+1][j-1] + 2;
+                  }
+                  else{                                                   // if more than 1 charcters are in blw
+                     dp[i][j] = 2*dp[i+1][j-1] - dp[low+1][high-1];
+                  }
+                }
+            }
+        }
+    }
+    return dp[0][n-1];
+}
+
+int main()
+{
+   string str;
+   cin>>str;
+   
+   cout<<Distinct_Palindromic_Subsequence(str);
+   return 0;
+}

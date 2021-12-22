@@ -1,0 +1,39 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int coin_permutation(int coin[], int n, int tar)
+{
+   int dp[tar+1];                        // declaring dp table wiht size 1+ target;
+   memset(dp, 0, sizeof(dp));
+   
+   dp[0]=1;                               // there is one way to pay 0 rupee with no coin
+   
+   for(int amt=1; amt<=tar; amt++)            // we will loop in amount from 1 to amount because int amt=0 is already calculated above
+   {
+       for(int j=0; j<n; j++)                 // makeing loop in coins;
+       {
+           if(coin[j] <= amt)                    // exploring each and every coin if amount is greater or equal than coin
+           {
+               int remaining = amt-coin[j];         // remaining will be amount - current coin taken;
+               dp[amt] += dp[remaining];          // dp[amt]-> no of ways to pay amt by n coins;
+           }
+       }
+   }
+   return dp[tar];
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int coin[n];
+    for(int i=0; i<n; i++)
+      cin>>coin[i];
+      
+    int tar;
+    cin>>tar;
+    
+    cout<<coin_permutation(coin, n, tar);
+    return 0;
+}

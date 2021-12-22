@@ -1,0 +1,73 @@
+/*1. You are given a string(str) and a number K.
+2. You have to find length of the longest substring that has exactly k unique characters.
+3. If no such substring exists, print "-1".*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void All_Substrings(string str, int k)
+{
+    int ans = 0;
+    
+    unordered_map<char, int> mp;
+    
+    int n = str.length();
+    int i=0;
+    int j=0;
+    
+    while(true)
+    {
+        bool flag1 = true, flag2 = true;
+        // acquiring the unique characters
+        while(i<n)
+        {
+            flag1 = false;
+            char ch = str[i];
+            mp[ch]++;
+            
+            i++;
+            
+            if(mp.size() > k){
+                break;
+            }else if(mp.size()==k){
+                ans = max(ans, i-j);
+            }
+        }
+        
+        // releasing the repeating characters
+        while(j<i)
+        {
+            flag2 = false;
+            char ch = str[j];
+            mp[ch]--;
+            
+            j++;
+            
+            if(mp[ch]==0){
+                mp.erase(ch);
+            }
+            
+            if(mp.size() <=k){
+                break;
+            }
+        }
+        
+        if(flag1==true and flag2==true)
+         break;
+    }
+    
+    cout<<ans;
+}
+
+int main()
+{
+    string str;
+    cin>>str;
+    
+    int k;
+    cin>>k;
+    
+    All_Substrings(str, k);
+    return 0;
+}

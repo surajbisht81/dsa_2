@@ -1,0 +1,163 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node
+{
+    public:
+    int data;
+    Node *left, *right;
+    
+    Node(int data){
+        this->data = data;
+        left = NULL;
+        right = NULL;
+    }
+};
+
+class Pair
+{
+    public:
+    Node *node;
+    int state;
+    Pair(Node *root, int x){
+        node = root;
+        state = x;
+    }
+};
+
+Node *construct(int arr[])
+{
+    stack<Pair*> st;
+    Node *root = new Node(arr[0]);
+    
+    Pair *p = new Pair(root, 1);
+    st.push(p);
+    
+    int idx = 0;
+    
+    while(st.empty()==false)
+    {
+        Pair *top = st.top();
+        
+        if(top->state == 1){
+            
+            idx++;
+            
+            if(arr[idx] == INT_MIN){
+                top->node->left = NULL;
+            }
+            else{
+                Node *temp = new Node(arr[idx]);
+                top->node->left = temp;
+                Pair *p = new Pair(top->node->left, 1);
+                st.push(p);
+            }
+            
+            top->state++;
+        }
+        else if(top->state == 2){
+            
+            idx++;
+            
+            if(arr[idx] == INT_MIN){
+                top->node->right = NULL;
+            }
+            else{
+                Node *temp = new Node(arr[idx]);
+                top->node->right = temp;
+                Pair *p = new Pair(top->node->right, 1);
+                st.push(p);
+            }
+            
+            top->state++;
+        }
+        else{
+            
+            st.pop();
+        }
+    }
+    return root;
+}
+
+void PrintKLevelDown(Node *root, int k, Node* blocker)
+{
+    if(root==NULL or k<0 or root==blocker)
+     return;
+     
+    if(k==0)
+     {
+         cout<<root->data<<endl;
+     }
+     
+    PrintKLevelDown(root->left, k-1, blocker);
+    PrintKLevelDown(root->right, k-1, blocker);
+    
+    
+}
+
+vector<Node*> v;
+
+bool NodeToRootPath(Node *root, int data)
+{
+    if(root==NULL)
+     return false;
+     
+    if(root->data == data){
+        v.push_back(root);
+        return true;
+    }
+    
+    bool dataATleft = NodeToRootPath(root->left, data);
+    if(dataATleft==true){
+        v.push_back(root);
+        return true;
+    }
+    
+    bool dataATright = NodeToRootPath(root->right, data);
+    if(dataATright==true){
+        v.push_back(root);
+        return true;
+    }
+    
+    return false;
+}
+
+//  This approach is using Node to root path and print k level down together, first finding the target and that node to root path and storing it 
+//   into the vector and after that finding nodes which are at k level down from i, dry run the code for better understanding
+void PrintKDistanceAway(Node *root, int data, int k)
+{
+   NodeToRootPath(root, data);    // storing the node to root path
+   
+   for(int i=0; i<v.size(); i++)       // running loop in vector
+   {
+       PrintKLevelDown(v[i], k-i, (i==0 ? NULL : v[i-1]) );       // printing nodes which are at k-i level down from given v[i] and last parameter
+   }                                                           // is blocker, if i is 0 then no blocker but if i !=0 then previous elment is blocker
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    string str;
+    
+    for(int i=0; i<n; i++)
+    {
+       cin>>str;
+       
+      if(str != "n")
+         arr[i] = stoi(str);
+      else
+         arr[i] = INT_MIN;
+    }
+    
+    Node *root = construct(arr);
+    
+    int data, k;
+    cin>>data>>k;
+    
+    PrintKDistanceAway(root, data, k);
+    
+    return 0;
+}

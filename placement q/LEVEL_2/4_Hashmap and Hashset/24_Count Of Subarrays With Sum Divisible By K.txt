@@ -1,0 +1,45 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int Count_Subarray(int arr[], int n, int k)
+{
+    int cnt = 0;
+    unordered_map<int, int> mp;
+    int sum = 0;
+    
+    mp[0] = 1;
+    
+    for(int i=0; i<n; i++)
+    {
+        sum += arr[i];
+        
+        int rem = sum%k;
+        if(rem < 0){
+            rem = rem + k;
+        }
+        
+        if(mp.find(rem) != mp.end()){
+            cnt += mp[rem];
+            
+        }
+        mp[rem]++;                      // we will always increase the count of rem we get(eg., if rem=5 is encountered again then we will increase the count of rem 5)
+    }
+    
+    return cnt;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    int k;
+    cin>>k;
+    
+    cout<<Count_Subarray(arr, n, k);
+    return 0;
+}

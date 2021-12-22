@@ -1,0 +1,66 @@
+/*1. You are given a string.
+2. You have to find the length of the longest substring of the given string that contains all non-repeating characters.*/
+
+// we will acquire till there are no repeating characters, and we will release the characters till there are no non-repeating characters.
+#include<bits/stdc++.h>
+using namespace std;
+
+void Longest_Substring(string str)
+{
+    int ans = 0;
+    unordered_map<char, int> mp;
+    
+    int i = 0;
+    int j = 0;
+    int n = str.length();
+    
+    while(true)
+    {
+        bool flag1 = true, flag2 = true;
+        // acquiring the characters till there is no repeating characters 
+        while(i < n)
+        {
+            flag1 = false;
+            char ch = str[i];
+            mp[ch]++;                         // increase the freq of character
+            
+            i++;                              // increment i, i should be exactly here, if you don't put i here, then TLE will come
+            
+            if(mp[ch]==2){                 // if at any time, freq of char is greater than 1 that's means character is repeating itself then break 
+                break;
+            }else{                         // else find the maximum length 
+                
+                ans = max(ans, i-j); 
+            }
+        }
+        
+        // release the characters from jth index till the subarray becomes valid again
+        
+        while(j<i)                        
+        {
+            flag2 = false;
+            char ch = str[j];
+            mp[ch]--;                    // decrement the character freq by 1
+            
+            j++;
+            
+            if(mp[ch]==1){               // there will be chaacters in substring where each character has freq 1 and one character has freq 2, so if 
+                break;                  // we decrement the freq by 1 then either character having freq 1 will get freq 0 or character having freq 2 will get freq 1
+            }                           // if character having freq 2 gets freq 1 that's means repeating character is removed then break out of loop
+        }
+        
+        if(flag1==true and flag2==true)     // if we do not enter both while loop that means break out of original while loop
+         break;
+    }
+ 
+    cout<<ans;
+}
+
+int main()
+{
+    string str;
+    cin>>str;
+    
+    Longest_Substring(str);
+    return 0;
+}

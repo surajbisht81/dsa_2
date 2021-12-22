@@ -1,0 +1,83 @@
+/*1. You are give a partially filled 9*9 2-D array(arr) which represents an incomplete sudoku state.
+2. You are required to assign the digits from 1 to 9 to the empty cells following some rules.
+Rule 1 -> Digits from 1-9 must occur exactly once in each row.
+Rule 2 -> Digits from 1-9 must occur exactly once in each column.
+Rule 3 -> Digits from 1-9 must occur exactly once in each 3x3 sub-array of the given 2D array.
+*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void print(vector<vector<int>> &arr)
+{
+    
+}
+
+void soduku(vector<vector<int>> &arr, int row[], int col[], vector<vector<int>> &grid, int i, int j)
+{
+    // base code
+    if(i==9)                        // if we reach out of matrix the print no and return for more  answers;
+    {
+        for(int i=0; i<9; i++){
+           for(int j=0; j<9; j++){
+             cout<<arr[i][j]<<" ";
+           }
+          cout<<endl;
+        }
+        cout<<endl;
+        return;
+    }
+    
+    // main code 
+    if(arr[i][j]!=0){            // if array value is not 0 then go to next cell as (if j is at its extreme then go to next row and col as 0 if j is not at its extreme
+        soduku(arr, row, col, grid, j<8 ? i : i+1, j<8 ? j+1: 0);   // then go to next col but row as same);
+    }
+    else{                                     // else if array value is 0 then explore every number from 1 to 9 and check if a number can be put into it or not
+        for(int num=1; num<=9; num++)
+        {
+            if( ((row[i] & (1<<num))==0) and ((col[j] & (1<<num))==0) and ((grid[i/3][j/3] & (1<<num))==0)){   // if that no is not present in entire row, col and grid the put it 
+                row[i] ^= (1<<num);
+                col[j] ^= (1<<num);
+                grid[i/3][j/3] ^= (1<<num);               // also make that no set in row, col and grid
+                
+                arr[i][j] = num;
+                soduku(arr, row, col, grid, j<8 ? i : i+1, j<8 ? j+1: 0);
+                arr[i][j] = 0;
+                
+                row[i] ^= (1<<num);
+                col[j] ^= (1<<num);
+                grid[i/3][j/3] ^= (1<<num);
+            }
+        }
+    }
+}
+
+int main()
+{
+    vector<vector<int>> arr(9);
+    
+    int row[9] = {0};                    // these are the arrays(row, col and grid) to check if particulare no is absent in row, col and that grid only then we can put that 
+    int col[9] = {0};                    // number in sudoku;
+    vector<vector<int>> grid(3);
+    for(int i=0; i<3; i++){
+        for(int j=0; j<3; j++){
+            grid[i].push_back(0);
+        }
+    }
+    
+    for(int i=0; i<9; i++){
+        for(int j=0; j<9; j++){
+            int x;
+            cin>>x;
+            
+            arr[i].push_back(x);              // when putting the no. in array then make no set in row, col and grid also
+            row[i] |= (1<<x);
+            col[j] |= (1<<x);
+            grid[i/3][j/3] |= (1<<x);
+        }
+    }
+    
+    soduku(arr, row, col, grid, 0, 0);       // we will start from 0, 0
+    return 0;
+}

@@ -1,0 +1,50 @@
+
+/*1. You are given a string containing only 0's and 1's.
+2. You have to find the length of substring which is having maximum difference of number of 0s and number of 1s i.e (Number of 0's - Number of 1's).
+3. If there are all 1's present in the given string, then print '-1'.*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int Max_diff(string str)
+{
+    int res = 0;                            // it is max diff of 0's and 1's in subarray
+    
+    int curr_sum = 0;    // for kadane's algorithm
+    int val;
+    
+    // we are replacing 0's with 1 and 1's with -1 so that we can get diff of 0's and 1's
+    for(int i=0; i<str.length(); i++)
+    {
+        if(str[i]=='0'){                 // if string value is 0 then put 1 in val
+            val = 1;
+        }
+        else if(str[i]=='1'){            // else put -1 in val
+            val = -1;
+        }
+        
+        if(curr_sum >=0){               // we are using simple kadane's algorithm here
+            curr_sum += val;
+        }
+        else{
+            curr_sum = val;
+        }
+        
+        if(curr_sum > res)
+         res = curr_sum;
+    }
+    if(res==0)               // if res is 0 that's means we are given string with all 1's in it then return -1
+     return -1;
+    else
+     return res;             // else return max difference
+}
+
+int main()
+{
+    string str;
+    
+    cin>>str;
+    
+    cout<<Max_diff(str);
+    return 0;
+}

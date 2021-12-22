@@ -1,0 +1,30 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+    int n;
+    cin>>n;
+    
+    int jumps = 1;
+    int sum = 0;
+    
+    // at starting, we are moving closer to n, and stop if sum is greater than n;
+    while(sum < n){
+        sum += jumps;
+        jumps++;
+    }
+    
+    // if sum-n is even then answer is jumps-1;
+    
+    if( (sum-n)%2 == 0){
+        cout<<jumps-1;
+    }
+    else if( (sum+jumps-n)%2 == 0){       // else we make one extra jumps and calculate sum-n
+        cout<<jumps;                      // and if this difference is even then this                                               // jumps is answer
+    }
+    else{
+        cout<<jumps+1;                  // else we will take one extra jump and jump +1 is                                           //garunteed our ans
+    }
+    
+    return 0;
+}

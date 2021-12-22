@@ -1,0 +1,37 @@
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& v) {
+        
+         int len = INT_MAX;         // we have to calculate the minimum length
+        
+         if(v.size() == 0){          // base case if size of 0 then return ""
+             return "";
+         }
+        
+         string str = v[0]; 
+        
+        // we will compare i and i+1th string so traverse from the first string as 0th string is in str 
+        for(int i=1; i<v.size(); i++)
+        {
+            int common = 0;               // length of common characters in both string
+            int j = 0;
+            int k = 0;
+            // traverse till we reach end of one string
+            while(j<str.length() && k<v[i].length())
+            {
+                // if character matches then increase the length
+                if(str[j] == v[i][k]){
+                    common++;
+                }else{
+                    break;       // else break
+                }
+                j++, k++;
+            }
+            
+            len = min(len, common);            // update the len as min of prev len and currently calculated len
+            str = v[i];                       // also update the str as current ith string
+        }
+        
+        return v[0].substr(0, len);             // return len character of string from any string of vector
+    }
+};

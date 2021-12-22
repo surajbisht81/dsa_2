@@ -1,0 +1,18 @@
+class Solution{
+public:
+    int inSequence(int A, int B, int C){
+        if(C==0 && A==B)
+        return 1;
+        
+        int n = ceil((1.0*(B-A))/(1.0*C) +1);
+        int m = floor((1.0*(B-A))/(1.0*C) +1);
+        
+        // cout<<n<<" "<<m<<endl;
+        if(n > 0 &&  n==m){
+            return 1;
+        }
+        else{
+            return 0;
+        }
+    }
+};

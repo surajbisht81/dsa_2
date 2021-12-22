@@ -1,0 +1,63 @@
+/*Given a row wise sorted matrix of size RxC where R and C are always odd, find the median of the matrix.
+
+Example 1:
+
+Input:
+R = 3, C = 3
+M = [[1, 3, 5], 
+     [2, 6, 9], 
+     [3, 6, 9]]
+
+Output: 5*/
+
+
+class Solution{   
+public:
+    int median(vector<vector<int>> &matrix, int r, int c){
+        
+        // first finding out the minimum and maximum in the matrix
+        int min = INT_MAX;
+        int max = INT_MIN;
+        
+        for(int i=0; i<r; i++)
+        {
+            for(int j=0; j<c; j++)
+            {
+                if(matrix[i][j] < min){
+                    min = matrix[i][j];
+                }
+                
+                if(matrix[i][j] > max){
+                    max = matrix[i][j];
+                }
+            }
+        }
+        
+        // it is the required no. of elements in matrix which should be less than median if we find out the element which has this no of elements less than it will be our median;
+        int required = (r*c+1)/2;
+        
+        // applying the binary search 
+        while(min < max)
+        {
+            int mid = (min+max)/2;
+            
+            int x = 0;
+            // it is the no of elements less than the mid
+            for(int i=0; i<r; i++)
+            {
+                x += upper_bound(matrix[i].begin(), matrix[i].end(), mid) - matrix[i].begin();
+            }
+            
+            // if x is less than required than we need to find out more less nos. than increase the min 
+            if(x < required){
+                min = mid + 1;
+            }
+            // else update the max as mid
+            else{
+                max = mid;
+            }
+        }
+        
+        return min;
+    }
+};

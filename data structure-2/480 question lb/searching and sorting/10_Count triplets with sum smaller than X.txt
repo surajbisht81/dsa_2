@@ -1,0 +1,29 @@
+
+// first method is simply apply 3 for loops O(n^3) time complaxity
+
+// second method is using two pointer approach or two sum
+// time complaxity is O(n^2)
+
+long long countTriplets(long long arr[], int n, long long sum)
+	{
+	    long long ans = 0;
+	    sort(arr, arr+n);
+	    
+	    for(int i=0; i<n; i++)
+	    {
+	        long long  start = i+1, end = n-1;
+	        
+	        while(start < end)
+	        {
+	            if(arr[i] + arr[start] + arr[end] >= sum){
+	                end = end - 1;  
+	            }
+	            else{
+	                ans += (end - start);
+	                start = start + 1;
+	            }
+	        }
+	    }
+	    
+	    return ans;
+	}

@@ -1,0 +1,57 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+bool DictContains(string str, string dict[], int n)
+{
+    for(int i=0; i<n; i++)
+    {
+        if(dict[i].compare(str)==0)
+         return true;
+    }
+    return false;
+}
+
+void WordBreak(string sentence, string dict[], int n, string ans)
+{
+   int len = sentence.length();                // length of sentence
+   
+   // base case
+   if(len == 0)                               // if length of sentence becomes 0 then print ans and return 
+   {
+       cout<<ans<<endl;
+       return;
+   }
+   
+   // main code
+   for(int i=0; i<len; i++)                            // exploring every prefix of sentence
+   {
+       string prefix = sentence.substr(0, i+1);
+       
+       if(DictContains(prefix, dict, n))                      // if this prefix is contained in dictionary then make a recursive call with 
+       {
+           string rem_str = sentence.substr(i+1);                 // remaining string;
+           WordBreak(rem_str, dict, n, ans+prefix+" ");
+       }
+   }
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    string dict[n];                  // dict of string 
+    
+    for(int i=0; i<n; i++)
+    {
+        string str;
+        cin>>str;
+        dict[i] = str;
+    }
+    
+    string sentence;                  // given sentence;
+    cin>>sentence;
+    
+    WordBreak(sentence, dict, n, "");    // last parameter is output,
+    return 0;
+}

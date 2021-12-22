@@ -1,0 +1,67 @@
+/*1. You are given an array(arr1) of integers and an integer k.
+2. Another array(arr2) is formed by concatenating K copies of arr1.
+   For example, if arr1 = {1,2} and k = 3, then arr2 = {1,2,1,2,1,2}.
+3. You have to find the maximum subarray sum in arr2.*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int kadanes(int arr[], int n)
+{
+    int curr_sum = arr[0];
+    int overall_sum = arr[0];
+    
+    for(int i=1; i<n; i++)
+    {
+        curr_sum = max(arr[i], curr_sum+arr[i]);
+        overall_sum = max(curr_sum, overall_sum);
+    }
+    return overall_sum;
+}
+
+int kadanesOfTwo(int arr[], int n)
+{
+    int new_arr[n*2];
+    
+    for(int i=0; i<n; i++)
+     new_arr[i] = arr[i];
+     
+    for(int i=0; i<n; i++)
+     new_arr[i+n] = arr[i];
+     
+    return kadanes(new_arr, 2*n);
+}
+
+int K_Concatenate(int arr[], int N, int k)
+{
+    int sum = 0;
+    for(int i=0; i<N; i++)                                          // first calculating the sum of entire array
+     sum += arr[i];
+     
+    if(k==1){                     // if we are given only 1 k then simply apply kadanes in array
+        return kadanes(arr, N);
+    }
+    else if(sum < 0){
+        return kadanesOfTwo(arr, N);                    // if sum is -ve then (k-2)*sum will always be -ve so max sum can be found out in only two copies
+    }
+    else{
+        return kadanesOfTwo(arr, N) + (k-2)*sum;       // if sum is +ve then (k-2)*sum will always be +ve so max is kadanes of two copies + (k-2)*sum   
+    }
+}
+
+int main()
+{
+    int N;
+    cin>>N;
+    
+    int arr[N];
+    for(int i=0; i<N; i++)
+     cin>>arr[i];
+     
+    int k;
+    cin>>k;
+    
+    cout<<K_Concatenate(arr, N, k);
+    return 0;
+}

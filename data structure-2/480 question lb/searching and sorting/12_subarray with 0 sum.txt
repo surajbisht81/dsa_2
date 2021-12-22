@@ -1,0 +1,25 @@
+// if sum is found in map then increase the res and also increase the no of times
+// it found in map
+// eg. we get 5 for first time then we found 5 again 2nd time we increase res by 1
+// then we got 5 third time which means 5 from first to third and from 2nd to 3rd subarray
+// is 0 so ans will be +2
+
+ll findSubarray(vector<ll> arr, int n ) {
+    
+    ll res = 0;
+    
+    unordered_map<ll, ll> mp;
+    mp[0] = 1;
+    ll sum = 0;
+    
+    for(ll i=0; i<n; i++)
+    {
+        sum += arr[i];
+        
+        if(mp.find(sum) != mp.end()){
+            res += mp[sum];
+        }
+            mp[sum]++;
+    }
+    return res;
+}

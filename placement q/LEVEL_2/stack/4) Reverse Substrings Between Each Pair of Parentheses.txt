@@ -1,0 +1,50 @@
+/*You are given a string s that consists of lower case English letters and brackets. 
+
+Reverse the strings in each pair of matching parentheses, starting from the innermost one.
+
+Your result should not contain any brackets.
+
+  */
+
+
+class Solution {
+public:
+    string reverseParentheses(string s) {
+        
+        stack<char> st;
+        queue<char> helper;
+        string str;
+        
+        for(int i=0; i<s.length(); i++)
+        {
+            char ch = s[i];
+            
+            if(ch == '(' || (ch>='a' && ch<='z')){
+                st.push(ch);
+            }
+            else{
+                
+                while(st.top() != '('){
+                    helper.push(st.top());
+                    st.pop();
+                }
+                
+                st.pop();
+                
+                while(helper.size() > 0){
+                    st.push(helper.front());
+                    helper.pop();
+                }
+            }
+        }
+        
+        str = "";
+        
+        while(st.size() > 0){
+            str = st.top() + str;
+            st.pop();
+        }
+        
+        return str;
+    }
+};

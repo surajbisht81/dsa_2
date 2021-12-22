@@ -1,0 +1,55 @@
+/*1. You are given a number n, representing the size of a n * n chess board.
+2. You are required to calculate and print the permutations in which n queens can be placed on the 
+     n * n chess-board. */
+// this permutation is calculated using combination approach, we are using combination approach to achieve permutation
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void Queen_Permutation(int queen, int n, int row, int col, bool used[], string asf)
+{
+    if(row == n)
+    {
+       if(queen == n){
+           cout<<asf<<endl;
+           cout<<endl;
+       }   
+       return;
+    }
+    
+    int nr = 0, nc = 0;
+    char sep;
+    
+    if(col == n-1){             // if we are at extreme col then col will change to 0 and row will be +1 and sep will be a new line
+        nr = row+1;
+        nc = 0;
+        sep = '\n';
+    }else{
+        nr = row;                 // else row will be same but col will be +1 and sep will a tab
+        nc = col+1;
+        sep = '\t';
+    }
+    
+    for(int i=0; i<n; i++)                      // this loop is for current cell, 0-n is no of queens, whether to include ith queen or not
+    {
+        if(used[i]==false){                     // we can include ith queen if it is not already used
+            used[i] = true;
+            Queen_Permutation(queen+1, n, nr, nc, used, asf+"q"+to_string(i+1)+sep);  // next call will be for next cell,  and queen will be +1 because, if 1 cell has q1 then next cell will contain q2
+            used[i] = false;                   // backtracking
+        }
+    }
+    
+    Queen_Permutation(queen, n, nr, nc, used, asf+"-"+sep);  // this call will be for when no queen is placed and "-" is placed in it;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    bool used[n];
+    memset(used, false, sizeof(used));
+    
+    Queen_Permutation(0, n, 0, 0, used, "");  // first parameter is queen, 2nd is total no of queens, 3rd, 4th is row and col, used is boolean array
+    return 0;                                  // "" is asf
+}

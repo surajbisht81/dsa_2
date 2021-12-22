@@ -1,0 +1,93 @@
+/*1. You are given an integer N, which represents the length of a rod, and an array of integers, which represents the prices of rod pieces of length varying from 1 to 
+     N.
+2. You have to find the maximum value that can be obtained by selling the rod.
+3. You can sell it in pieces or as a whole.*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int Rod_Cutting(int arr[], int n)
+{
+    int new_arr[n+1] = {0};
+    
+    for(int i=1; i<n+1; i++){              // making new array because in original array price of ith length rod is stored in i-1 th index 
+        new_arr[i] = arr[i-1];
+    }
+    
+    int dp[n+1] = {0};
+    
+    dp[0] = 0;                   // 0 length rod has price 0
+    dp[1] = new_arr[1];         // 1 length rod has price as given us
+    
+    for(int i=2; i<n+1; i++){    // calculating price for given value of n
+        
+        dp[i] = new_arr[i];      // first dp will contain price of entire length(when we do not cut any length from it)
+        
+        //using left and right strategy
+        int left = 1;                    //   left will start from 1 length  
+        int right = i-1;                 // right will start from i-1 (eg., for i=5, l=1 and r=4 then l=2, r=3 and l=3, r=2 is already occured that's why we are running loop for half the value)
+        
+        while(left<=right){
+            if(dp[left]+dp[right] > dp[i])
+             dp[i] = dp[left] + dp[right];
+             
+            left++, right--;
+        }
+    }
+    return dp[n];
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    cout<<Rod_Cutting(arr, n);
+    return 0;
+}
+
+
+/*#include<bits/stdc++.h>
+using namespace std;
+
+int Rod_Cutting(int arr[], int n)
+{
+     int new_arr[n+1];
+     new_arr[0] = 0;
+     
+     for(int i=1; i<n+1; i++)
+      new_arr[i] = arr[i-1];
+      
+     int dp[n+1];
+     dp[0] = 0;                                         // dp of 0 will containg 0 becoz 0 length has 0 price and 1 length has price of 1 length
+     dp[1] = new_arr[1];
+     
+     for(int i=2; i<n+1; i++){                         // run loop from length =2 ;
+         
+         int maxim = INT_MIN;
+         for(int j=1; j<=i; j++){                     // cutting length from 1 upto i length and finding the maximum price
+             
+            maxim = max(maxim, new_arr[j]+dp[i-j]);   // if i=4 then max is price of 1+price of 3 length in dp, price of 2+price of 2 length in dp and so on
+         }
+         dp[i] = maxim;                                  // storing then maximum in dp
+     }
+     return dp[n];
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    cout<<Rod_Cutting(arr, n);
+    return 0;
+}*/

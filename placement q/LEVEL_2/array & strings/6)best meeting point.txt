@@ -1,0 +1,61 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int Best_meeting_point(vector<vector<int>> &grid)
+{
+    // calculating x coordinate 
+    vector<int> xcord;
+    for(int r=0; r<grid.size(); r++){
+        for(int c=0; c<grid[0].size(); c++){
+            if(grid[r][c] == 1){
+                xcord.push_back(r);
+            }
+        }
+    }
+    
+    // calculaing y coordinate
+    vector<int> ycord;
+    
+    for(int c=0; c<grid[0].size(); c++){
+        for(int r=0; r<grid.size(); r++){
+            if(grid[r][c] == 1){
+                ycord.push_back(c);
+            }
+        }
+    }
+    
+    // calculating median of x and y;
+    int xmedian = xcord[xcord.size()/2];
+    int ymedian = ycord[ycord.size()/2];
+    
+    //calculating distance
+    int dist = 0;
+    for(int i=0; i<xcord.size(); i++){
+        dist += abs(xcord[i] - xmedian);
+    }
+    
+    for(int i=0; i<ycord.size(); i++){
+        dist += abs(ycord[i] - ymedian);
+    }
+    
+    return dist;
+}
+
+int main()
+{
+    int n, m;
+    cin>>n>>m;
+    
+    vector<vector<int>> grid(n);
+    
+    for(int i=0; i<n; i++){
+        for(int j=0; j<m; j++){
+            int x;
+            cin>>x;
+            grid[i].push_back(x);
+        }
+    }
+    
+    cout<<Best_meeting_point(grid);
+    return 0;
+}

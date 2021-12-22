@@ -1,0 +1,31 @@
+/*1. You are given two numbers A and B.
+2. You are given two more numbers left and right, representing a range [left,right].
+3. You have to set bits in B which are set in A lying in the above mentioned range.
+4. Print the updated number B.*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    int A, B;
+    cin>>A>>B;
+    
+    int left, right;
+    cin>>left>>right;
+    
+    // main code
+    
+    int mask = (1 << (right-left+1));    // first left shift 1 upto range value
+    
+    mask--;                              // decrease mask by 1 
+    
+    mask = (mask << (left-1));        // then left shift mask again by left-1
+    
+    mask = A & mask;                  // making actual mask 
+    
+    B = B | mask;                     // required result
+    
+    cout<<B;
+    return 0;
+}

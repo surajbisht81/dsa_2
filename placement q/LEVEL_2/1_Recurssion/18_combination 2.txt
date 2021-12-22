@@ -1,0 +1,43 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void Combination(bool boxes_used[], int n, int item, int r, int last_box)
+{
+    if(item > r)                        // if item reaches beyond the total no of items
+    {
+        for(int i=0; i<n; i++)             // then print the "i" where boxes are used and "-" where boxes are not used
+        {
+            if(boxes_used[i] == true){
+                cout<<"i";
+            }
+            else{
+                cout<<"-";
+            }
+        }
+        cout<<endl;
+        return;                             // and return
+    }
+    
+    // main code
+    for(int i=last_box+1; i<n; i++)     // i will start from next box of previously used box
+    {
+        if(boxes_used[i]==false)          // if ith box is not used then process ahead and make this ith box used
+        {
+            boxes_used[i] = true;
+            Combination(boxes_used, n, item+1, r, i);   // make call for next item(item+1) with last_box used is i;
+            boxes_used[i] = false;                 // backtracking, so that more options are explored
+        }
+    }
+}
+
+int main()
+{
+    int n, r;
+    cin>>n>>r;
+    
+    bool boxes_used[n];
+    memset(boxes_used, false, sizeof(boxes_used));
+    
+    Combination(boxes_used, n, 1, r, -1);    // first parameter is boolean array which tells that which box is used, n is total no of boxes, 1 is first item
+    return 0;                                // r is total items to put in the boxes, -1 is last box used so that item can not be put into previous box
+}

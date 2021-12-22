@@ -1,0 +1,37 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int CountSubarray_Eqal01(int arr[], int n)
+{
+    int cnt = 0;
+    unordered_map<int, int> mp;
+    
+    mp[0] = 1;
+    int sum = 0;
+    
+    for(int i=0; i<n; i++)
+    {
+        sum += (arr[i]==0) ? -1 : 1;
+        
+        if(mp.find(sum) != mp.end()){
+            cnt += mp[sum];
+        }
+        
+        mp[sum]++;
+    }
+    
+    return cnt;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    cout<<CountSubarray_Eqal01(arr, n);
+    return 0;
+}

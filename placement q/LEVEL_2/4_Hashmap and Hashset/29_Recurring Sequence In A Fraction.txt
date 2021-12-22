@@ -1,0 +1,58 @@
+/*1. You are given two numbers which represent the numerator and denominator of a fraction.
+2. You have to convert this fraction into a decimal.
+3. If the decimals are repeating recursively, then you have to put the recurring sequence inside a bracket.*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void Recurring_Sequence(int num, int den)
+{
+    string ans = "";
+    
+    int q = num/den;                   // q is quotient
+    int r = num % den;                 // r is remainder
+    ans += to_string(q);               // put the quotient in the ans;
+    
+    if(r==0){                         // if remainder is 0 in first attempt then print ans
+        
+       cout<<ans;    
+    }
+    else{
+         
+        ans += ".";                               // else put a full stop in the ans 
+        unordered_map<int, int> mp;               // and make a map so that if remainder is repeated again we will get to know that the ans will repeat itself
+        mp[r] = ans.length();
+        
+        while(r != 0)                            // we will process unitl remainder is 0
+        {
+           r *= 10;                              //  first make reaminder *10
+           
+           q = r/den;                            // get the quotient and remainder
+           r = r % den;
+           
+           ans += to_string(q);                  // put the quotient in the ans
+           
+           if(mp.find(r) != mp.end()){           // we will check if remainder is repeated or not if repeated then find the length where it was repeated
+               int len = mp[r];
+               ans.insert(len, "(");             // and put a ( after that length and put a ) at the end of ans
+               ans += ")";                       // and break out of while loop
+               break;
+           }
+           else{
+               mp[r] = ans.length();             // else put the remainder into the map with the value as length where is was repeated
+           }
+        }
+        
+        cout<<ans;
+    }
+}
+
+int main()
+{
+    int num, den;
+    cin>>num>>den;
+    
+    Recurring_Sequence(num, den);
+    return 0;
+}

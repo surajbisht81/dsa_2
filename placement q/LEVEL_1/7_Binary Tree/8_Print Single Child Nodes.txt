@@ -1,0 +1,123 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node
+{
+    public:
+    int data;
+    Node *left, *right;
+    
+    Node(int data){
+        this->data = data;
+        left = NULL;
+        right = NULL;
+    }
+};
+
+class Pair
+{
+    public:
+    Node *node;
+    int state;
+    Pair(Node *root, int x){
+        node = root;
+        state = x;
+    }
+};
+
+Node *construct(int arr[])
+{
+    stack<Pair*> st;
+    Node *root = new Node(arr[0]);
+    
+    Pair *p = new Pair(root, 1);
+    st.push(p);
+    
+    int idx = 0;
+    
+    while(st.empty()==false)
+    {
+        Pair *top = st.top();
+        
+        if(top->state == 1){
+            
+            idx++;
+            
+            if(arr[idx] == INT_MIN){
+                top->node->left = NULL;
+            }
+            else{
+                Node *temp = new Node(arr[idx]);
+                top->node->left = temp;
+                Pair *p = new Pair(top->node->left, 1);
+                st.push(p);
+            }
+            
+            top->state++;
+        }
+        else if(top->state == 2){
+            
+            idx++;
+            
+            if(arr[idx] == INT_MIN){
+                top->node->right = NULL;
+            }
+            else{
+                Node *temp = new Node(arr[idx]);
+                top->node->right = temp;
+                Pair *p = new Pair(top->node->right, 1);
+                st.push(p);
+            }
+            
+            top->state++;
+        }
+        else{
+            
+            st.pop();
+        }
+    }
+    return root;
+}
+
+void PrintChild(Node *root)
+{
+    if(root==NULL)
+     return;
+     
+    if((!root->left and root->right) or (root->left and !root->right)) // we are checking the parent's child, if one, then print child
+    {
+        if(root->left){
+            cout<<root->left->data<<endl;
+        }
+        else{
+            cout<<root->right->data<<endl;
+        }
+    }
+    PrintChild(root->left);
+    PrintChild(root->right);
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    string str;
+    
+    for(int i=0; i<n; i++)
+    {
+       cin>>str;
+       
+      if(str != "n")
+         arr[i] = stoi(str);
+      else
+         arr[i] = INT_MIN;
+    }
+    
+    Node *root = construct(arr);
+    
+    PrintChild(root);
+ 
+    return 0;
+}

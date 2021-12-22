@@ -1,0 +1,52 @@
+// we want unique quadraplets
+// O(n^3) soln, first sort the array then use two loops and inside 2nd loop, run two pointer approach
+// for no duplicate ans, if ith and previous ith element i and i-1 are same then do i++, similarly for j
+// and similarly for low and high
+
+class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+            
+        int n = nums.size();
+        vector<vector<int>> res;
+        
+        if(n == 0){
+            return res;
+        }
+        
+        sort(nums.begin(), nums.end());
+        
+        for(int i=0; i<n; i++)
+        {
+            if(i!=0 && nums[i] == nums[i-1]) continue;
+            
+            for(int j=i+1; j<n; j++)
+            {
+                if(j!=i+1 && nums[j] == nums[j-1]) continue;
+                
+                int low = j+1;
+                int high = n-1;
+                
+                while(low < high)
+                {
+                    int sum = nums[i] + nums[j] + nums[low] + nums[high];
+                    
+                    if(sum > target) high--;
+                    else if(sum < target) low++;
+                    else{
+                        vector<int> v{nums[i], nums[j], nums[low], nums[high]};
+                        res.push_back(v);
+                        
+                        low++;
+                        high--;
+                        
+                        while(low<high && nums[low]==nums[low-1]) low++;
+                        while(low<high && nums[high]==nums[high+1]) high--;
+                    }
+                }
+            }
+        }
+        
+        return res;
+    }
+};

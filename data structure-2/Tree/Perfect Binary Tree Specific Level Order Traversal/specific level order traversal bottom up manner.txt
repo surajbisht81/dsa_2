@@ -1,0 +1,81 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Node
+{
+	int data;
+	Node *left, *right;
+
+	Node(int key)
+	{
+		this->data = key;
+		this->left = this->right = nullptr;
+	}
+};
+
+void printNodes(Node *root)
+{
+    queue<Node*> qu1, qu2;
+    qu1.push(root->left);
+    qu2.push(root->right);
+    
+    unordered_map<int, vector<int>> mp;
+    int level=1;
+    mp[level].push_back(root->data);
+    
+    while(!qu1.empty())
+    {
+        level++;
+        int n = qu1.size();
+        
+        while(n--)
+        {
+            Node *first = qu1.front();
+            qu1.pop();
+            
+            mp[level].push_back(first->data);
+            if(first->left)
+             qu1.push(first->left);
+            if(first->right)
+             qu1.push(first->right);
+             
+           
+           Node *second = qu2.front();
+           qu2.pop();
+           mp[level].push_back(second->data);
+           if(second->right)
+            qu2.push(second->right);
+           if(second->left)
+            qu2.push(second->left);
+        }
+    }
+    
+    for(int i=mp.size(); i>0; i--)
+     {
+         for(auto x:mp[i])
+           cout<<x<<" ";
+     }
+}
+int main() {
+Node* root = nullptr;
+
+	root = new Node(1);
+	root->left = new Node(2);
+	root->right = new Node(3);
+	root->left->left = new Node(4);
+	root->left->right = new Node(5);
+	root->right->left = new Node(6);
+	root->right->right = new Node(7);
+	root->left->left->left = new Node(8);
+	root->left->left->right = new Node(9);
+	root->left->right->left = new Node(10);
+	root->left->right->right = new Node(11);
+	root->right->left->left = new Node(12);
+	root->right->left->right = new Node(13);
+	root->right->right->left = new Node(14);
+	root->right->right->right = new Node(15);
+
+	printNodes(root);
+
+	return 0;
+}

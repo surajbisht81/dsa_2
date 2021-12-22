@@ -1,0 +1,68 @@
+/*1. You are given a number n, representing the number of time-intervals.
+2. In the next n lines, you are given a pair of space separated numbers.
+3. The pair of numbers represent the start time and end time of a meeting (first number is start time and second number is end time)
+4. You are required to merge the meetings and print the merged meetings output in increasing order of start time.*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+class Pair{
+    public:
+    int st;
+    int et;
+};
+
+bool mycomp(Pair a, Pair b)   // comparator function
+{ 
+    return a.st < b.st; 
+} 
+
+void Merge_Intervals(Pair arr[], int n)
+{
+   sort(arr, arr+n, mycomp);   // sorting the array before 
+   stack<Pair> st;
+   
+   st.push(arr[0]);          // 1st pair will push into the stack always
+   
+   for(int i=1; i<n; i++)
+   {
+       if(arr[i].st > st.top().et)             // is st. top element's end time is less than current array start time 
+        st.push(arr[i]);                          // then push current pair
+       else
+       {
+           st.top().et = max(st.top().et, arr[i].et);   // else update the end time of st.top() as maximum of it's end time and current pair end time
+       }
+   }
+   
+   stack<Pair> nst;
+   while(st.size()!=0)    // we have to print the pair in increasing order so push stack elements into other stack to print elements in correct order
+    {
+        nst.push(st.top());
+        st.pop();
+    }
+    
+   while(nst.size()!=0)
+   {
+       cout<<nst.top().st<<" "<<nst.top().et<<endl;
+       nst.pop();
+   }
+}
+
+int main()
+{
+   int n;
+   cin>>n;
+   
+   Pair arr[n];
+   for(int i=0; i<n; i++)
+   {
+      int x, y;
+      cin>>x>>y;
+      arr[i].st = x;
+      arr[i].et = y;
+   }
+   
+   Merge_Intervals(arr, n);
+   return 0;
+}

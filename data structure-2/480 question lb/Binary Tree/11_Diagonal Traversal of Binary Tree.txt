@@ -1,0 +1,31 @@
+// we have observed that nodes which are at same diagonal has same slope like 1st diagonal has 0 and second has -1 and third has -2 and so on
+// so if we go to left increase the slope by 1(do not decrease the slope because we are storing  nodes in ordered manner) and we go to right then do
+// not change the slope
+void solve(Node *root, int d, map<int, vector<int>> &mp)
+{
+    if(!root)  return;
+    
+    mp[d].push_back(root->data);        // storing all data which have same distance
+    
+    solve(root->left, d+1, mp);         // we go to left then increase the slope
+    solve(root->right, d, mp);          // we go to right then do not change slope
+}
+
+vector<int> diagonal(Node *root)
+{
+   vector<int> ans;
+   
+   map<int, vector<int>> mp;
+   
+   solve(root, 0, mp);
+   
+   for(auto x=mp.begin(); x!=mp.end(); x++){
+       vector<int> v = (*x).second;
+       
+       for(int i=0; i<v.size(); i++){
+           ans.push_back(v[i]);
+       }
+   }
+   
+   return ans;
+}

@@ -1,0 +1,67 @@
+// C++ implementation to find the maximum number 
+// of chocolates to be distributed equally among 
+// k students 
+#include <bits/stdc++.h> 
+using namespace std; 
+
+// function to find the maximum number of chocolates 
+// to be distributed equally among k students 
+int maxNumOfChocolates(int arr[], int n, int k) 
+{ 
+	// unordered_map 'um' implemented as 
+	// hash table 
+	unordered_map<int, int> um; 
+
+	// 'sum[]' to store cumulative sum, where 
+	// sum[i] = sum(arr[0]+..arr[i]) 
+	int sum[n], curr_rem; 
+
+	// to store sum of sub-array having maximum sum 
+	int maxSum = 0; 
+
+	// building up 'sum[]' 
+	sum[0] = arr[0]; 
+	for (int i = 1; i < n; i++) 
+		sum[i] = sum[i - 1] + arr[i]; 
+
+	// traversing 'sum[]' 
+	for (int i = 0; i < n; i++) { 
+
+		// finding current remainder 
+		curr_rem = sum[i] % k; 
+
+		// if true then sum(0..i) is divisible 
+		// by k 
+		if (curr_rem == 0) { 
+			// update 'maxSum' 
+			if (maxSum < sum[i]) 
+				maxSum = sum[i]; 
+		} 
+
+		// if value 'curr_rem' not present in 'um' 
+		// then store it in 'um' with index of its 
+		// first occurrence 
+		else if (um.find(curr_rem) == um.end()) 
+			um[curr_rem] = i; 
+
+		else
+			// if true, then update 'max' 
+			if (maxSum < (sum[i] - sum[um[curr_rem]])) 
+			maxSum = sum[i] - sum[um[curr_rem]]; 
+	} 
+
+	// required maximum number of chocolates to be 
+	// distributed equally among 'k' students 
+	return (maxSum / k); 
+} 
+
+// Driver program to test above 
+int main() 
+{ 
+	int arr[] = { 2, 7, 6, 1, 4, 5 }; 
+	int n = sizeof(arr) / sizeof(arr[0]); 
+	int k = 3; 
+	cout << "Maximum number of chocolates: "
+		<< maxNumOfChocolates(arr, n, k); 
+	return 0; 
+} 

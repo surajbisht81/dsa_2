@@ -1,0 +1,73 @@
+/*1. You are given a number n, representing the number of people in a party.
+2. You are given n strings of n length containing 0's and 1's
+3. If there is a '1' in ith row, jth spot, then person i knows about person j.
+4. A celebrity is defined as somebody who knows no other person than himself but everybody else knows him.
+5. If there is a celebrity print it's index otherwise print "none".*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void is_celebrity(vector<vector<int>> &v)
+{
+    stack<int> st;
+    
+    for(int i=0; i<v.size(); i++)
+     st.push(i);
+     
+    while(st.size() >= 2)   // while there are 2 or more people in the stack while loop will run
+    {
+        int i = st.top();
+        st.pop();
+        int j = st.top();
+        st.pop();
+        
+        if(v[i][j]==0)    // i don't know j -> i is celebrity
+        {
+            st.push(i);    // i is celebrity then put it into the stack because stack will contain celebrity at the end
+        }
+        else        // i know j -> i is not celebrity;  then push j into the stack
+        {
+            st.push(j);
+        }
+    }
+    int pot = st.top();    // st. top may or may not be the celebrity
+    
+    for(int i=0; i<v.size(); i++)   // checking pot is actually a celebrity
+    {
+        if(i!=pot)     // pot knows pot, this has no meaning 
+        {
+            if(v[pot][i]==1 or v[i][pot]==0)     // is pot knows any other person  or  any other person doesn't know pot then pot must not be the celebrity
+             {
+                 cout<<"none";   // print none and return
+                 return;
+             }
+        }
+    }
+    cout<<pot;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    string arr[n];    // we are given array of strings
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    vector<vector<int>> v(n);  //declaring vector for solving problem
+    
+    for(int i=0; i<n; i++)
+    {
+       string str = arr[i];
+       for(int j=0; j<str.length(); j++)
+       {
+           v[i].push_back(str[j]-'0');          // converting string to integer and putting into the vector
+       }
+    }
+    
+    is_celebrity(v);
+     
+    return 0;
+}

@@ -1,0 +1,64 @@
+/*Given a binary tree, the task is to create a new binary tree which is a mirror image of the given binary tree.*/
+/* In order to change the original tree in its mirror tree, then we simply swap the left and right link of each node. If the node is leaf node then do nothing.*/
+
+#include <iostream>
+using namespace std;
+
+typedef struct treenode {
+	int val;
+	struct treenode* left;
+	struct treenode* right;
+} node;
+
+node* createNode(int val)
+{
+	node* newNode = (node*)malloc(sizeof(node));
+	newNode->val = val;
+	newNode->left = NULL;
+	newNode->right = NULL;
+	return newNode;
+}
+
+void inorder(node* root)
+{
+	if (root == NULL)
+		return;
+	inorder(root->left);
+	printf("%d ", root->val);
+	inorder(root->right);
+}
+
+treenode* mirrorTree(node* root)
+{
+    if(root == NULL){
+        return NULL;
+    }
+    
+    mirrorTree(root->left);
+    mirrorTree(root->right);
+    
+    treenode *temp = root->left;
+    root->left = root->right;
+    root->right = temp;
+    
+    return root;
+}
+
+int main()
+{
+
+	node* tree = createNode(5);
+	tree->left = createNode(3);
+	tree->right = createNode(6);
+	tree->left->left = createNode(2);
+	tree->left->right = createNode(4);
+	printf("Inorder of original tree: ");
+	inorder(tree);
+
+	// Function call
+	mirrorTree(tree);
+
+	printf("\nInorder of Miror tree: ");
+	inorder(tree);
+	return 0;
+}

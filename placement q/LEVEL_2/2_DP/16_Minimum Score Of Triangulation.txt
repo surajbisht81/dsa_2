@@ -1,0 +1,58 @@
+/*1. You are given an array of integers, which represents the vertices of an N-sided convex polygon in clockwise order.
+2. You have to triangulate the given polygon into N-2 triangles.
+3. The value of a triangle is the product of the labels of vertices of that triangle.
+4. The total score of the triangulation is the sum of the value of all the triangles.
+5. You have to find the minimum score of the triangulation of the given polygon.*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int Min_Score_Of_Triangulation(int arr[], int n)
+{
+    int dp[n][n];                                                            // making dp table of size n*n
+    memset(dp, 0, sizeof(dp));
+    
+    for(int g=0; g<n; g++)                                                  // using gap stratagy
+    {
+        for(int i=0, j=g; j<n; i++, j++)
+        {
+            if(g==0 or g==1)                                                // if gap is 0 or 1 then dp is 0 
+             dp[i][j] = 0;
+             
+            else if(g==2){                                                // if gap is 3 then these 3 point altogether can make triangle, so dp will containg
+                
+                dp[i][j] = arr[i] * arr[i+1] * arr[j];                    // multiplication of all these 3 points
+            }
+            else{                                                        // else, points are greater than 3 then take min of all combination
+                
+                int minim = INT_MAX;                                  
+                for(int k=i+1; k<=j-1; k++){                            // run loop from all other points except i and j and make triangle with i, j and k
+                    int middle_part = arr[i] * arr[j] * arr[k];           // main triangle is i, j, k
+                    int left_part = dp[i][k];                             // left part is solved in dp and has points between i and k
+                    int right_part = dp[k][j];                            // right part is solved in dp and has points between k and j
+                    int total = middle_part + left_part + right_part;     // total is sum of all three combinations
+                    
+                    minim = min(minim, total);                            // taking minimum
+                }
+                dp[i][j] = minim;                                       // putting minimum in dp
+            }
+        }
+    }
+    return dp[0][n-1];
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+    {
+        cin>>arr[i];
+    }
+    
+    cout<<Min_Score_Of_Triangulation(arr, n);
+    return 0;
+}

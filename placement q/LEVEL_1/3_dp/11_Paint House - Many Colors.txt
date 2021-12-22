@@ -1,0 +1,75 @@
+/* You are given a number n and a number k separated by a space, representing the number of houses and number of colors.
+2. In the next n rows, you are given k space separated numbers representing the cost of painting nth house with one of the k colors.
+3. You are required to calculate and print the minimum cost of painting all houses without painting any consecutive house with same color.*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int paint_many_houses(vector<vector<int>> &arr, int n, int k)
+{
+    int dp[n][k];
+    memset(dp, 0, sizeof(dp));
+    
+    int first_min=INT_MAX, second_min=INT_MAX;
+    
+    for(int j=0; j<k; j++)
+    {
+        dp[0][j] = arr[0][j];    
+        
+        if(arr[0][j] < first_min){                  // if current element is less than first_min then second_min will get value of first_min and first_min will get that current element
+            second_min = first_min;
+            first_min = arr[0][j];                   
+            
+        }else if(arr[0][j] < second_min){           // if current element is between first and second min then second min will get that elemnt
+            second_min = arr[0][j];
+        }
+    }
+    
+    for(int i=1; i<n; i++)
+    {
+        int nfirst_min = INT_MAX, nsecond_min = INT_MAX;
+        
+        for(int j=0; j<k; j++)
+        {
+            if(dp[i-1][j]!=first_min)                 // if previous row element is not first_min then dp[i][j] will get current arr[i][j]+ first min
+             dp[i][j] = arr[i][j] + first_min;
+            
+            else
+             dp[i][j] = arr[i][j] + second_min;
+             
+            if(dp[i][j] < nfirst_min){
+              nsecond_min = nfirst_min;
+              nfirst_min = dp[i][j];
+            
+            }else if(dp[i][j] < nsecond_min){
+              nsecond_min = dp[i][j];
+            }
+             
+        }
+        first_min = nfirst_min;
+        second_min = nsecond_min;
+    }
+    
+    return first_min;
+}
+
+int main(){
+    
+    int n, k;
+    cin>>n>>k;
+    
+    vector<vector<int>> arr(n);
+    
+    for(int i=0; i<n; i++)
+    {
+        for(int j=0; j<k; j++)
+        {
+            int x;
+            cin>>x;
+            arr[i].push_back(x);
+        }
+    }
+    
+    cout<<paint_many_houses(arr, n, k);
+    return 0;
+}

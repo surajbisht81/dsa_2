@@ -1,0 +1,110 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Node 
+{
+    public:
+  int data;
+  Node *next;
+  
+  Node(int key){
+      data = key;
+      next = NULL;
+  }
+};
+
+void addLast(Node **head, int key){
+    
+    Node *temp = new Node(key);
+    
+    if((*head) == NULL){
+           (*head) = temp ;
+    }
+    else{
+        Node *ptr = (*head);
+        while(ptr->next!=NULL)
+          ptr = ptr->next;
+          
+        ptr->next = temp;
+    }
+}
+
+Node* modify(Node *head){
+    
+     Node *first_even = NULL, *last_even = NULL;  // first_even will contain first even node for head and last_even node is for joining even list to odd
+     Node *first_odd = NULL, *last_odd = NULL;
+     
+     Node *curr = head;
+     
+     while(curr != NULL){
+         
+        if((curr->data) % 2 ==0){
+            
+            if(first_even == NULL){
+                 
+                 first_even = curr;
+                 last_even = curr;
+             }
+             else{
+                 
+                 last_even->next = curr;
+                 last_even = curr;
+             }
+        }
+        else{
+            
+            if(first_odd == NULL){
+                first_odd = curr;
+                last_odd = curr;
+            }
+            else{
+                last_odd->next = curr;
+                last_odd = curr;
+            }
+        }
+        curr = curr->next;
+     }
+     
+     if(first_even != NULL)
+       head = first_even;
+       
+     if(last_even != NULL)
+       last_even->next = first_odd;
+       
+     if(last_odd != NULL)
+       last_odd->next = NULL;
+       
+     return head;              // returning head is necessary because desired list will not be printed;
+}
+
+void display(Node *head){
+    while(head!=NULL){
+        cout<<head->data<<" ";
+        head = head->next;
+    }
+}
+
+int main() {
+  
+    int T;
+    cin>>T;
+    
+    while(T--){
+        
+        int n;
+        cin>>n;
+        
+        Node *head = NULL;
+        
+        for(int i=0; i<n; i++){
+            int x;
+            cin>>x;
+            addLast(&head, x);
+        }
+          
+        head = modify(head);
+        
+        display(head);
+        cout<<endl;
+    }
+}

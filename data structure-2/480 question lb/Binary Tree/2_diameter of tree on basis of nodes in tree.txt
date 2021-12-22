@@ -1,0 +1,32 @@
+/*Input:
+       1
+     /  \
+    2    3
+Output: 3*/
+// This diameter is calculated on the basis of nodes and not on the basis of edges
+// so diameter is just height, in this case
+class Solution
+{
+    public:
+    
+    int diameterUtil(Node *root, int &dia)
+    {
+        if(root == NULL){
+            return 0;
+        }
+        
+        int left_h = diameterUtil(root->left, dia);         // getting left and right height, height is just no of nodes in left and right
+        int right_h = diameterUtil(root->right, dia);
+        
+        dia = max(dia, left_h + right_h + 1);              // if nodes in left and right + 1 extra node for current root is maximum than dia then updte it
+        
+        return max(left_h, right_h) + 1;                   // and return the height including current root;
+    }
+    
+    int diameter(Node* root) {
+         int dia = INT_MIN;
+         diameterUtil(root, dia);
+         return dia;
+    }
+
+};

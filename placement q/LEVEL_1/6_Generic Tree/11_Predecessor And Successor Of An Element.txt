@@ -1,0 +1,83 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Node {
+    public:
+        int data;
+    vector <Node*> children;
+};
+
+Node* construct(int arr[], int n) {
+    Node* root = NULL;
+
+    stack <Node*> st;
+
+    for (int i = 0; i < n; i++) {
+        if (arr[i] == -1) {
+            st.pop();
+        } else {
+            Node * temp = new Node;
+            temp-> data = arr[i];
+
+            if (st.size() > 0) {
+                st.top()-> children.push_back(temp);
+            } else {
+                root = temp;
+            }
+            st.push(temp);
+        }
+    }
+    return root;
+}
+
+static Node *Predecessor, *Successor;
+int state = 0;                                                                  // keeping one state variable
+
+void PredessorAndSuccessor(Node *root, int k) {
+    if (state == 0) {                                                           // if state is 0 then
+        if (root -> data == k) {                                                // if root data is same as k then change state as 1
+            state = 1;
+        } else {
+            Predecessor = root;                                                 // otherwise, change predecessor as root, because state jab tak 0 hai tab tak predecessor change hote rahega and 
+        }                                                                       // or jaise hi k mil jayega tab state ko 1 kr dinge or ye if condition nahi chalega or predecessor hamko mil chuka hoga
+    } else if (state == 1) {                                                    // and if state is 1 then make successor as root and return;
+        Successor = root;
+        state = 2;
+        return;
+    }
+
+
+    for (Node *child : root->children) {
+        PredessorAndSuccessor(child, k);
+    }
+}
+
+int main() {
+    int n;
+    cin >> n;
+
+    int arr[n];
+    for (int i = 0; i < n; i++)
+        cin >> arr[i];
+
+    Node *root = construct(arr, n);
+
+    int k;
+    cin >> k;
+
+    Predecessor = NULL, Successor = NULL;
+    PredessorAndSuccessor(root, k);
+
+    if (Predecessor == NULL) {
+        cout << "Predecessor = Not found";
+    } else {
+        cout << "Predecessor = " << Predecessor->data<<endl;
+    }
+
+    if (Successor == NULL) {
+        cout << "Successor = Not found";
+    } else {
+        cout << "Successor = " << Successor->data;
+    }
+    return 0;
+}

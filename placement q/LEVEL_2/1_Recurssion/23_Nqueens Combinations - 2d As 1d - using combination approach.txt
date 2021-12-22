@@ -1,0 +1,80 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+bool IsSafe(int row, int col, vector<vector<int>> &chess)
+{
+    // upward
+    for(int i=row, j=col; i>=0; i--){
+        if(chess[i][j]==1)
+         return false;
+    }
+    
+    // left diagonal
+    for(int i=row, j=col; i>=0 and j>=0; i--, j--){
+        if(chess[i][j]==1)
+         return false;
+    }
+    
+    // right diagonal
+    for(int i=row, j=col; i>=0 and j<chess.size(); i--, j++){
+        if(chess[i][j]==1)
+         return false;
+    }
+    
+    for(int i=row, j=col; j>=0; j--){
+        if(chess[i][j]==1)
+         return false;
+    }
+    return true;
+}
+
+void NQueen_combination(int queen, int n, vector<vector<int>> &used, int last_cellno)
+{
+    //base case
+    if(queen == n)                                                             // if no of queens placed are equal to given queen then print ans and returna
+    {
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                if(used[i][j]==1){
+                    cout<<"q\t";
+                }
+                else{
+                    cout<<"-\t";
+                }
+            }
+            cout<<endl;
+        }
+        cout<<endl;
+        return;
+    }
+    
+    // main code
+    for(int i=last_cellno+1; i<n*n; i++)                                    // we will check for cell no after last cell no used
+    {
+        int row = i/n;                                                     // getting row, and col from cell no
+        int col = i%n;
+        
+        if(used[row][col] == 0 and IsSafe(row, col, used)){                // if this cell no is not used already and safe to place queen
+            used[row][col] = 1;
+            NQueen_combination(queen+1, n, used, row*n+col);            // then use it and make call for next queen and last cell no is now (row*n+col)
+            used[row][col] = 0;                                            // backtracking
+        }
+    }
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    vector<vector<int>> used(n);
+    
+    for(int i=0; i<n; i++){
+        for(int j=0; j<n; j++){
+            used[i].push_back(0);
+        }
+    }
+    
+    NQueen_combination(0, n, used, -1);
+    return 0;
+}

@@ -1,0 +1,52 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define d 256
+void rabin_karp(char txt[],char patt[],int q)
+{
+    int M=strlen(patt);
+    int N=strlen(txt);
+    int p=0;   //hash value for p
+    int t=0;   // hash value for t
+    int h=1;
+    int i,j;
+
+    for( i=0;i<M-1;i++)
+        h=(h*d)%q;
+
+    //calculate hash value for first sliding window of text and pattern
+    for( i=0;i<M;i++)
+    {
+        p=(p*d + patt[i])%q;
+        t=(t*d +txt[i])%q;
+    }
+
+    for( i=0;i<=N-M;i++)
+    {
+        if(p==t)
+        {
+           //checking for matching of pattern and text;
+           for( j=0;j<M;j++)
+           {
+               if(patt[j]!=txt[i+j])
+                break;
+           }
+           if(j==M)
+            cout<<"\npattern found at index :"<<i;
+        }
+        if(i<N-M)
+        {
+            t= (d*(t-txt[i]*h)+txt[i+M])%q;
+            if(t<0)
+                t=t+q;
+        }
+    }
+}
+int main()
+{
+    char txt[]="GEEKS FOR GEEKS";
+    char patt[]="GEEK";
+    int q=101;
+    rabin_karp(txt,patt,q);
+    return 0;
+}

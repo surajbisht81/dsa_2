@@ -1,0 +1,40 @@
+class Solution {
+public:
+    void wiggleSort(vector<int>& arr) {
+        
+        int n = arr.size();
+        
+        // first sort original array
+        sort(arr.begin(), arr.end());
+        
+        // using extra space and building our ans in arr2
+        int arr2[n];
+        
+        int j = n-1;   // put j at last index(greatest element index)
+        int i = 1;     // put i at 1st index
+        
+        // first filling all the odd values of arr2 with highest values(getting higher value from last)
+        while(i < n)
+        {
+            arr2[i] = arr[j];
+            j--;
+            i = i+2;
+        }
+        
+        // for filling even positions, set i to 0
+        i = 0;
+        
+        // run till j is valid
+        while(j >= 0)
+        {
+            arr2[i] = arr[j];
+            j--;
+            i = i+2;
+        }
+        
+        // set our result in original vector
+        for(int i=0; i<n; i++){
+            arr[i] = arr2[i];
+        }
+    }
+};

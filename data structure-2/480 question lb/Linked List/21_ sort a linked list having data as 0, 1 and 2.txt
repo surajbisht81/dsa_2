@@ -1,0 +1,54 @@
+// first solution is making freq count and put data accordingly
+
+// this soln has tc as O(n) and sc as O(1)
+class Solution
+{
+    public:
+    Node* segregate(Node *head) {
+        
+        if(head == NULL || head->next==NULL){
+            return head;
+        }
+        
+        Node *curr = head;
+        
+        // creating dummy nodes for zero, one and two
+        Node *oneD = new Node(0);
+        Node *zeroD = new Node(0);
+        Node *twoD = new Node(0);
+        
+        Node *one = oneD, *zero = zeroD, *two = twoD;  // new nodes for making connections
+        
+        // we are not using any other space we are just linking the zero, one and two with original linked list
+        while(curr!=NULL){
+            
+            if(curr->data == 0){         // if data is zero then link zero next to curr
+                zero->next = curr;
+                zero = zero->next;
+            }
+            else if(curr->data == 1){    // if data is one then link one next to curr
+                one->next = curr;
+                one = one->next;
+            }
+            else{                       // if data is two then link two next to curr
+                two->next = curr;
+                two = two->next;
+            }
+            
+            curr = curr->next;
+        }
+        
+        zero->next = (oneD->next) ? oneD->next : twoD->next;      // link oneD->next with zero->next if oneD->next is present otherwise link twoD->next
+        
+        one->next = twoD->next;        // link one->next with twoD->next (note, one is at tail of list named as one and twoD is at head of list named as two)
+        two->next = NULL;
+        
+        head = zeroD->next;      
+        
+        delete(oneD);
+        delete(twoD);
+        delete(zeroD);
+        
+        return head;
+    }
+};

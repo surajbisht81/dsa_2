@@ -1,0 +1,84 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class Graph
+{
+  public:
+   int V;
+   vector<pair<int, int> > *Edges;
+   
+   Graph(int v){
+     V = v;
+     Edges = new vector<pair<int, int>>[V];
+   }
+   void addEdge(int, int, int);
+   void Hamiltonian(bool visited[], int osrc, int src, string psf);
+};
+
+void Graph :: addEdge(int src, int dst, int wgt)
+{
+    Edges[src].push_back(make_pair(dst, wgt));
+    Edges[dst].push_back(make_pair(src, wgt));
+}
+
+void Graph :: Hamiltonian(bool visited[], int osrc, int src, string psf)
+{
+    if(psf.length()==V){        // 5. base case,,   if length of psf is equal to no of vertices then we have got our answer 
+        
+        bool closingEdge = false;             // initiall closingEdge is false
+        for(auto it=Edges[src].begin(); it!=Edges[src].end(); it++)       // making for loop in last vertex
+        {
+            int dst = (*it).first;             // if we find the adjacent of last vertex as original src, then its a hamiltonian cycle(and mark
+            if(dst==osrc){                     //   closingEdge as true) else it is a hamiltonian path 
+                closingEdge = true;
+                break;         // break;
+            }
+        }
+        if(closingEdge){                 // 6. if its a cycle then print psf with * else print psf with . indicating that it's a path.
+            cout<<(psf+"*")<<endl;
+        }
+        else{
+            cout<<(psf+".")<<endl;
+        }
+        return;                             // 7. return for exploring other paths and cycle
+    }
+    
+    visited[src] = true;         // 1. first mark the src as visited
+    
+    for(auto it=Edges[src].begin(); it!=Edges[src].end(); it++)      // 2. traverse each and every adjacent node of src
+    {
+        int next_src = (*it).first;
+        if(visited[next_src]==false){                              // 3. if next adjacent node is still not visited then enter the if condition
+            Hamiltonian(visited, osrc, next_src, psf+to_string(next_src));    // 4. oscr is original src for base case, and last parameter is
+        }                                                                    // psf + next_node
+    }
+    visited[src] = false;
+}
+
+int main()
+{
+    int vertices;
+    cin>>vertices;
+    
+    int edges;
+    cin>>edges;
+    
+    Graph g(vertices);
+    
+    for(int i=0; i<edges; i++)
+    {
+        int src, dst, wgt;
+        cin>>src>>dst>>wgt;
+        
+        g.addEdge(src, dst, wgt);    
+    }
+    
+    int src;
+    cin>>src;
+    
+    bool visit[vertices];
+    memset(visit, false, sizeof(visit));
+    
+    g.Hamiltonian(visit, src, src, to_string(src)+""); // src is the starting point, last parameter is the path in form of string having src first
+    return 0;
+}

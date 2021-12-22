@@ -1,0 +1,88 @@
+Given a singly linked list L0 -> L1 -> … -> Ln-1 -> Ln. Rearrange the nodes in the list so that the new formed list is 
+: L0 -> Ln -> L1 -> Ln-1 -> L2 -> Ln-2 …
+Simple Solution
+
+1) Initialize current node as head.
+2) While next of current node is not null, do following
+    a) Find the last node, remove it from the end and insert it as next
+       of the current node.
+    b) Move current to next to next of current
+Time complexity of the above simple solution is O(n2) where n is the number of nodes in the linked list.
+
+
+#include<bits/stdc++.h>
+using namespace std;
+  
+// Linkedlist Node structure
+struct Node
+{
+    int data;
+    struct Node *next;
+};
+  
+// Function to create newNode in a linkedlist
+Node* newNode(int key)
+{
+    Node *temp = new Node;
+    temp->data = key;
+    temp->next = NULL;
+    return temp;
+}
+ 
+// Function to print the linked list
+void printlist(Node *head)
+{
+    while (head != NULL)
+    {
+        cout << head->data << " ";
+        if(head->next) cout << "-> ";
+        head = head->next;
+    }
+    cout << endl;
+}
+ 
+void rearrange(Node* head) 
+{
+   Node *curr = head;
+   
+   vector<Node*> v;
+   
+   while(curr!=NULL)
+   {
+       v.push_back(curr);
+       curr = curr->next;
+   }
+   curr = head;
+   int l = v.size(), i;
+   
+   for(i=0; i<l/2; i++){
+       
+       if(i!=0)
+       {
+           curr->next = v[i];
+           curr = curr->next;
+       }
+       curr->next = v[l-i-1];
+       curr = curr->next;
+   }
+   if(l%2!=0)
+    curr->next = v[i];
+    curr = curr->next;
+    curr->next=NULL;
+}
+ 
+ 
+// Driver program
+int main()
+{
+    Node *head = newNode(1);
+    head->next = newNode(2);
+    head->next->next = newNode(3);
+    head->next->next->next = newNode(4);
+    head->next->next->next->next = newNode(5);
+  
+    printlist(head);    // Print original list
+    rearrange(head);       // Modify the list
+    printlist(head);    // Print modified list
+    return 0;
+}

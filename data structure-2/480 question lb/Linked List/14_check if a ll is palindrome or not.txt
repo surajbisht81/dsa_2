@@ -1,0 +1,74 @@
+// O(2n) time complaxity
+
+bool isPalindromeUtil(Node *right, Node **pleft)
+{
+    if(right==NULL){
+        return true;
+    }
+    
+    bool x = isPalindromeUtil(right->next, pleft);
+    
+    if(x==false){
+        return false;
+    }
+    else if(right->data != (*pleft)->data){
+        return false;
+    }
+    else{
+        *pleft = (*pleft)->next;
+        return true;
+    }
+}
+
+bool isPalindrome(Node *head)
+{
+    Node *pleft = head;
+    return isPalindromeUtil(head, &pleft);    
+}
+
+
+// ---------------------- 2nd method ---------------------------------------
+ TC is O(n/2) for finding middle of ll, O(n/2) for reversing the second half of ll, O(n/2) for comparing the first and 2nd part of ll
+ SC(1)
+
+Node *reverse(Node *head)
+{
+     Node *prev = NULL, *next = NULL;
+     
+     while(head!=NULL){
+         next = head->next;
+         head->next = prev;
+         
+         prev = head;
+         head = next;
+     }
+     
+     return prev;
+}
+
+bool isPalindrome(Node *head)
+{
+     if(head==NULL || head->next==NULL){
+         return true;
+     }
+     
+     Node *slow = head, *fast = head;
+     
+     while(fast->next!=NULL && fast->next->next!=NULL){        // finding the middle of ll
+         fast = fast->next->next;
+         slow = slow->next;
+     }
+     
+     slow->next = reverse(slow->next);      // slow->next is the 2nd part so reverse it
+     slow = slow->next;                     // we will compare 2nd part 
+     
+     while(slow!=NULL){
+         if(head->data != slow->data){            // if 1st part data is not same as 2nd part data then return false
+             return false;
+         }
+         
+         slow = slow->next;
+         head = head->next;
+     }
+     return true;
+}

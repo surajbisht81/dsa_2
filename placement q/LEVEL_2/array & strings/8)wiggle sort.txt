@@ -1,0 +1,53 @@
+/*1. Given an unsorted array 'arr'.
+2. Reorder it in-place such that :  arr[0] <= arr[1] >= arr[2] <= arr[3] . . . .
+3. Please sort the array in place and do not define additional arrays.
+4. Allowed Time Complexity : O(n)*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void wiggleSort(vector<int> &arr)
+{
+    int n = arr.size();
+    
+    for(int i=0; i<n-1; i++)
+    {
+        if(i % 2 == 0){
+            
+            // even case, in this case, ith element should be less than i+1th element
+            if(arr[i] > arr[i+1]){
+                swap(arr[i], arr[i+1]);
+            }
+        }
+        else{
+            
+            // odd case, in this case, ith element should be greater than i+1th element
+            if(arr[i] < arr[i+1]){
+                swap(arr[i], arr[i+1]);
+            }
+        }
+    }
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    vector<int> v;
+    for(int i=0; i<n; i++){
+        int x;
+        cin>>x;
+        
+        v.push_back(x);
+    }
+    
+    wiggleSort(v);
+    
+    for(int i=0; i<n; i++){
+        cout<<v[i]<<" ";
+    }
+    
+    return 0;
+}

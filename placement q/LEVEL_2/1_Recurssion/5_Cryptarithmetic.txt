@@ -1,0 +1,95 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void Print(map<char, int> mp)
+{
+   for(auto it=mp.begin(); it!=mp.end(); it++)
+   {
+       cout<<(*it).first<<"-"<<(*it).second<<" ";
+   }
+   cout<<endl;
+}
+
+string getNum(string s, map<char, int> mp)
+{
+    string number = "";
+    for(int i=0; i<s.length(); i++)
+    {
+        char ch = s[i];
+        number += to_string(mp[ch]);
+    }
+    return (number);
+}
+
+void criptarithmeticUtil(map<char, int> mp, string unique, int idx, bool number[], string s1, string s2, string s3)
+{
+    if(idx == unique.length())              // if idx is equal to unique length then
+    {
+        int num1 = stoi(getNum(s1, mp));  // get all no from map
+        int num2 = stoi(getNum(s2, mp));
+        int num3 = stoi(getNum(s3, mp));
+        
+        if(num1+num2 == num3){      // if sum of first 2 nos is equal to 3rd no then print the nos and return for other possibilites
+            Print(mp);
+        }
+        return;    
+    }
+    
+    for(int i=0; i<=9; i++)        // therer are total 10 nos which can be mapped to the characters
+    { 
+        if(number[i]==false)  // if this no is not used then 
+        {
+            mp[unique[idx]] = i;    // map this character with this no and 
+            number[i] = true;              // make this nos as true for not using this no. again
+            
+            // make recursive call;
+            criptarithmeticUtil(mp, unique, idx+1, number, s1, s2, s3); // making call for next character having idx as +1
+            
+            // backtracking
+            mp[unique[idx]] = -1;   
+            number[i] = false;
+        }
+    }
+}
+
+void criptarithmetic(string s1, string s2, string s3)
+{
+    map<char, int> mp;                        // map is for mapping the different characters of all the words
+    bool number[10];                        // every unique character is assigned a unique no, bool is used for checking if this no is used or not
+    memset(number, false, sizeof(number));
+    
+    string unique = "";
+    
+    for(int i=0; i<s1.length(); i++){
+        
+        if(mp.find(s1[i])==mp.end()){    // if this character is not present in map then add it with map as -1 value
+            mp[s1[i]] = -1;
+            unique = unique + s1[i];        // also add this character in unique string
+        }
+    }
+    for(int i=0; i<s2.length(); i++){
+        
+        if(mp.find(s2[i])==mp.end()){
+            mp[s2[i]] = -1;
+            unique = unique + s2[i];
+        }
+    }
+    for(int i=0; i<s3.length(); i++){
+        
+        if(mp.find(s3[i])==mp.end()){
+            mp[s3[i]] = -1;
+            unique = unique + s3[i];
+        }
+    }
+    
+    criptarithmeticUtil(mp, unique, 0, number, s1, s2, s3);  // 0 is index of unique string 
+}
+
+int main()
+{
+    string s1, s2, s3;
+    cin>>s1>>s2>>s3;
+    
+    criptarithmetic(s1, s2, s3);
+    return 0;
+}

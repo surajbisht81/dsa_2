@@ -1,0 +1,40 @@
+/*1. You are given a number n.
+2. You have to print the count of set bits of first n natural numbers.*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int highestPowerOf2UptoN(int n)
+{
+    int res = 0;
+    
+    while( (1<<res) <= n){
+        res++;
+    }
+    
+    return res-1;
+}
+
+int set_bits(int n)
+{
+    if(n==0)
+     return 0;
+     
+    int x = highestPowerOf2UptoN(n);
+    
+    int ans = (1<<(x-1)) * x;    // it is no of total set bits upto highest power of 2
+    
+    ans += (n + 1 - (1<<x));     // after highest power of 2, the msb will always be set so include it 
+    
+    ans += set_bits(n-(1<<x));   // then call for remaining bits.
+    return ans;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    cout<<set_bits(n);
+    return 0;
+}

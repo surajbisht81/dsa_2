@@ -1,0 +1,32 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void Abbreviation(string str, string psf, int pos, int count)
+{
+    if(pos == str.length())     // if pos is equal to string length
+    {
+        if(count==0)                // if count is 0 then simply print psf
+         cout<<psf<<endl;
+        else
+         cout<<(psf+to_string(count))<<endl;    // if count is greater than 0 then print psf with count 
+        return;
+    }
+    
+    // if current character is included in output
+    if(count>0)                                             // if count is greater than 0 then 
+     Abbreviation(str, psf + to_string(count) + str[pos], pos+1, 0);   //  add psf with count and current character and als set count to 0 again
+    else
+      Abbreviation(str, psf + str[pos], pos+1, 0);   //else do not add count if count is 0 and set count equal to 0 again
+      
+    // if current character is not included in output
+    Abbreviation(str, psf, pos+1, count+1);         // then pos will increase, count will increase indicating that this much character are there to include and psf will remain same
+}
+
+int main()
+{
+    string str;
+    cin>>str;
+    
+    Abbreviation(str, "", 0, 0);
+    return 0;
+}

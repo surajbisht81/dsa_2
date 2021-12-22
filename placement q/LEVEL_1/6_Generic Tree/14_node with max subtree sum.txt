@@ -1,0 +1,69 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Node {
+    public:
+        int data;
+    vector <Node*> children;
+};
+
+Node* construct(int arr[], int n) {
+    Node* root = NULL;
+
+    stack <Node*> st;
+
+    for (int i = 0; i < n; i++) {
+        if (arr[i] == -1) {
+            st.pop();
+        } else {
+            Node * temp = new Node;
+            temp-> data = arr[i];
+
+            if (st.size() > 0) {
+                st.top()-> children.push_back(temp);
+            } else {
+                root = temp;
+            }
+            st.push(temp);
+        }
+    }
+    return root;
+}
+
+static int max_sum = INT_MIN, max_sum_node = 0;
+
+int MaxSum_And_MaxSumNode(Node *root)
+{
+    int sum = 0;                                             
+    
+    for(Node *child : root->children)                        // calculating the sum of each and every child of current root node using recursion
+    {
+        sum += MaxSum_And_MaxSumNode(child);
+    }
+    
+    sum = sum + root->data;                                   // and root data will also be included into the sum
+    
+    if(sum > max_sum)                                       // if this sum is greater than max_sum obtained so far then update our max_sum
+    {
+        max_sum = sum;
+        max_sum_node = root->data;
+    }
+    
+    return sum;
+}
+
+int main() {
+    int n;
+    cin >> n;
+
+    int arr[n];
+    for (int i = 0; i < n; i++)
+        cin >> arr[i];
+
+    Node *root = construct(arr, n);
+
+    MaxSum_And_MaxSumNode(root);
+    
+    cout<<max_sum_node<<"@"<<max_sum;     
+    return 0;
+}

@@ -1,0 +1,82 @@
+// first approact-- using merge function of merge sort---
+// we are not using any extra space here because, we are just using dummy node and linking dummy node with nodes of linked list
+
+struct  comp{
+  bool operator()(Node *a, Node *b){
+      return (a->data > b->data);
+  }  
+};
+
+Node *merge(Node *a, Node *b)
+{
+    if(a==NULL) return b;
+    if(b==NULL) return a;
+    
+    Node *dummy = new Node(0);
+    Node *ptr = dummy;
+    
+    while(a!=NULL && b!=NULL){
+        if(a->data < b->data){
+            dummy->next = a;
+            dummy = dummy->next;
+            a = a->next;
+        }
+        else{
+            dummy->next = b;
+            dummy = dummy->next;
+            b = b->next;
+        }
+    }
+    
+    if(a) dummy->next = a;
+    else dummy->next = b;
+    
+    return ptr->next;
+}
+
+Node * mergeKLists(Node *arr[], int k)
+{
+      int i=0, j=k-1;
+      
+      while(i< j)
+      {
+          arr[i] = merge(arr[i], arr[j]);
+          j--;
+      }
+      return arr[0];
+}
+
+-----------------------------------  2nd approach using priority queue ---------------------------------------------------------
+
+struct  comp{
+  bool operator()(Node *a, Node *b){
+      return (a->data > b->data);
+  }  
+};
+
+Node * mergeKLists(Node *arr[], int k)
+{
+       priority_queue<Node*, vector<Node*>, comp> pq;
+       
+      for(int i=0; i<k; i++){
+          pq.push(arr[i]);
+      }
+      
+      Node *dummy = new Node(0);
+      Node *ptr = dummy;
+      
+      while(!pq.empty())
+      {
+          Node *curr = pq.top();
+          pq.pop();
+          
+          dummy->next = curr;
+          dummy = dummy->next;
+          
+          if(curr->next!=NULL){
+              pq.push(curr->next);
+          }
+      }
+      
+      return ptr->next;
+}

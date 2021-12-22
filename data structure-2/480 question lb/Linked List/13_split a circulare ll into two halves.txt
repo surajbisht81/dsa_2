@@ -1,0 +1,26 @@
+// if n is odd then n/2 +1 node will be in first half and remaining will be in second half
+
+void splitList(Node *head, Node **head1_ref, Node **head2_ref)
+{
+    Node *slow = head, *fast = head;
+    
+    while(fast->next!=head && fast->next->next!=head){           // this condition is meausred very carefully and after dry running
+        fast = fast->next->next;
+        slow = slow->next;
+    }
+    
+    
+    
+    (*head2_ref) = slow->next;
+     Node *curr = slow->next;
+     
+    (*head1_ref) = head;
+    
+    slow->next = head;
+    
+    while(curr->next!=head){
+        curr = curr->next;
+    }
+    
+    curr->next = (*head2_ref);
+}

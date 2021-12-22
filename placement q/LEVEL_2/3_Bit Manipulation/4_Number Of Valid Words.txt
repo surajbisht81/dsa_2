@@ -1,0 +1,87 @@
+/*1. You are given N number of words.
+2. You are given M puzzles in the form of M strings.
+3. For a given puzzle, a word is valid if both the following conditions are confirmed - 
+    Condition 1 -> Word contains the first letter of puzzle.
+    Condition 2 -> For each letter in word, that letter should be present in puzzle.
+4. You have to print the number of valid words corresponding to a puzzle.*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+vector<int> valid_words(string words[], int n, string puzzles[], int m)
+{
+    unordered_map<char, vector<int>> mp;               // we will use map to store the mask of every word against characters
+    unordered_set<char> st;
+    
+    for(int i=0; i<n; i++)
+    {
+        string word = words[i];                    // for first word
+        int mask = 0;                             // initially its mask is 0
+        for(char ch : word)                       // one by one getting every character of word
+        {
+            mask = mask | (1<<(ch-'a'));          // and making the mask
+        }
+        
+        for(char ch: word)                       // after getting mask of word, we are gonna put this mask agains every character of the word
+        {
+            if(st.find(ch)==st.end())            // if mask has already been put then do not put again, set is used for this case
+              mp[ch].push_back(mask);
+              
+            st.insert(ch);
+        }
+        
+        st.clear();                             // set is cleared because next time, next word will be processed
+    }
+    
+    vector<int> res;                            // result vector 
+    
+    for(int i=0; i<m; i++)
+    {
+        string puzzle = puzzles[i];              // getting all puzzle one by one
+        int mask = 0;                            // also calculating it's mask 
+        for(char ch : puzzle)
+        {
+            mask = mask | (1<<(ch-'a'));
+        }
+        
+        char  ch = puzzle[0];                      // getting first character of puzzle
+        vector<int> wordsToCheck = mp[ch];          // these are the masks which we have to check , because previously we have put mask against character, eg. putted the mask of words having a
+        
+        int count = 0;                             // count of words matching
+        for(int i : wordsToCheck)
+        {
+            if( (i&mask) == i)                      // if words to check & with mask of puzzle is equal to words again that means all characters of words are present in puzze
+             count++;                               // then increment count
+        }
+        res.push_back(count);                         // push back count for result
+    }
+    return res;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    string words[n];
+    for(int i=0; i<n; i++){
+        cin>>words[i];                 // given words
+    }
+    
+    
+    int m;
+    cin>>m;
+    string puzzle[m];
+    for(int i=0; i<m; i++){
+        cin>>puzzle[i];                // given puzzles
+    }
+    
+    vector<int> res = valid_words(words, n, puzzle, m);              // getting results
+    
+    for(int i=0; i<res.size(); i++)
+    {
+        cout<<puzzle[i]<<" -> "<<res[i]<<endl;
+    }
+    return 0;
+}

@@ -1,0 +1,46 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void NQueen(int n, int row, bool col[], bool rdiag[], bool ldiag[], string psf)
+{
+    if(row == n)
+    {
+       cout<<(psf + ".")<<endl;
+       return;
+    }
+    
+    for(int cols=0; cols<n; cols++)  // loop for every column of current row
+    {
+        if(col[cols]==false && rdiag[row+cols]==false and ldiag[row-cols+n-1]==false) // if current row's col ldiag and rdiag is false then queen can be placed
+        {
+            col[cols] = true;    // make entire col true
+            rdiag[row+cols] = true;  // make entire right diagonal true
+            ldiag[row-cols+n-1] = true;  // make entire left diagonal true
+            
+            NQueen(n, row+1, col, rdiag, ldiag, psf+ to_string(row) +"-" + to_string(cols) + ", ");  // make call, 
+            
+            // backtracking
+            col[cols] = false;  // make entire col false 
+            rdiag[row+cols] = false;  
+            ldiag[row-cols+n-1] = false;
+        }
+    }
+}
+
+int main()
+{
+    int n;   // no of rows and columns
+    cin>>n;
+    
+    bool col[n];           // array of bool col, representing the block of col if queen is placed in col of a particular row
+    memset(col, false, sizeof(col));
+    
+    bool rdiag[2*n-1];       // array of right diagonal, representing the block of cell
+    memset(rdiag, false, sizeof(rdiag));
+    
+    bool ldiag[2*n-1];           // similar is for left diagonal
+    memset(ldiag, false, sizeof(ldiag));
+    
+    NQueen(n, 0, col, rdiag, ldiag, "");  // last para is output string
+    return 0;
+}

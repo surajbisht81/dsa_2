@@ -1,0 +1,35 @@
+/*making use of lps of kmp algorithm*/
+class Solution{
+public:		
+
+		
+	int lps(string s)
+	{
+	    int m = s.length();
+	    
+	    int len = 0;
+	    int i=1; 
+	    
+	    int lps[m] = {0};     // initialize with 0 always
+	    lps[0] = 0;           // lps of 0th is 0
+	    
+	    while(i<m)
+	    {
+	        if(s[i] == s[len]){               // if character matching then put lps[i] = len after increasing the len by 1 
+	            len++;
+	            lps[i] = len;
+	            i++;
+	        }
+	        else{
+	            
+	            if(len != 0){                     // else if len is not 0 then go back one step and update len as lps[len-1]
+	                len = lps[len-1];
+	            }else{
+	                lps[i] = 0;                   // else if len is 0 then put lps[i] = 0
+	                i++;
+	            }
+	        }
+	    }
+	    return lps[m-1];
+	}
+};

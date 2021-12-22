@@ -1,0 +1,98 @@
+// using iteration
+and 2 reverse methods
+class Solution
+{
+    public:
+    
+    Node *reverse(Node *head)
+    {
+        Node *curr = head;
+        Node *prev = NULL, *next = NULL;
+        
+        while(curr!=NULL){
+            
+            next = curr->next;
+            curr->next = prev;
+            
+            prev = curr;
+            curr = next;
+        }
+        
+        return prev;
+    }
+    
+    Node* addOne(Node *head) 
+    {
+        head = reverse(head);
+        
+        Node *curr = head, *temp;
+        int sum = 0;
+        int carry = 1;
+        
+        while(curr != NULL)
+        {
+            sum = carry + curr->data;
+            
+            carry = sum/10;
+            curr->data = sum%10;
+            
+            temp = curr;
+            curr = curr->next;
+        }
+        
+        if(carry > 0){
+            Node *new_node = new Node(carry);
+            new_node->next = NULL;
+            temp->next = new_node;
+        }
+        
+        head = reverse(head);
+        
+        return head;
+    }
+};
+
+
+
+
+//--------------------------- 2nd method --------------------------------------
+// using recursion
+
+class Solution
+{
+    public:
+    
+    int addOneUtil(Node *head)
+    {
+        int sum;
+        
+        if(head->next == NULL){
+            
+            sum = 1 + head->data;
+            head->data = sum%10;
+            return sum/10;
+        } 
+        
+        int carry = addOneUtil(head->next);
+        
+        sum = carry + head->data;
+        
+        head->data = sum%10;
+        carry = sum/10;
+        
+        return carry;
+    }
+    
+    Node* addOne(Node *head) 
+    {
+        int carry = addOneUtil(head);
+        
+        if(carry > 0){
+            Node *new_node = new Node(carry);
+            new_node->next = NULL;
+            new_node->next = head;
+            head = new_node;
+        }
+        
+        return head;
+    }

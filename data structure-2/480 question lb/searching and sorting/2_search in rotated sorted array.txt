@@ -1,0 +1,143 @@
+// two binary search are required first for finding the pivot element and second for finding the target element
+class Solution {
+public:
+    
+    int find_pivot(vector<int> &nums, int left, int right)
+    {
+        // if array is sorted already and no rotations are performed then return 0
+        if(nums[left] < nums[right])
+            return 0;
+        
+        // else we will find the pivot
+        int mid;
+         while(left <= right)
+         {
+                  mid = (left + right)/2;
+                 
+                 // if mid is greater than mid+1, then mid must be pivot then return it
+                 if(nums[mid] > nums[mid+1]){
+                     return mid;
+                 }
+                 // else we will check if 0th element is greater than midth element then pivot must lie in left side so make right as mid 
+                 else if(nums[mid] < nums[0]){
+                     right = mid;
+                 }
+                 // else pivot must lie in right side
+                 else{
+                     left = mid + 1;
+                 }
+         }
+         return mid;
+    }
+    
+    int binarySearch(vector<int> &arr, int left, int right, int target)
+    {
+         while(left <= right)
+         {
+             int mid = (left + right)/2;
+             
+             if(arr[mid] == target){
+                 return mid;
+             }
+             else if(arr[mid] < target){
+                 left = mid+1;
+             }
+             else{
+                 right = mid-1;
+             }
+         }
+        
+        return -1;
+    }
+    
+    int search(vector<int>& nums, int target) {
+      
+          int n = nums.size();
+          
+          // base cases for n=0 and n=1;
+          if(n==0){
+              return -1;
+          }
+        
+          if(n==1){
+              return nums[0]==target ? 0 : -1;
+          }
+        
+          // pivot elemnt
+          int pivot = find_pivot(nums, 0, n-1);
+        
+          // if pivot elemtn is target then return pivot this case will cover the case when array is not rotated, In that case pivot will be 0, so we will check
+          // 0the elemnt will target if target is equal then return
+          if(nums[pivot]==target){
+              return pivot;
+          }
+        
+          if( target > nums[n-1]){
+              return binarySearch(nums, 0, pivot, target);
+          }
+          else{
+              // if array is not rotated, then we have already checked the 0th element so check from 0+1th element to end
+              return binarySearch(nums, pivot+1, n-1, target);
+          }
+    }
+};
+
+
+
+--------------------------------------------------------------------------------------
+
+only one binary search is required
+
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        
+        // the intitution is, there will always be atleast one strictly increasing curve or graph either left or right of pivot(pivot is greatest element)
+        int n = nums.size();
+        
+        int mid;
+        
+        int left = 0;
+        int right = n-1;
+        
+        while(left <= right)
+        {
+            mid = (left + right)/2;
+            
+            // if mid element is target then return its index
+            if(nums[mid] == target){
+                return mid;
+            }
+            
+            // else we will check if nums of left element is less than mid elemtn then left side is strictly increasing
+            else if(nums[left] <= nums[mid]){
+                
+                // then we will check if target is actually present in left side or not if present then make right as mid - 1
+                if(nums[left] <= target && target <= nums[mid]){
+                    right = mid - 1;
+                }
+                else{
+                    // else if target is not present, then make left as mid + 1
+                    left = mid + 1;
+                }
+            }
+            
+            else{
+                
+                // if left part is not strictly increasing then right part must be strictly increasing
+                if(nums[mid] <= target && target <= nums[right]){
+                    
+                    // if target is present in right part then make left as mid + 1
+                    left = mid + 1;
+                }
+                else{
+                    
+                    // else make right as mid -1 because, if target is not present in right then make search in left part so make right as mid-1 to search in left part
+                    right = mid - 1;
+                }
+            }
+        }
+        
+        return -1;
+    }
+};

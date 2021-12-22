@@ -1,0 +1,42 @@
+// we are using level order traversal and ordered map for printing the nodes in correct order.
+// we first check if map has horizontal distance(hd) in it or not, if not then it means it is top node of its hd and if its count is not zero
+// then that means, it is not the first node of its hd
+
+vector<int> topView(struct Node *root)
+{
+    vector<int> ans;
+    if(!root){
+        return ans;
+    }
+    
+    queue<pair<Node*, int>> qu;
+    qu.push({root, 0});                            // pushing root with hd as 0
+    
+    map<int, int> mp;
+    
+    while(!qu.empty())
+    {
+        pair<Node*, int> p = qu.front();
+        qu.pop();
+        Node *node = p.first;
+        int hd = p.second;
+        
+        if(mp.count(hd) == 0){             // if count of current hd is 0 in map then, it is first node of its hd
+           mp[hd] = node->data;            // then push it into the map
+        }
+        
+        if(node->left){                       // if node has left child then push it into the queue with hd as hd-1
+            qu.push({node->left, hd-1});
+        }
+        
+        if(node->right){                          // similarly for right child
+            qu.push({node->right, hd+1});
+        }
+    }
+    
+    for(auto it=mp.begin(); it!=mp.end(); it++){           // now map has only those nodes which are first node of their hd and in correct order
+        ans.push_back((*it).second);
+    }
+    
+    return ans;
+}

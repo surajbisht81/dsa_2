@@ -1,0 +1,26 @@
+/*Given an integer rowIndex, return the rowIndexth (0-indexed) row of the Pascal's triangle.*/
+
+
+class Solution {
+public:
+    vector<int> getRow(int rowIndex) {
+        
+        vector<int> res;
+        
+        long val = 1;
+        
+        // here, we are using formula of combination nCr
+        // first value is always 1 so val is 1 initially
+        // then, we have to multiply factor with val each time, and factor is
+        // calculated as (i-j)/(j+1) where i is current row and j is value of previous
+        // column, 
+        
+        for(int j=0; j<=rowIndex; j++)
+        {
+            res.push_back(val);
+            val = val * (rowIndex-j) / (j+1);
+        }
+        
+        return res;
+    }
+};

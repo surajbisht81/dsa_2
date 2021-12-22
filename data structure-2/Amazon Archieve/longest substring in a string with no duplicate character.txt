@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int longest_substring(string str){
+    
+    if(str.length()==0)
+     return 0;
+    
+    int n = str.length();
+    
+    int maxim = 0;
+    int  j=0, i=0;
+    vector<int> count(256, 0);
+    
+    count[str[0]]++;
+    while(j!=n-1){
+        
+        if(count[str[j+1]]==0){
+            j++;
+            count[str[j]]++;
+            maxim = max(maxim, j-i+1);
+        }   
+        else
+        {
+            count[str[i]]--;
+            i++;
+        }
+    }
+    return maxim;
+}
+int main() {
+    
+    int T;
+    cin>>T;
+    while(T--){
+        
+        string str;
+        cin>>str;
+        
+        cout<<longest_substring(str)<<endl;
+    }
+    return 0;
+}

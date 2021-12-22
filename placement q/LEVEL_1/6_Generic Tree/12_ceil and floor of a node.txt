@@ -1,0 +1,73 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Node {
+    public:
+        int data;
+    vector <Node*> children;
+};
+
+Node* construct(int arr[], int n) {
+    Node* root = NULL;
+
+    stack <Node*> st;
+
+    for (int i = 0; i < n; i++) {
+        if (arr[i] == -1) {
+            st.pop();
+        } else {
+            Node * temp = new Node;
+            temp-> data = arr[i];
+
+            if (st.size() > 0) {
+                st.top()-> children.push_back(temp);
+            } else {
+                root = temp;
+            }
+            st.push(temp);
+        }
+    }
+    return root;
+}
+
+static int CEIL, FLOOR;
+
+void ceilAndFloor(Node *root, int k)
+{
+    // equal to is not onsidered
+    if(root->data < k){
+        
+        FLOOR = max(FLOOR, root->data);
+    }
+    else if(root->data > k){
+        
+        CEIL = min(CEIL, root->data);
+    }
+    
+    for(Node *child : root->children)
+    {
+        ceilAndFloor(child, k);
+    }
+}
+
+int main() {
+    int n;
+    cin >> n;
+
+    int arr[n];
+    for (int i = 0; i < n; i++)
+        cin >> arr[i];
+
+    Node *root = construct(arr, n);
+
+    int k;
+    cin >> k;
+
+    FLOOR = INT_MIN, CEIL = INT_MAX;
+    
+    ceilAndFloor(root, k);
+    cout<<"CEIL = "<<CEIL<<endl;
+    cout<<"FLOOR = "<<FLOOR;
+    
+    return 0;
+}

@@ -1,0 +1,77 @@
+/*1. You are given two strings S1 and S2. S1 represents a text and S2 represents a wildcard pattern.
+2. You have to print 'true' if the wildcard pattern is matched with the given text, otherwise print 'false'.
+
+The wildcard pattern can include the characters '?' and '*'
+'?' - matches any single character
+'*' - matches any sequence of characters (including the empty sequence)*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void WildCard_Pattern(string str, string patt)
+{
+    int n = str.length();
+    int m = patt.length();
+    
+    bool dp[m+1][n+1];  // 1 extra for blank spaces
+    
+    
+    //traversing from back as it is easy to do
+    for(int i=m; i>=0; i--)
+    {
+        for(int j=n; j>=0; j--)
+        {
+            if(i==m and j==n){               // last cell, then true
+                dp[i][j] = true;
+            }
+            else if(i==m){                  // if last row then false
+                dp[i][j] = false;
+            }
+            else if(j==n){                  // if last col
+                if(patt[i]=='*'){            // if * then go downward
+                    dp[i][j] = dp[i+1][j];
+                }else{                        // else false
+                    dp[i][j] = false;
+                }
+            }
+            else{
+                
+                if(patt[i] == '?'){               // if ? then go diagonally  because it matches 1 charcter 
+                    
+                    dp[i][j] = dp[i+1][j+1];
+                }
+                else if(patt[i] == '*'){           // if * then check bottom and right cell and if one of them is true then make true
+                    
+                    dp[i][j] = dp[i+1][j] || dp[i][j+1];
+                }
+                else{
+                    if(patt[i] == str[j]){             // if character do matches then go diagonally
+                        dp[i][j] = dp[i+1][j+1];
+                    }
+                    else{
+                        dp[i][j] = false;                // else false;
+                    }
+                }
+                
+            }
+        }
+    }
+    
+    if(dp[0][0]==true){
+        cout<<"true";
+    }
+    else{
+        cout<<"false";
+    }
+}
+
+int main()
+{
+    string str;
+    string patt;
+    cin>>str;
+    cin>>patt;
+    
+    WildCard_Pattern(str, patt);
+    return 0;
+}

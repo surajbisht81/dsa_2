@@ -1,0 +1,158 @@
+1. You are given a partially written BinaryTree class.
+2. You are given an element.
+3. You are required to complete the body of find and nodeToRoot function. The functions are expected to 
+    3.1. find -> return true or false depending on if the data is found in binary tree.
+    3.2. nodeToRoot -> returns the path from node (correspoding to data) to root in 
+    form of an arraylist (root being the last element)
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node
+{
+    public:
+    int data;
+    Node *left, *right;
+    
+    Node(int data){
+        this->data = data;
+        left = NULL;
+        right = NULL;
+    }
+};
+
+class Pair
+{
+    public:
+    Node *node;
+    int state;
+    Pair(Node *root, int x){
+        node = root;
+        state = x;
+    }
+};
+
+Node *construct(int arr[])
+{
+    stack<Pair*> st;
+    Node *root = new Node(arr[0]);
+    
+    Pair *p = new Pair(root, 1);
+    st.push(p);
+    
+    int idx = 0;
+    
+    while(st.empty()==false)
+    {
+        Pair *top = st.top();
+        
+        if(top->state == 1){
+            
+            idx++;
+            
+            if(arr[idx] == INT_MIN){
+                top->node->left = NULL;
+            }
+            else{
+                Node *temp = new Node(arr[idx]);
+                top->node->left = temp;
+                Pair *p = new Pair(top->node->left, 1);
+                st.push(p);
+            }
+            
+            top->state++;
+        }
+        else if(top->state == 2){
+            
+            idx++;
+            
+            if(arr[idx] == INT_MIN){
+                top->node->right = NULL;
+            }
+            else{
+                Node *temp = new Node(arr[idx]);
+                top->node->right = temp;
+                Pair *p = new Pair(top->node->right, 1);
+                st.push(p);
+            }
+            
+            top->state++;
+        }
+        else{
+            
+            st.pop();
+        }
+    }
+    return root;
+}
+
+vector<int> v;  // its's global variable, for adding nodes from node to root path
+
+bool NodeToRootPath(Node *root, int data)
+{
+    if(root==NULL)      // if root is null return;
+     return false;
+     
+    if(root->data == data){           // if root->data is equal to given data, then it is required node and add it to vector
+        v.push_back(root->data);
+        return true;
+    }
+    
+    bool dataATleft = NodeToRootPath(root->left, data);          // if given data is present at left of present node;
+    if(dataATleft==true){                 // if above function return true, then this present node is also contributing to the path
+        v.push_back(root->data);
+        return true;
+    }
+    
+    bool dataATright = NodeToRootPath(root->right, data);   // if given data is present at right of present node;
+    if(dataATright==true){         // if yes, then presnet node data is also a part of our answer so add it 
+        v.push_back(root->data);
+        return true;
+    }
+    
+    return false;         // if given data is not found in left, right or is even not equal to given data itself, then given data is not present in tree
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    string str;
+    
+    for(int i=0; i<n; i++)
+    {
+       cin>>str;
+       
+      if(str != "n")
+         arr[i] = stoi(str);
+      else
+         arr[i] = INT_MIN;
+    }
+    
+    Node *root = construct(arr);
+    
+    int data;
+    cin>>data;
+    
+    bool ans = NodeToRootPath(root, data);
+    if(ans)
+     cout<<"true"<<endl;
+    else
+     cout<<"false"<<endl;
+     
+    cout<<"[";
+    
+    if(v.size()>0)
+     for(int i=0; i<v.size()-1; i++)
+       cout<<v[i]<<", ";
+     
+    if(v.size()>0)
+     cout<<v[v.size()-1]<<"]";
+    else
+     cout<<"]";
+    return 0;
+}

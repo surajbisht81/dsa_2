@@ -1,0 +1,35 @@
+/*1. You are given an array(arr) of integers.
+2. You have to find the count of arithmetic slices in the given array.
+3. Arithmetic slice is defined as the sub-array having all its elements in A.P and the length of sub-array should be greater than or equal to 3.*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int Arithmetic_Slices(int arr[], int n)
+{
+    int dp[n];
+    memset(dp, 0, sizeof(dp));
+    
+    int ans = 0;
+    for(int i=2; i<n; i++)
+    {
+        if(arr[i]-arr[i-1] == arr[i-1]-arr[i-2]){
+            dp[i] = dp[i-1] + 1;
+            ans += dp[i];
+        }
+    }
+    return ans;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    cout<<Arithmetic_Slices(arr, n);
+    return 0;
+}

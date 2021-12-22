@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1581429281 source:c:\users\admin\desktop\data structure\graph\bfs traversal of graph\main.cpp
+	<iostream>
+	<list>
+	<queue>
+

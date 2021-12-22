@@ -1,0 +1,82 @@
+/*1. You are given a number N representing number of elements.
+2. You are given N space separated numbers (ELE : elements).
+3. Your task is to find & print  
+    3.1) "MINIMUM JUMPS" need from 0th step to (n-1)th step.
+    3.2) all configurations of "MINIMUM JUMPS".
+*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+class Pair
+{
+    public:
+    int idx;
+    int no_of_jumps;
+    string asf;
+    
+    Pair(int idx, int no_of_jumps, string asf){
+        this->idx = idx;
+        this->no_of_jumps = no_of_jumps;
+        this->asf = asf;
+    }
+};
+
+void Print_Paths(int arr[], int n)
+{
+    int dp[n];                                                    // calculating the dp array first , storing minimum no of steps to reach the end of stairs
+    dp[n-1] = 0;                                                  // 0 steps needed to reach from last stair 
+    
+    for(int i=n-2; i>=0; i--)
+    {
+        int no_of_jumps = arr[i];
+        
+        int minim = INT_MAX;
+        for(int j=1; j<=no_of_jumps; j++)
+        {
+            if( i+j<n and dp[i+j]!=INT_MAX){                        // if we are inside the array and dp of previous index are not int_max(invalid) or barrier
+                minim = min(minim, dp[i+j]);                         // then calculating the minimum steps and then adding 1 to this ans
+            }
+        }
+        if(minim != INT_MAX)
+         dp[i] = minim +1;
+        else
+         dp[i] = INT_MAX;
+    }
+    
+    queue<Pair*> qu;
+    qu.push(new Pair(0, arr[0], to_string(0) + ""));       // we need to print the paths also, so put 0th index, arr[0] jumps from 0th index, and asf will include 0th index
+    
+    cout<<dp[0]<<endl;
+    
+    while(!qu.empty())
+    {
+        Pair *p = qu.front();
+        qu.pop();
+        
+        if(p->idx == n-1){
+            cout<<p->asf<<" ."<<endl;
+        }
+        
+        for(int i=1; i<=p->no_of_jumps; i++)   // we have 1 to no_of_jumps jumps from current index
+        {
+            int next_idx = p->idx+i;             // next index will be current index + no of_jums which is i
+            if( next_idx < n and dp[next_idx]!=INT_MAX and dp[p->idx]-1 == dp[next_idx]){         // if we do not cross the array and dp of next index is not barrier and dp of next index is 1 less than current dp value
+                qu.push(new Pair(next_idx, arr[next_idx], p->asf+" -> "+to_string(next_idx)));    // then push next index, no of jumps from next index and asf + next index
+            }
+        }
+    }
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    Print_Paths(arr, n);
+    return 0;
+}

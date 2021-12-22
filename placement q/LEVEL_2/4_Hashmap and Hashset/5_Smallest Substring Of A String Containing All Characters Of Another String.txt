@@ -1,0 +1,75 @@
+/*1. You are given two strings s1 and s2 containing lowercase english alphabets.
+2. You have to find the smallest substring of s1 that contains all the characters of s2.
+3. If no such substring exists, print blank string("").*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void SmallestSubstring(string str1, string str2)
+{
+    string ans = "";
+    
+    unordered_map<char, int> mp2;
+    
+    for(int i=0; i<str2.length(); i++)
+    {
+        char ch = str2[i];
+        mp2[ch]++;
+    }
+    
+    // total count of characters of string 2
+    int total_cnt = str2.length();
+    int current_cnt = 0;
+    
+    unordered_map<char, int> mp1;
+    int j=0;
+    
+    for(int i=0; i<str1.length(); i++)
+    {
+        while(i<str1.length() and current_cnt < total_cnt)
+        {
+            char ch = str1[i];
+            mp1[ch]++;
+            
+            if(mp1[ch] <= mp2[ch])
+             current_cnt++;
+            
+            i++;
+        }
+        
+        // obtaining the desired substring and releasing the characters from starting
+        
+        while(j<i and current_cnt==total_cnt)
+        {
+            string substr = str1.substr(j, i-j);
+            
+            if(ans.length()==0 || substr.length() < ans.length())
+            {
+                ans = substr;
+            }
+            
+            char ch = str1[j];
+            mp1[ch]--;
+            
+            if(mp1[ch] < mp2[ch])
+             current_cnt--;
+             
+            j++;
+        }
+        
+        i--;
+    }
+    
+    cout<<ans;
+}
+
+int main()
+{
+    string str1, str2;
+    
+    cin>>str1>>str2;
+    
+    SmallestSubstring(str1, str2);
+    return 0;
+}

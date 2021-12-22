@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1581401331 source:c:\users\admin\desktop\data structure\graph\adjacency matrix of graph\main.cpp
+	<iostream>
+	<stdio.h>
+	<conio.h>
+

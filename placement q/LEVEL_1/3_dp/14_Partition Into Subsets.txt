@@ -1,0 +1,42 @@
+/*1. You are given a number n, representing the number of elements.
+2. You are given a number k, representing the number of subsets.
+3. You are required to print the number of ways in which these elements can be partitioned in k non-empty subsets.*/
+#include<bits/stdc++.h>
+using namespace std;
+
+long partition_into_subsets(int n, int k)
+{
+   long dp[k+1][n+1];
+   
+   memset(dp, 0, sizeof(dp));
+   
+   for(int team=1; team<=k; team++)
+   {
+       for(int people=1; people<=n; people++)
+       {
+           if(team==1)                   // if there is only one team then 1 way is to put them into only one team
+            dp[team][people] = 1;
+            
+           else if(team > people){            // is team is greater than people then 0 ways are there
+               dp[team][people] = 0;
+           
+            }else if(team == people){         // if people == team then every man has to go into 1 team so possible ways are 1
+                dp[team][people] = 1;
+                
+            }else{
+                
+                dp[team][people] = dp[team-1][people-1] + dp[team][people-1] * (team); // if people are greater than team then, nth man will combine
+            }                    // with (n-1)people team having team-1 team + it will combine with people-1 making given team themselves
+       }
+   }
+   return dp[k][n];
+}
+
+int main() {
+    
+    int n, k;
+    cin>>n>>k;
+    
+    cout<<partition_into_subsets(n, k);
+    return 0;
+}

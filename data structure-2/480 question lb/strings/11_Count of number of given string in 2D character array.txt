@@ -1,0 +1,52 @@
+#include <bits/stdc++.h> 
+using namespace std; 
+  
+int searchWord(string str, string arr[], int row, int col, int max_row, int max_col, int idx)
+{
+    int found = 0;                 // no of times string is found
+    
+    if(row>=0 && col>=0 && row<max_row && col<max_col && arr[row][col]==str[idx])      // if this condition meets
+    {
+        char ch = arr[row][col];                                               // extract the current character for backtracking
+        arr[row][col] = '0';                                                   // and make the current character of array(matrix) as different
+        idx++;          // idx ++
+        
+        if(idx == str.length()){            // if we get to the end of string then found = 1
+            found = 1;
+        }
+        else{
+            found += searchWord(str, arr, row+1, col, max_row, max_col, idx);     // found += is because, it will explore other directions
+            found += searchWord(str, arr, row-1, col, max_row, max_col, idx);     // and if we find string there also then +=
+            found += searchWord(str, arr, row, col+1, max_row, max_col, idx);
+            found += searchWord(str, arr, row, col-1, max_row, max_col, idx);
+        }
+        
+        arr[row][col] = ch;      // backtracking
+    }
+    return found;         // return found;
+}
+ 
+int main() 
+{  
+    string needle = "MAGIC";  
+    
+    string input[] = { "BBABBM",  
+                       "CBMBBA",  
+                       "IBABBG",  
+                       "GOZBBI",  
+                       "ABBBBC",  
+                       "MCIGAM" }; 
+    
+    int res = 0;
+    
+    for(int i=0; i<6; i++)
+    {
+        for(int j=0; j<6; j++)
+        {
+            res += searchWord(needle, input, i, j, 6, 6, 0);
+        }
+    }
+    
+    cout<<res<<" \n"; 
+    return 0;  
+}

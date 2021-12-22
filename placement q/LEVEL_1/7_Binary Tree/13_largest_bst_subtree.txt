@@ -1,0 +1,166 @@
+/*1. You are given a partially written BinaryTree class.
+2. You are required to find the root of largest sub-tree which is a BST. Also, find the number of nodes in that sub-tree.*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node
+{
+    public:
+    int data;
+    Node *left, *right;
+    
+    Node(int data){
+        this->data = data;
+        left = NULL;
+        right = NULL;
+    }
+};
+
+class Pair
+{
+    public:
+    Node *node;
+    int state;
+    Pair(Node *root, int x){
+        node = root;
+        state = x;
+    }
+};
+
+Node *construct(int arr[])
+{
+    stack<Pair*> st;
+    Node *root = new Node(arr[0]);
+    
+    Pair *p = new Pair(root, 1);
+    st.push(p);
+    
+    int idx = 0;
+    
+    while(st.empty()==false)
+    {
+        Pair *top = st.top();
+        
+        if(top->state == 1){
+            
+            idx++;
+            
+            if(arr[idx] == INT_MIN){
+                top->node->left = NULL;
+            }
+            else{
+                Node *temp = new Node(arr[idx]);
+                top->node->left = temp;
+                Pair *p = new Pair(top->node->left, 1);
+                st.push(p);
+            }
+            
+            top->state++;
+        }
+        else if(top->state == 2){
+            
+            idx++;
+            
+            if(arr[idx] == INT_MIN){
+                top->node->right = NULL;
+            }
+            else{
+                Node *temp = new Node(arr[idx]);
+                top->node->right = temp;
+                Pair *p = new Pair(top->node->right, 1);
+                st.push(p);
+            }
+            
+            top->state++;
+        }
+        else{
+            
+            st.pop();
+        }
+    }
+    return root;
+}
+
+
+// using the concept of isBst question
+class BstPair     // this is a class 
+{
+   public:
+   int max;  // max of tree
+   int min;  // min of tree
+   bool isBst;   // if this subtree is bst or not
+   
+   int size;   // no of nodes in subtree
+   Node *root;   // root of subtree which is bst
+   
+   BstPair(){
+       max = INT_MIN;
+       min = INT_MAX;
+       isBst = true;
+       size = 0;
+       root = NULL;
+   }
+};
+
+BstPair *MaxBst(Node *root)
+{
+    if(root ==  NULL)      // if root is null then make base class and return
+    {
+        BstPair *base = new BstPair;
+        return base;
+    }
+    
+    BstPair *left_pair = MaxBst(root->left);   // calling left subtree 
+    BstPair *right_pair = MaxBst(root->right);  // calling right subtree
+    
+    BstPair *myPair = new BstPair;
+    
+    myPair->isBst = left_pair->isBst && right_pair->isBst && (root->data>left_pair->max && root->data<right_pair->min); // for current subtree to be bst, its left and right subtree should be bst and current node data should be greater than max of left and less than min of right subtree
+    myPair->min = min(root->data, min(left_pair->min, right_pair->min));  // current subtree node's min is min of current node data and min of left andd right subtree
+    myPair->max = max(root->data, max(left_pair->max, right_pair->max));  // current subtree node's max is max of current node data and max of left andd right subtree
+    
+    if(myPair->isBst){  // if current subtree is bst then
+        
+        myPair->root = root;   // max bst node should be current node
+        myPair->size = left_pair->size + right_pair->size + 1;  // and its size be addition of left, right and 1
+    }
+    else if(left_pair->size > right_pair->size){  // if it's not bst then, max bst should be max bst present in left
+        
+        myPair->root = left_pair->root;
+        myPair->size = left_pair->size;
+    }
+    else{                                   // else right
+     myPair->root = right_pair->root;
+     myPair->size = right_pair->size;
+    }
+    
+    return myPair;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    string str;
+    
+    for(int i=0; i<n; i++)
+    {
+       cin>>str;
+       
+      if(str != "n")
+         arr[i] = stoi(str);
+      else
+         arr[i] = INT_MIN;
+    }
+    
+    Node *root = construct(arr);
+    
+    BstPair *res = MaxBst(root);
+    
+    cout<<res->root->data<<"@"<<res->size;
+    
+    return 0;
+}

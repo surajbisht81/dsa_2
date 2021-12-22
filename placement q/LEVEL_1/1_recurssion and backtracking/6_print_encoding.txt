@@ -1,0 +1,55 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void Encoding(string str, string output)
+{
+    if(str.length()==0)      // if length is 0 then print the output
+    {
+        cout<<output<<endl;
+        return;
+    }
+    else if( str.length()==1)       // if length is 1 then first check if character is '0' or not and acc. to that return or print;
+    {
+        char ch = str[0];
+        if(ch=='0'){
+            return;
+        }else{
+            int chv = ch-'0';     // converting character into interger value
+            char code = 'a' + chv - 1;  // making the code for that interger by adding 'a' and subtracing 1 from integer chv
+            output = output+code;
+            cout<<output<<endl;
+            return;
+        }
+    }
+    else               // if length of string is equal to 2 or more than 2, we have 2 choices, first taking one character and 2nd taking two characters at a time
+    {
+        char ch1 = str[0];                 // first taking one character at a time
+        string remaining_str = str.substr(1);   // this is remaining character after deleting first character
+        if(ch1=='0'){                         // if this first character is '0' simply return
+            return;
+        }else{
+            int chv = ch1-'0';               // if not '0' then convert it into interger and making code for that 
+            char code = 'a' + chv - 1;
+            Encoding(remaining_str, output + code);      // we have to make a call because the string size is more than 1;
+        }
+        
+        string ch12 = str.substr(0, 2);          // this is for taking two characters at a time
+        remaining_str = str.substr(2);         // this is remaining character after aking 2 characters
+        
+        int chv12 = stoi(ch12);                  // converting that 2 characters from string into integer
+        if(chv12<=26)        // if those 2 characters are less than 26 then it's ok otherwise no need to work furthur because we can't encode furthur
+        {
+            char code = 'a'+chv12-1;            // making code for those 2 characters
+            Encoding(remaining_str, output+code);  // making call for remaining character, and output so far is output+ code(code of those 2 characters)
+        }
+    }
+}
+
+int main() {
+    
+    string str;
+    cin>>str;
+    
+    Encoding(str, "");
+    return 0;
+}

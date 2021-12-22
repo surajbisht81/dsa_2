@@ -1,0 +1,35 @@
+class Solution {
+public:
+    void nextPermutation(vector<int>& nums) {
+     
+          int n = nums.size();
+        
+          int k, l;
+          
+          // getting break point where kth element is less than k+1th element
+          for(k=n-2; k>=0; k--)
+          {
+              if(nums[k] < nums[k+1])
+                  break;
+          }
+        
+          // if we can't found break point then we just reverse the whole vector
+          if(k < 0){
+              reverse(nums.begin(), nums.end());
+          }
+          else{
+              // else we find the first element from then end which is greater than kth index element 
+              
+              for(l=n-1; l>=0; l--){
+                  if(nums[k] < nums[l])
+                       break;
+              }
+              
+              // we swap the kth and lth element
+              swap(nums[k], nums[l]);
+              
+              // then reverse the elements from k+1th to end
+              reverse(nums.begin()+k+1, nums.end());
+          }
+    }
+};

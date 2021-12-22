@@ -1,0 +1,35 @@
+class Solution
+{
+    public:
+    
+    void removeLoop(Node* head)
+    {
+        if(head==NULL || head->next==NULL){
+            return;
+        }
+        
+        // using here and tortoise method
+        Node *slow = head, *fast = head;
+        Node *prev;                                 // prev is used to remove the cycle in linked list
+        
+        while(fast!=NULL && fast->next!=NULL){
+            slow = slow->next;
+            fast = fast->next->next;
+            
+            // if fast and slow are equal that's means loop is detected
+            if(fast == slow){
+                fast = head;           // make any one of fast or slow pointing to head and move them with same pace (steps)
+                while(slow != fast){
+                    prev = slow;
+                    fast = fast->next;
+                    slow = slow->next;
+                }
+                prev->next = NULL;
+                break;
+            }
+            prev = slow;                            // keep prev here, for the case when first node is attacked to last node of linked list
+        }
+        
+        
+    }
+};

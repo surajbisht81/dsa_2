@@ -1,0 +1,74 @@
+// recursive method using queue same as left view but pushing right children first
+class Solution
+{
+    public:
+    vector<int> rightView(Node *root)
+    {
+       vector<int> ans;
+       if(!root){
+           return ans;
+        }
+        
+       queue<Node*> qu;
+       
+       qu.push(root);
+       
+       while(!qu.empty())
+       {
+            int n = qu.size();
+            
+            for(int i=1; i<=n; i++)
+            {
+                Node *p = qu.front();
+                qu.pop();
+                
+                if(i==1){
+                   ans.push_back(p->data);    
+                }
+                
+                if(p->right) qu.push(p->right);
+                if(p->left) qu.push(p->left);
+            }
+       }
+       
+       return ans;
+    }
+};
+
+
+
+------------------------------------------  2nd method using recursion --------------------------------------------------------
+
+// optimized way same as left view but recursing in right subtree first then left
+
+class Solution
+{
+    public:
+    
+    void rightViewUtil(Node *root, vector<int> &ans, int *max_level, int level)
+    {
+        //base case
+        if(root == NULL){
+            return;
+        }
+        
+        //main code
+        if(*max_level < level){
+            ans.push_back(root->data);
+            *max_level = level;
+        }
+        
+        rightViewUtil(root->right, ans, max_level, level+1);
+        rightViewUtil(root->left, ans, max_level, level+1);
+    }
+    
+    vector<int> rightView(Node *root)
+    {
+        vector<int> ans;
+        int max_level = 0;
+        
+        rightViewUtil(root, ans, &max_level, 1);
+        
+        return ans;
+    }
+};

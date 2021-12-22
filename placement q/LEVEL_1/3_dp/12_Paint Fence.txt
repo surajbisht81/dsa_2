@@ -1,0 +1,36 @@
+/*1. You are given a number n and a number k in separate lines, representing the number of fences and number of colors.
+2. You are required to calculate and print the number of ways in which the fences could be painted so that not more than two fences have same colors.*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+long Paint_fence(int n, int k)
+{
+   if(n==0)
+    return 0;
+    
+   if(n==1)
+     return k;
+     
+   long same = k * 1;             //  for same,, first fance have k options then 2nd will have only 1 option to paint with same color
+   long diff = k * (k-1);         // if first has k options then 2nd has k-1 options
+   long total = same + diff;        
+   
+   for(int i=3; i<=n; i++)
+   {
+       same = diff * 1;          // for same, we have to put the same color behind the fence of diff combinations
+       diff = total * (k-1);    // diff will be current fence has different color as previous one so it will be  =to (same+diff) * k-1 because
+       total = same + diff;      // --- we have k-1 choices now
+   }
+   return total;
+}
+
+int main(){
+    
+    int n, k;
+    cin>>n>>k;
+    
+    cout<<Paint_fence(n, k);
+    
+    return 0;
+}

@@ -1,0 +1,52 @@
+
+// we can use binary search also, we first sort the array, then we will traverse the array and for each element we will find out the abs(arr[i] - x) using binary search
+// in whole array first step will take O(nlogn) and second step will also use O(nlogn) 
+
+// we can't use two pointers int the first way(put i=0, j=n-1), here two pointers will be like put i=0, j=1 and compare the elements accordingly
+// it also has same time complaxity but a little bit optimized. O(nlogn + n)
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+   ll t;
+   cin>>t;
+   
+   while(t--)
+   {
+       int n, x;
+       cin>>n>>x;
+       
+       ll arr[n];
+       for(int i=0; i<n; i++){
+           cin>>arr[i];
+       }
+       
+       sort(arr, arr+n);
+       
+       int i=0, j=1;
+       bool flag = false;
+       
+       while(i<n && j<n)
+       {
+           int diff = arr[j] - arr[i];
+           
+           if(i!=j && diff == x){                     // edge case is i!=j because we are supposed to find the difference of two different index element
+               cout<<"1"<<endl;
+               flag = true;
+               break;
+           }
+           else if(diff > x){                   // if diff is greater then we have to decrease the diff, so on increasing j, diff will also increase so i should be increased
+               i++;   
+           }else{                             // else if diff is smaller than x then increase the j
+               j++;
+           }
+       }
+  
+    if(flag==false)
+    cout << "-1"<<endl;  
+   }
+   
+   return 0;
+}

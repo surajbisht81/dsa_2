@@ -1,0 +1,89 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node
+{
+    public:
+    int data;
+    vector<Node*> children;
+};
+
+Node* construct(int arr[], int n)
+{
+    Node *root = NULL;
+    
+    stack<Node*> st;
+    
+    for(int i=0; i<n; i++)
+    {
+        if(arr[i] == -1)
+        {
+            st.pop();
+        }
+        else
+        {
+            Node *temp = new Node;
+            temp->data = arr[i];
+            
+            if(st.size()>0){
+                st.top()->children.push_back(temp);
+            }
+            else{
+                root = temp;
+            }
+            st.push(temp);
+        }
+    }
+    return root;
+}
+
+vector<int> Find(Node *root, int k)
+{
+    // base case
+   if(root->data == k){                  // if root is that node which we are finding then make an empty vector, and return it after adding root->data               
+       vector<int> v;
+       v.push_back(root->data);
+       return v;
+   }
+   
+   // main code
+   vector<int> res;                      // otherwise, make an empty vector res;
+   for(Node *child : root->children)       // explore all the childs of root;
+   {
+       res = Find(child, k);                // and make call for its child
+       if(res.size()>0){                   // if vector size is greater than 0 it means, that child subtree contains our k
+           res.push_back(root->data);       // then push back the root->data and return
+           return res;                      // because we do not want to go furthur
+       }
+   }
+   return res;                                   // if  by exploring all childs, we do not find our k then return empty vector;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    Node *root = construct(arr, n);
+    
+    int k;
+    cin>>k;
+    
+    vector<int> v = Find(root, k);
+    
+    cout<<"[";
+    
+    if(v.size()!=0)
+    for(int i=0; i<v.size()-1; i++)
+     cout<<v[i]<<", ";
+    
+    if(v.size()!=0) 
+     cout<<v[v.size()-1]<<"]";
+    else
+     cout<<"]";
+    return 0;
+}

@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void Swap(int arr[], int i, int j) {
+    cout<<"Swapping "<<arr[i]<<" and "<<arr[j]<<endl;
+    int temp = arr[i];
+    arr[i]=arr[j];
+    arr[j]=temp;
+}
+
+bool isSmaller(int arr[], int i, int j) {
+    cout<<"Comparing "<<arr[i]<<" and "<<arr[j]<<endl;
+    if(arr[i]<arr[j])
+      return true;
+    else
+     return false;
+}
+
+int main() {
+    
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    
+    for(int i=1; i<=n-1; i++)         // this loop will run for n-1 times
+    {
+        for(int j=0; j<n-i; j++)       // this loop will  take the largest element at the last and finally we will get the sorted array
+        {
+            if(isSmaller(arr, j+1, j))       // if j+1 th element is greater than j
+            {
+                Swap(arr, j+1, j);        // then shift j+1th element at right that's how the elements are sorted
+            }
+        }
+    }
+    
+    for(int i=0; i<n; i++)
+     cout<<arr[i]<<endl;
+     
+    return 0;
+}

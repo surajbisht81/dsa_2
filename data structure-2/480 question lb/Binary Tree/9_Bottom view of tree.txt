@@ -1,0 +1,36 @@
+/*4. Every time, we encounter a new horizontal distance or an existing horizontal distance put the node data for the horizontal distance as key.
+For the first time it will add to the map, next time it will replace the value. This will make sure that the bottom most element for that 
+horizontal distance is present in the map and if you see the tree from beneath that you will see that element. */
+
+
+vector <int> bottomView(Node *root)
+{
+    vector<int> ans;
+    if(!root) return ans;
+    
+    queue<pair<Node*, int>> qu;
+    qu.push({root, 0});
+    
+    map<int, int> mp;
+    
+    while(!qu.empty())
+    {
+        pair<Node*, int> p = qu.front();
+        qu.pop();
+        
+        Node *node = p.first;
+        int hd = p.second;
+        
+        mp[hd] = node->data;
+        
+        if(node->left) qu.push({node->left, hd-1});
+        
+        if(node->right) qu.push({node->right, hd+1});
+    }
+    
+    for(auto it=mp.begin(); it!=mp.end(); it++){
+        ans.push_back((*it).second);
+    }
+    
+    return ans;
+}

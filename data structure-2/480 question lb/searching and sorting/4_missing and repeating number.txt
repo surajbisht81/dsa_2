@@ -1,0 +1,53 @@
+    int *findTwoElement(int *arr, int n) {
+        int m = 0, r = 0;
+        
+        int x = 0;
+        for(int i=0; i<n; i++){
+            x = x ^ arr[i];
+        }
+        
+        for(int i=1; i<=n; i++){
+            x ^= i;
+        }
+        
+        int set_bit = x & ~(x-1);          // formula to find the rightmost set bit
+        
+        // we will arr elements in different buckets according to the 
+        // condition that if bit that is set in x that bit should also be set in 
+        // array element otherwise element will go in other bucket 
+        for(int i=0; i<n; i++){
+            if(set_bit & arr[i]){
+                m = m ^ arr[i];
+            }
+            else{
+                r = r ^ arr[i];
+            }
+        }
+        
+        // similarly for other numbers
+        for(int i=1; i<=n; i++){
+            if(set_bit & i){
+                m ^= i;
+            }else{
+                r ^= i;
+            }
+        }
+        
+        int *ans = new int(2);
+        int i;
+        for( i=0; i<n; i++){
+            if(arr[i] == m){      // if we found the repeating no. then return 
+                ans[0] = m;
+                ans[1] = r;
+                return ans;
+            }
+        }
+        
+        
+            ans[0] = r;
+            ans[1] = m;
+        
+        
+        return ans;
+    }
+};

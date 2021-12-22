@@ -1,0 +1,86 @@
+/*1. You are given a string of length n.
+2. You have to print all the palindromic permutations of the given string.
+3. If no palindromic permutation exists for the given string, print "-1".*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+string reverse(string asf)
+{
+    string rstr="";
+    for(int i=asf.length()-1; i>=0; i--)
+     rstr += asf[i];
+     
+    return rstr;
+}
+void Print_Palindrome(int cs, int ts, map<char, int> mp, char oddc, string asf)
+{
+    if(cs == ts+1)                                              // if we reach at the last length then 
+    {
+        string rstr = reverse(asf);                             // get reverse of ans so far
+        string ans;
+        
+        (oddc!='1') ? ans = (asf+oddc+rstr) : ans=(asf+rstr);         // if odd character exist then ans becomes asf+oddc+rstr
+        cout<<ans<<endl; 
+        return;  // return for more ans
+    }
+    
+    for(auto it=mp.begin(); it!=mp.end(); it++)            // run loop in map
+    {
+        char ch = (*it).first;          // this is character of map
+        int freq = (*it).second;        // this is freq of character
+        
+        if(freq > 0){                 // we will proceed if freq is greater than 0 
+          mp[ch] = freq-1;             // reduce freq of character by 1
+          Print_Palindrome(cs+1, ts, mp, oddc, asf+ch);  // make call for next character and add this character in the ans
+        
+          mp[ch] = freq;                                 // for backtracking, again, put the same freq into the map
+        }
+    }
+}
+
+void Palindromic_Permutation(string str)
+{
+     map<char, int> mp;                    // we have to use map for mapping characters for how many times the characters are repeating
+    
+    for(int i=0; i<str.length(); i++)   // running loop through the length of string 
+    {
+       if(mp.find(str[i])==mp.end())   // if str[i] is not found in map then insert it with freq 1
+         mp[str[i]] = 1;
+       else                             // else, increase the freq of character
+         mp[str[i]]++;                    
+    }
+    
+    char oddc = '1';                     // declare a character oddc because in palindrome we have either one odd character or no odd character
+    int length=0, ofc=0;               // length is used for calculating the half palindromic string, ofc is odd_freq_charcter
+    
+    for(int i=0; i<26; i++)             // running loop for entire alphabetic characters
+    {
+        char ch = (char) (i + 'a');    // one by one taking each and every character
+        if(mp.find(ch)!=mp.end())      // if this character is found in map then
+        {
+            int freq = mp[ch];          // first calculate the freq of character
+            if(freq%2!=0){              // if freq is odd then oddc will get this character and increase the ofc by 1
+                oddc = ch;
+                ofc++;
+            }
+            if(ofc > 1){                // if ofc is greater than 1 then, no palindrome can be made then print -1 and return
+                cout<<"-1";
+                return;
+            }
+            mp[ch] = freq/2;            //else reduce then freq of character by half
+            length += freq/2;           // and length by half also to make half part of palindromeic string
+        }
+    }
+    Print_Palindrome(1, length, mp, oddc, "");   // 
+}
+
+int main()
+{
+    string str;
+    cin>>str;
+    
+    Palindromic_Permutation(str);
+    return 0;
+}

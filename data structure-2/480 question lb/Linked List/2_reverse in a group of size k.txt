@@ -1,0 +1,54 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    
+    // There are two parts of this soln
+    
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        
+        // First part
+        // in this part, i am iterating from head till k and storing the count in cnt and if cnt is less than k that's means we do not have k nodes in current set
+        // so just return the head as it is
+        ListNode *temp = head;
+        int cnt = 0;
+        while(temp!=NULL && cnt < k){
+            temp = temp->next;
+            cnt++;
+        }
+        
+        if(cnt < k){
+            return head;
+        }
+        
+        // second part
+        // In this part, I am first reversing the nodes in group and then attaching the head to the previous which we will get from the recursion
+        ListNode *next = NULL, *prev = NULL;
+        ListNode *curr = head;
+        cnt = 0;
+        
+        while(curr!=NULL && cnt < k)
+        {
+            next = curr->next;
+            curr->next = prev;
+            
+            prev = curr;
+            curr = next;
+            cnt++;
+        }
+        
+        if(next!=NULL){
+            head->next = reverseKGroup(next, k);
+        }
+        
+        return prev;
+    }
+};

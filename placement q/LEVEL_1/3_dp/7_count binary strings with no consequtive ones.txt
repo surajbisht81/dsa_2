@@ -1,0 +1,32 @@
+/*1. You are given a number n.
+2. You are required to print the number of binary strings of length n with no consecutive 0's.*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int count_binary_strings(int n)
+{
+  int old_zeros = 1;
+  int old_ones = 1;
+   
+   for(int i=2; i<=n; i++)
+   {
+      int new_zeros = old_ones;                 // zeros will be qual to no of old ones because we have to append only one 0 at the end of old ones 
+      int new_ones = old_zeros+old_ones;        // new ones will be equal to old_zeros+old_ones because we want only no non consecutive but consecutive ones are allowed
+      
+      old_zeros = new_zeros;               // updating old zeros
+      old_ones = new_ones;                  // updating old ones
+   }
+   return old_zeros+old_ones;
+  
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    cout<<count_binary_strings(n);
+    return 0;
+}

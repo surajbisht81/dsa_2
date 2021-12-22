@@ -1,0 +1,92 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node
+{
+    public:
+    int data;
+    vector<Node*> children;
+};
+
+Node* construct(int arr[], int n)
+{
+    Node *root = NULL;
+    
+    stack<Node*> st;
+    
+    for(int i=0; i<n; i++)
+    {
+        if(arr[i] == -1)
+        {
+            st.pop();
+        }
+        else
+        {
+            Node *temp = new Node;
+            temp->data = arr[i];
+            
+            if(st.size()>0){
+                st.top()->children.push_back(temp);
+            }
+            else{
+                root = temp;
+            }
+            st.push(temp);
+        }
+    }
+    return root;
+}
+
+void LevelOrder(Node *root)
+{
+    stack<Node*> main;                         // using two stacks, one for main and one for helping
+    stack<Node*> helper;
+    
+    main.push(root);
+    
+    int level = 1;                                   // initial level is 1
+    
+    while(main.size()!=0)                              // while will run til main size is not 0
+    {
+        Node *p = main.top();
+        main.pop();
+        
+        cout<<p->data<<" ";
+        
+        if(level %2 != 0)                                // if level  is odd then put nodes in helper from left to right
+        {
+            for(int i=0; i<p->children.size(); i++)
+              helper.push(p->children[i]);
+        }
+        else                                             // if level is even then put nodes in helper from right to left
+        {
+            for(int i = p->children.size()-1; i>=0; i--)
+               helper.push(p->children[i]);
+        }
+        
+        if(main.size()==0)                             // if main size becomes 0, then swap the helper and main stack also increment level and endl
+        {
+            stack<Node*> st;
+            st = main;
+            main = helper;
+            helper = st;
+            level++;
+            cout<<endl;
+        }
+    }
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    Node *root = construct(arr, n);
+    
+    LevelOrder(root);
+    return 0;
+}

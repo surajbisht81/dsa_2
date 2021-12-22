@@ -1,0 +1,63 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int max_profit(int n, int price[])
+{
+    int profit_sold_today = 0;
+    int least = price[0];
+    int dpl[n] = {0};
+    
+    for(int i=1; i<n; i++)                            // first traversing the price from 0 to n-1;
+    {
+        if(least > price[i])                      // tracking least value every time
+          least = price[i];
+          
+        profit_sold_today = price[i] - least;                // profit make if sold today will be price at today - least price in previous days
+        
+        if(profit_sold_today > dpl[i-1]){                       // if profit make by selling today is greater than previous days profit 
+            dpl[i] = profit_sold_today;                        // update the dp_left
+        }else{
+            dpl[i] = dpl[i-1];
+        }
+    }
+    
+    int profit_bought_today = 0;
+    int highest = price[n-1];
+    int dpr[n] = {0};
+    
+    for(int i=n-2; i>=0; i--)                            // traversing the price from n-1 to 0 in reverse order
+    {
+        if(highest < price[i])                          // tracking the highest price to sell today
+          highest = price[i];
+          
+        profit_bought_today = highest - price[i];               // if we buy today then profit will be highest price tracked - price at today
+        
+        if(profit_bought_today > dpr[i+1]){            // if profit make by buying today is greater than future buying profit then update the dp_right
+            dpr[i] = profit_bought_today;
+        }else{
+            dpr[i] = dpr[i+1];
+        }
+    }
+    
+    int op = 0;
+    for(int i=0; i<n; i++)
+    {
+        if(op < dpl[i] + dpr[i])
+          op = dpl[i] + dpr[i];
+    }
+    return op;
+}
+
+int main() { 
+  
+   int n;
+   cin>>n;
+   
+   int price[n];
+   
+   for(int i=0; i<n; i++)
+     cin>>price[i];
+     
+    cout<<max_profit(n, price);
+    return 0;
+}

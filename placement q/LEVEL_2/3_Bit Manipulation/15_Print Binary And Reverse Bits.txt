@@ -1,0 +1,42 @@
+/*1. You are given a number.
+2. You have to print its binary representation.
+3. You also have to reverse the bits of n and print the number obtained after reversing the bits.*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    bool flag = false;
+    int rev = 0;
+    int j=0;
+    
+    for(int i=31; i>=0; i--)            // integer has 32 bits
+    {
+        if(flag==true)
+        {
+            if( (n & (1<<i))!=0){             // ek bar flag true ho gaya to, 1 and zero print krna hai according ki kya aata hai and reverse ko set b krna hai jab 1 aayega
+               cout<<"1";
+               rev |= (1<<j);
+            }
+            else{
+                cout<<"0";
+            }
+            j++;
+        }
+        else                             // jab tak 1st 1 nahi aata tab tak kch print nahi krna, par jab 1st 1 aata hai tab se 1 and 0 dono ko print krna hai
+        {
+            if( (n & (1<<i))!=0){       // or jab 1st 1 aayega tab 1 ko print krna hai or flag ko true krna hai
+               flag=true;
+               cout<<"1";   
+               rev |= (1<<j);           // and reverse digit ke 0th digit ko set krna hai and j++ krna hai
+               j++;
+            }
+        }
+    }
+    cout<<endl<<rev;
+    return 0;
+}

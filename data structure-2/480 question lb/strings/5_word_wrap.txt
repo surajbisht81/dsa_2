@@ -1,0 +1,112 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long int 
+
+int print(int p[], int n)
+{
+    int k;               // k represents line no.
+    
+    if(p[n] == 1){
+        k = 1;
+    }else{
+        k = print(p, p[n]-1) + 1;
+    }
+    
+    cout<<p[n]<<" "<<n<<" ";    // p[n] to n words on kth line
+    return k;
+}
+
+void WordWrap(int arr[], int n, int M)
+{
+    // extras[i][j] will have number of extra spaces if words from i  
+    // to j are put in a single line  
+    int extraSpace[n+1][n+1];
+    
+    // lc[i][j] will have cost of a line which has words from  
+    // i to j  
+    int lc[n+1][n+1];
+    
+    // c[i] will have total cost of optimal arrangement of words  
+    // from 1 to i  
+    int c[n+1];
+    
+    // p[] is used to print the solution.  
+    int p[n+1];
+    
+    // calculate extra spaces in a single line. The value extra[i][j]  
+    // indicates extra spaces if words from word number i to j are  
+    // placed in a single line  
+    for(int i=1; i<=n; i++)
+    {
+        extraSpace[i][i] = M - arr[i-1];
+        
+        for(int j=i+1; j<=n; j++)
+        {
+            extraSpace[i][j] = extraSpace[i][j-1] - arr[j-1] - 1;    
+        }
+    }
+    
+    // Calculate line cost corresponding to the above calculated extra  
+    // spaces. The value lc[i][j] indicates cost of putting words from  
+    // word number i to j in a single line  
+    for(int i=1; i<=n; i++)
+    {
+        for(int j=1; j<=n; j++)
+        {
+            if(extraSpace[i][j] < 0){
+                lc[i][j] = INT_MAX;
+            }
+            else if(j==n && extraSpace[i][j] >= 0){
+                lc[i][j] = 0;
+            }
+            else{
+                lc[i][j] = extraSpace[i][j] * extraSpace[i][j];
+            }
+        }
+    }
+    
+    // Calculate minimum cost and find minimum cost arrangement.  
+    // The value c[j] indicates optimized cost to arrange words  
+    // from word number 1 to j. 
+    
+    c[0] = 0;                       // if there are no words then cost is 0;
+    for(int j=1; j<=n; j++)
+    {
+        c[j] = INT_MAX;
+        for(int i=1; i<=j; i++)
+        {
+            // if cost from 1 to i-1 is not infinity and also cost from i to j is not infinity 
+            // and 1 to i-1 + i to j cost is less than cost already caluculated from 1 to j then
+            if(c[i-1]!=INT_MAX && lc[i][j]!=INT_MAX && c[i-1]+lc[i][j] < c[j]){
+                c[j] = c[i-1] + lc[i][j];
+                p[j] = i;        // indicating that i words are present at jth line
+            }
+        }
+    }
+    
+    print(p, n);
+}
+
+int main()
+{
+   ll t;
+   cin>>t;
+   
+   while(t--)
+   {
+       int n;
+       cin>>n;
+       
+       int arr[n];
+       for(int i=0; i<n; i++)
+        cin>>arr[i];
+        
+       int M;
+       cin>>M;
+       
+       WordWrap(arr, n, M);
+       cout<<endl;
+   }
+   
+   return 0;
+}

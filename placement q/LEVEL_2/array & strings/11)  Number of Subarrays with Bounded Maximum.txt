@@ -1,0 +1,44 @@
+/*Given an integer array nums and two integers left and right, return the number of contiguous non-empty subarrays such that the value of the maximum array element in that subarray is in the range [left, right].
+
+The test cases are generated so that the answer will fit in a 32-bit integer.
+
+ 
+
+Example 1:
+
+Input: nums = [2,1,4,3], left = 2, right = 3
+Output: 3
+Explanation: There are three subarrays that meet the requirements: [2], [2, 1], [3].*/
+
+
+class Solution {
+public:
+    int numSubarrayBoundedMax(vector<int>& nums, int left, int right) {
+         
+        // we are using partition concept, if value of nums is greater than right then they cant 
+        // contribute to our result;
+        int count = 0;                 // our final answer
+        int prev_count = 0;            // it is the no of subarray corresponding to every element
+        
+        int si = 0, ei = 0;             // si is for counting no of subarray in O(1) by ei-si+1
+        
+        while(ei < nums.size())
+        {
+            if(left <= nums[ei] && nums[ei] <= right){       // if value lies between left and right then add every
+                prev_count = ei - si + 1;                    // subarray corresponding to it
+                count += prev_count;                         // add it to our final ans also
+            }
+            else if(nums[ei] < left){                        // if value is even less than left then the last prev_count
+                count += prev_count;                          // no is the total no of subarray
+            }                                                 // eg., 1, 3, 4, 2 and left is 3 then prev_count is ans
+            else{
+                si = ei + 1;                 // and last case, if value is greater than right then si will be updated 
+                prev_count = 0;               // as starting point of next partition and change prev_count as 0;
+            }
+            
+            ei++;
+        }
+        
+        return count;
+    }
+};

@@ -1,0 +1,88 @@
+/*1. You are given a string, which represents an expression having only opening and closing parenthesis.
+2. You have to remove minimum number of parenthesis to make the given expression valid.
+3. If there are multiple answers, you have to print all of them.
+*/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int getMinRemoval(string str)
+{
+    stack<char> st;
+    
+    for(int i=0; i<str.length(); i++)
+    {
+        if(str[i] == '('){
+            st.push('(');
+        }
+        else if(str[i] == ')'){
+            
+            if(st.empty()){
+                st.push(')');
+            }
+            else if(st.top() == ')'){
+                st.push(')');
+            }
+            else if(st.top() == '('){
+                st.pop();
+            }
+        }
+    }
+    return st.size();
+}
+
+bool IsValidString(string str)
+{
+    int cnt=0;
+    for(int i=0; i<str.length(); i++)
+    {
+        if(str[i]=='(')
+         cnt++;
+         
+        else if(str[i]==')')
+         cnt--;
+        
+        if(cnt<0)
+         return false;
+    }
+    return (cnt==0);
+}
+
+void Print_ValidStrings(string str, int min_rem, unordered_map<string, int> &mp)
+{
+    if(min_rem == 0)
+    {
+        if(IsValidString(str)){
+            if(mp[str]!=1){
+                cout<<str<<endl;
+                mp[str] = 1;
+            }
+        }    
+        return;
+    }
+    
+    for(int i=0; i<str.length(); i++)
+    {
+        string prefix = str.substr(0, i);
+        string rem_str = str.substr(i+1);
+        
+        Print_ValidStrings(prefix+rem_str, min_rem-1, mp);
+    }
+}
+
+void ValidStrings(string str)
+{
+    int min_rem = getMinRemoval(str);
+    unordered_map<string, int> mp;
+    
+    Print_ValidStrings(str, min_rem, mp);
+}
+
+int main()
+{
+    string str;
+    cin>>str;
+    
+    ValidStrings(str);
+    return 0;
+}

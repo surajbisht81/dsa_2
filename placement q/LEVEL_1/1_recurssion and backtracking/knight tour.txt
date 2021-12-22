@@ -1,0 +1,61 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void print(vector<vector<int>> &chess)
+{
+    for(int i=0; i<chess.size(); i++)
+    {
+        for(int j=0; j<chess[0].size(); j++)
+         {
+             cout<<chess[i][j]<<" ";
+         }
+         cout<<endl;
+    }
+}
+void print_chess(vector<vector<int>> &chess, int n, int row, int col, int val){
+    
+    if(row<0 or col<0 or row>=n or col>=n or chess[row][col]!=0)       // if we are out of chess and cell is already visited(i.e., cell do not contains 0)
+      return;
+      
+    if(n*n==val and chess[row][col]==0)                                // we last filled value is n*n and that cell is not visited
+    {
+        chess[row][col]=val;                          // make the cell fill with val for printing
+        print(chess);
+        cout<<endl;
+        chess[row][col]=0;                              // backtracking i.e., making cell fill with 0 again and return for more ans
+        return;           
+    }
+    chess[row][col] = val;                        // fill the cell with value 
+    
+    print_chess(chess, n, row-2, col+1, val+1);
+    print_chess(chess, n, row-1, col+2, val+1);
+    print_chess(chess, n, row+1, col+2, val+1);
+    print_chess(chess, n, row+2, col+1, val+1);
+    print_chess(chess, n, row+2, col-1, val+1);
+    print_chess(chess, n, row+1, col-2, val+1);
+    print_chess(chess, n, row-1, col-2, val+1);
+    print_chess(chess, n, row-2, col-1, val+1);
+    
+    chess[row][col]=0;                               // backtrack and make cell 0 again for more exploration
+}
+int main() {
+    
+    int n;
+    cin>>n;
+    
+     int row, col;
+     cin>>row>>col;
+     
+     vector<vector<int>> chess(n);
+     
+     for(int i=0; i<n; i++)
+     {
+         for(int j=0; j<n; j++)
+         {
+             chess[i].push_back(0);
+         }
+     }
+     
+     print_chess(chess, n, row, col, 1);            // initial val of chess is 1 and we are given a particular row and column
+     return 0;
+}

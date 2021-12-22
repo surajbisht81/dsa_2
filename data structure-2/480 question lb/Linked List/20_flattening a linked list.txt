@@ -1,0 +1,41 @@
+struct compare{
+    bool operator()(Node *a, Node *b){
+        return a->data > b->data;
+    }
+};
+
+Node* flatten(Node *root)
+{
+     Node *head = NULL, *ptr = root;
+     
+     priority_queue<Node*, vector<Node*>, compare> pq;
+     
+     // first pushing all top nodes of linked list in pq;
+     while(ptr!=NULL){
+         pq.push(ptr);
+         ptr = ptr->next;
+     }
+     
+     
+     while(!pq.empty())
+     {
+         Node *temp = pq.top();
+         pq.pop();
+         
+         if(temp->bottom!=NULL){      // if current popped node's bottom exist then push it into the pq
+             pq.push(temp->bottom);
+         }
+         
+         if(ptr==NULL){               // if we are adding the first node then 
+             head = temp;              // make head as temp for returning the resultant list
+             ptr = temp;               // make ptr = temp and ptr->next as NULL
+             ptr->next = NULL;
+         }
+         else{
+             ptr->bottom = temp;       // otherwise, first push temp in resultant list bottom
+             ptr = ptr->bottom;        // then advance ptr as ptr->bottom and make ptr next as NULL
+             ptr->next = NULL;
+         }
+     }
+     return head;
+}

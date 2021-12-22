@@ -1,0 +1,65 @@
+/*1. You are given a string(str) and a number K.
+2. You have to find the count of substrings of the given string that contains at most K unique characters.*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void Count_Substring(string str, int k)
+{
+    int n = str.length();
+    int i=0, j=0;
+    int cnt = 0;
+    
+    unordered_map<char, int> mp;
+    
+    while(true)
+    {
+        while(i<n)
+        {
+            char ch = str[i];
+            mp[ch]++;
+            
+            i++;
+            
+            if(mp.size() <= k){   // jab tak map size <=k hai tab tak substring mai atmost k unique characters honge to cnt ko += i-j krna padega
+                cnt += i-j;
+            }else{                // or jaise hi map size >k ho jayega tab break kr dena hai
+                break;
+            }
+        }
+        
+        if(i==n && mp.size()<=k)  // this is special in this question, because, agar i end mai reach kr gaya par map ka size abhi bhi >k hai to release krna hoga
+         break;                   // taki jab release hoga to hamko kch substring having atmost k unique character, milinge. 
+        
+        while(j<i)
+        {
+            char ch = str[j];
+            mp[ch]--;
+            
+            j++;
+            
+            if(mp[ch]==0)
+             mp.erase(ch);
+             
+            if(mp.size() <= k){     // jab tak map  ka size >k hai tab tak release krna hai but jab size ==k or <k ho jayega tab break krna hai par cnt bhi increase
+                cnt += i-j;         // hoga qk hamne character decrease kiya hai jisse hamko substring mila hai jisme atmost k unique character honge
+                break;
+            }
+        }
+    }
+    
+    cout<<cnt;
+}
+
+int main()
+{
+    string str;
+    cin>>str;
+    
+    int k;
+    cin>>k;
+    
+    Count_Substring(str, k);
+    return 0;
+}

@@ -1,0 +1,57 @@
+/*1. You are given an array of strings.
+2. You have to group the given strings in such a way that all strings in a group are shifted versions of each other. 
+3. Two strings s1 and s2 are shifted if -
+   -> Length of both the strings is the same.
+   -> The difference between ASCII values of every character of s1 and s2 is constant.*/
+   
+   
+#include<bits/stdc++.h>
+using namespace std;
+
+void Group_Shifting(string arr[], int n)
+{
+    unordered_map<string, vector<string>> mp;
+    
+    for(int j=0; j<n; j++)
+    {
+        string str = arr[j];
+        string mapping = "";                            // we will map origianl string to the mapped string
+        
+        for(int i=0; i<str.length()-1; i++)
+        {
+            int x = str[i+1] - str[i];                  // first calculating the differene blw the adjacent characters
+            
+            if(x < 0){                                  // if difference is negative then add 26( we are considering this as circular )
+                x += 26;
+            }
+            
+            mapping += to_string(x) + "#";             // put # so that every mapped string is differentiated
+        }
+        mapping += ".";                                // add . at the end for string having only one character
+        
+        mp[mapping].push_back(str);                 
+    }
+    
+    for(auto kv : mp)
+    {
+        vector<string> ans = kv.second;
+        
+        for(int i=0; i<ans.size(); i++){         // then iterate over the vector and print it
+            cout<<ans[i]<< " ";
+        }
+        cout<<endl;
+    }
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    string arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    Group_Shifting(arr, n);
+    return 0;
+}

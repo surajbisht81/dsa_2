@@ -1,0 +1,68 @@
+/*1. You are given a word (may have one character repeat more than once).
+2. You are required to generate and print all arrangements of these characters. 
+
+Sample Input
+aabb
+Sample Output
+aabb
+abab
+abba
+baab
+baba
+bbaa */
+
+// we are using combination approach, and placing box at levels which is choosing which character to place in it;
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void Permutation_Words(int current_pos, int total_pos, int freq[], string asf)
+{
+    if(current_pos > total_pos)
+    {
+        cout<<asf<<endl;
+        return;    
+    }
+    
+    // main code
+    for(int i=0; i<26; i++)
+    {
+        if(freq[i] > 0)                                                        // if freq of current index is greater than 0 then 
+        {
+            int f = freq[i];
+            char ch = i+'a';                                                   // get that character and freq
+            freq[i]--;
+            Permutation_Words(current_pos+1, total_pos, freq, asf+ch);             // and make call for next position 
+            freq[i] = f;                                                         // backtracking and put the freq again into the character
+        }
+        
+        // int freq =  (*it).second;
+        // char ch = (*it).first;
+        
+        // if(freq > 0)
+        // {
+        //     mp[ch] = freq-1;
+        //     Permutation_Words(current_pos+1, total_pos, mp, ch+asf);
+        //     mp[ch] = freq;
+        // }
+    }
+}
+
+int main()
+{
+    string str;
+    cin>>str;
+    
+    // map is unable to get the correct order
+    //unordered_map<char, int> mp;
+    
+    int freq[26] = {0};
+    for(int i=0; i<str.length(); i++)
+    {
+        //mp[str[i]]++;
+        freq[str[i]-'a']++;                                                // first calculating the freq of every character
+    }
+    
+    Permutation_Words(1, str.length(), freq, "");                        // 1st parameter is current position to fill, 2nd is total positions, "" is asf
+    return 0;
+}

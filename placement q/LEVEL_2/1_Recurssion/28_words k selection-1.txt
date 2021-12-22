@@ -1,0 +1,46 @@
+/*1. You are given a word (may have one character repeat more than once).
+2. You are given an integer k.
+2. You are required to generate and print all ways you can select k distinct characters out of the 
+     word.*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void WordKSelection(string str, int idx, int selected, int k, string unique, string asf)
+{
+    // base case
+    if(idx == unique.length())                                       // if all character of unique string are processed 
+    {
+        if(selected == k)                // then check if selected chars are equal to k or not if yes print the asf
+         cout<<asf<<endl;
+        return;
+    }
+    
+    // main code
+        char ch = unique[idx];                                        // getting the idx character of unique string
+        WordKSelection(str, idx+1, selected+1, k, unique, asf+ch);    // if this char is selected
+        WordKSelection(str, idx+1, selected, k, unique, asf);         // if not selected then selected will not increase
+}
+
+int main()
+{
+    string str;
+    int k;
+    cin>>str;
+    cin>>k;
+    
+    unordered_map<char, int> mp;
+    string unique = "";
+    
+    for(int i=0; i<str.length(); i++)
+    {
+         if(mp[str[i]]==0){
+             mp[str[i]]=1;
+             unique += str[i];
+         }
+    }
+    
+    WordKSelection(str, 0, 0, k, unique, "");     // 1st parameter is original string, 0 is idx of unique string, 0 is selected char out of k char
+    return 0;                                     // k is no of chars choosen, unique is unique string having no duplicacy, "" is ans
+}

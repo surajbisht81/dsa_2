@@ -1,0 +1,59 @@
+/*1. You are given a number n, representing the size of array a.
+2. You are given n numbers, representing elements of array a.
+3. You are required to print the longest sequence of consecutive elements in the array (ignoring duplicates)*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int Longest_Sequence(int arr[], int n)
+{
+    unordered_map<int, bool> mp;         
+    
+    for(int i=0; i<n; i++)
+    {
+        mp[arr[i]] = true;      // first, declaring all values of arr as true, means they are starting point of therir series
+    }
+    
+    for(int i=0; i<n; i++)
+    {
+        if(mp.find(arr[i]-1)!=mp.end()){   // if for arr[i], arr[i]-1 also present then arr[i] is not a starting point of his series so put false in value
+            mp[arr[i]] = false;
+        }
+    }
+    
+    int longest = 0;   // this is longest series
+    int start = 0;      // this is starting point of series
+    for(int i=0; i<n; i++)
+    {
+        if(mp[arr[i]]==true){   // we will do something if current arr[i] is starting point of his series
+            
+          int x = arr[i];       // initially, x will contain starting point
+          int x_len = 1;            // having series length 1
+          
+          while(mp.find(x+x_len)!=mp.end())  // we are finding that how long is its series,
+           x_len++;
+           
+            if(x_len > longest){   // and if its series is longer than longest then update starting and series lenght 
+            longest = x_len;
+            start = arr[i];
+           }
+        }
+    }
+    
+    for(int i=0; i<longest; i++)
+     cout<<(start+i)<<endl;
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    int arr[n];
+    for(int i=0; i<n; i++)
+     cin>>arr[i];
+     
+    Longest_Sequence(arr, n);
+    return 0;
+}

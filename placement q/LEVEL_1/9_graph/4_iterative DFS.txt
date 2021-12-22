@@ -1,0 +1,90 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class Graph
+{
+  public:
+   int V;
+   vector<pair<int, int> > *Edges;
+   
+   Graph(int v){
+     V = v;
+     Edges = new vector<pair<int, int>>[V];
+   }
+   void addEdge(int, int, int);
+   void Iterative_DFS(int);
+};
+
+void Graph :: addEdge(int src, int dst, int wgt)
+{
+    Edges[src].push_back(make_pair(dst, wgt));
+    Edges[dst].push_back(make_pair(src, wgt));
+}
+
+class Pair
+{
+    public:
+    int src;
+    string psf;
+    Pair(int src, string psf)
+    {
+        this->src = src;
+        this->psf = psf;
+    }
+};
+
+void Graph :: Iterative_DFS(int src)
+{
+    stack<Pair*> st;
+    
+    st.push(new Pair(src, to_string(src) + ""));
+    
+    bool visited[V];
+    memset(visited, false, sizeof(visited));
+    
+    while(st.size() > 0)
+    {
+        Pair *p = st.top();
+        st.pop();
+        
+        if(visited[p->src]==true)
+         continue;
+        else
+         visited[p->src] = true;
+         
+         cout<<p->src<<"@"<<p->psf<<endl;
+         
+        for(auto it=Edges[p->src].begin(); it!=Edges[p->src].end(); it++)
+        {
+            int new_src = (*it).first;
+            if(visited[new_src]==false)
+              st.push(new Pair(new_src, p->psf + to_string(new_src)));
+        }
+    }
+}
+
+int main()
+{
+    int vertices;
+    cin>>vertices;
+    
+    int edges;
+    cin>>edges;
+    
+    Graph g(vertices);
+    
+    for(int i=0; i<edges; i++)
+    {
+        int src, dst, wgt;
+        cin>>src>>dst>>wgt;
+        
+        g.addEdge(src, dst, wgt);    
+    }
+    
+    int src;
+    cin>>src;
+    
+    g.Iterative_DFS(src);
+ 
+    return 0;
+}

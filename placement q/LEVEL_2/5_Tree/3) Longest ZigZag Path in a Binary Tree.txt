@@ -1,0 +1,48 @@
+
+class Pair{
+    
+  public:
+  int leftslope;
+  int rightslope;
+    
+    Pair(){
+        leftslope = -1;  // we are getting our ans according to edges, so take -1, and 0 for in terms of nodes
+        rightslope = -1;
+    }
+};
+
+class Solution {
+public:
+    
+    Pair *longestzigzag_(TreeNode *root, int *ans)
+    {
+        if(!root){
+            Pair *base = new Pair;
+            return base;
+        }
+        
+        // postorder traversal
+        Pair *left = longestzigzag_(root->left, ans);
+        Pair *right = longestzigzag_(root->right, ans);
+        
+        Pair *myPair = new Pair;
+        
+        // for making leftslope, we choose rightslope of left
+        myPair->leftslope = left->rightslope + 1; 
+        
+        // for making rightslope, we choose right slope of right
+        myPair->rightslope = right->leftslope + 1;
+        
+        *ans = max(*ans, max(myPair->leftslope, myPair->rightslope));  // updating our ans at every time
+        
+        return myPair;
+    }
+    
+    int longestZigZag(TreeNode* root) {
+        int ans = 0;
+        
+        longestzigzag_(root, &ans);
+        
+        return ans;
+    }
+};

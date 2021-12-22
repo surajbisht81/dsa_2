@@ -1,0 +1,110 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node
+{
+    public:
+   int data;
+   Node *next;
+   Node(int key){
+       data = key;
+       next = NULL;
+   }
+};
+
+class LinkedList
+{
+    public:
+   Node *head;
+   int size;
+   LinkedList(){
+       head = NULL;
+   }
+   
+   void addLast(int data){
+       Node *temp = new Node(data);
+       
+       if(head == NULL){
+           head = temp;
+       }
+       else{
+           Node *key = head;
+           while(key->next != NULL)
+            key = key->next;
+            
+           key->next = temp;
+       }
+   }
+   
+   void display(){
+       
+       while(head!=NULL){
+           cout<<head->data<<" ";
+           head = head->next;
+       }
+       cout<<endl;
+   }
+   
+     LinkedList merged_Lists(LinkedList l1, LinkedList l2){
+       
+       LinkedList merged;
+       Node *one = l1.head;
+       Node *two = l2.head;
+       
+       while(one!=NULL and two!=NULL){
+           
+           if(one->data <= two->data){
+               merged.addLast(one->data);
+               one = one->next;
+           }
+           else{
+               merged.addLast(two->data);
+               two = two->next;
+           }
+       }
+       
+       while(one!=NULL){
+           merged.addLast(one->data);
+           one = one->next;
+       }
+       
+      while(two!=NULL){
+           merged.addLast(two->data);
+           two = two->next;
+       }
+       return merged;
+   }
+};
+
+
+int main(){
+    
+    int n;
+    cin>>n;
+    
+    LinkedList l1; 
+    for(int i=0; i<n; i++)
+     {
+         int x;
+         cin>>x;
+         l1.addLast(x);
+     }
+    
+    int m;
+    cin>>m;
+    
+    LinkedList l2; 
+    for(int i=0; i<m; i++)
+     {
+         int x;
+         cin>>x;
+         l2.addLast(x);
+     }
+    LinkedList merged;
+    LinkedList merged_new = merged.merged_Lists(l1, l2);
+    merged_new.display();
+    
+    l1.display();
+    l2.display();
+    return 0;
+}

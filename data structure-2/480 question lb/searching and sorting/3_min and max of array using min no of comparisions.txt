@@ -1,0 +1,66 @@
+
+// using divide and conquer algorithm
+// Total no of comparisions are : T(n)  = 3n/2 -2
+#include<iostream>
+using namespace std; 
+
+pair<int, int> getMinMax(int arr[], int low, int high)
+{
+    pair<int, int> res;
+    
+    if(low == high){
+        res.first = arr[low];
+        res.second = arr[low];
+        return res;
+    }
+    
+    if(low+1 == high){
+        
+        if(arr[low] < arr[high]){
+            res.first = arr[low];
+            res.second = arr[high];
+        }
+        else{
+            res.first = arr[high];
+            res.second = arr[low];
+        }
+        return res;
+    }
+    
+    int mid = (low + high)/2;
+    
+    pair<int, int> left = getMinMax(arr, low, mid);
+    pair<int, int> right = getMinMax(arr, mid+1, high);
+    
+    if(left.first < right.first){
+        res.first = left.first;
+    }else{
+        res.first = right.first;
+    }
+    
+    if(left.second > right.second){
+        res.second = left.second;
+    }else{
+        res.second = right.second;
+    }
+    
+    return res;
+}
+
+// Driver code
+int main()
+{
+	int arr[] = { 1000, 11, 445,
+				1, 330, 3000 };
+	int arr_size = 6;
+	
+	pair<int, int> minmax = getMinMax(arr, 0, 
+							arr_size - 1);
+							
+	cout << "Minimum element is "
+		<< minmax.first << endl;
+	cout << "Maximum element is "
+		<< minmax.second;
+		
+	return 0;
+}

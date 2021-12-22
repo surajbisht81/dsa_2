@@ -1,0 +1,109 @@
+Given a Binary Tree, the task is create a Balanced Binary Tree from all the leaf nodes of the given Binary Tree.
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Node { 
+public: 
+    int data; 
+    Node *left, *right; 
+}; 
+
+Node* newNode(int data) 
+{ 
+    Node* node = new Node(); 
+    node->data = data; 
+    node->left = NULL; 
+    node->right = NULL; 
+    return node; 
+} 
+
+Node *LeafToDLL(Node *root, Node **head_ref)
+{
+    if(!root)
+     return NULL;
+     
+    if(!root->left and !root->right)
+    {
+        root->right = *head_ref;
+        
+        if(*head_ref!=NULL)
+          (*head_ref)->left = root;
+          
+        *head_ref = root;
+        return NULL;
+    }
+    
+    root->right = LeafToDLL(root->right, head_ref);
+    root->left = LeafToDLL(root->left, head_ref);
+    return root;
+}
+
+int count_nodes(Node *head)
+{
+    Node *curr = head;
+    
+    int cnt=0;
+    while(curr)
+    {
+        curr = curr->right;
+        cnt++;
+    }
+    return cnt;
+}
+
+Node *DLLToBinaryTreeRec(Node **head, int n)
+{
+    if(n<=0)
+     return NULL;
+     
+   Node *left =  DLLToBinaryTreeRec(head, n/2);
+   
+  Node *root = *head;
+  
+  root->left = left;
+  
+  *head = (*head)->right;
+  
+  root->right = DLLToBinaryTreeRec(head, n-n/2-1);
+  
+  return root;
+}
+
+Node *DLLToBinaryTree(Node *head)
+{
+    int n = count_nodes(head);
+    
+    return DLLToBinaryTreeRec(&head, n);
+}
+
+void printLL(Node *root)
+{
+    if(!root)
+     return;
+     
+   printLL(root->left);
+   cout<<root->data<<" ";
+   printLL(root->right);
+}
+int main() {
+    Node* head = NULL; 
+    Node* root = newNode(1); 
+  
+    root->left = newNode(2); 
+    root->right = newNode(3); 
+    root->left->left = newNode(4); 
+    root->left->right = newNode(5); 
+    root->right->right = newNode(6); 
+    root->left->left->left = newNode(7); 
+    root->left->left->right = newNode(8); 
+    root->right->right->left = newNode(9); 
+    root->right->right->right = newNode(10); 
+    
+    root =LeafToDLL(root, &head);
+    
+    root = DLLToBinaryTree(head);
+    
+    printLL(root);
+    return 0;
+}

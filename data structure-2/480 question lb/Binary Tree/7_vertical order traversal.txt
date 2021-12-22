@@ -1,0 +1,77 @@
+void gethorizontaldistance(int hd,map<int,vector<int>> &mp,struct Node* root)
+{
+    if(root==NULL)
+        return;
+    mp[hd].push_back(root->data);
+    gethorizontaldistance(hd-1,mp,root->left);
+    gethorizontaldistance(hd+1,mp,root->right);
+}
+void printVerticalOrder(struct Node *root)
+{
+    map<int,vector<int>> mp;
+    int hd=0;
+    gethorizontaldistance(hd,mp,root);
+
+    for(auto it=mp.begin();it!=mp.end();it++)
+    {
+        for(int i=0;i<it->second.size();i++)
+        {
+            cout<<it->second[i]<<" ";
+        }
+        cout<<endl;
+    }
+}
+int main()
+{
+ Node *root = newNode(1);
+    root->left = newNode(2);
+    root->right = newNode(3);
+    root->left->left = newNode(4);
+    root->left->right = newNode(5);
+    root->right->left = newNode(6);
+    root->right->right = newNode(7);
+    root->right->left->right = newNode(8);
+    root->right->right->right = newNode(9);
+    cout << "Vertical order traversal is n";
+    printVerticalOrder(root);
+    return 0;
+}
+
+
+//------------------------------------------ using level order traversal to preserve order -----------------------
+vector<int> verticalOrder(Node *root)
+{
+    vector<int> ans;
+    
+    if(root == NULL) return ans;
+    
+    map<int, vector<int>> mp;
+    
+    queue<pair<int, Node*>> qu;
+    
+    qu.push({0, root});
+    
+    while(!qu.empty())
+    {
+        pair<int, Node*> temp =  qu.front();
+        
+        qu.pop();
+        
+        int hd = temp.first;
+        Node *node = temp.second;
+        
+        mp[hd].push_back(node->data);
+        
+        if(node->left) qu.push({hd-1, node->left});
+        if(node->right) qu.push({hd+1, node->right});
+    }
+    
+    for(auto it=mp.begin(); it!=mp.end(); it++){
+        vector<int> v = (*it).second;
+        for(int i=0; i<v.size(); i++){
+            ans.push_back(v[i]);
+        }
+    }
+    
+    return ans;
+}

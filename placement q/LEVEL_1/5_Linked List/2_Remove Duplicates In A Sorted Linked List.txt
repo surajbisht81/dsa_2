@@ -1,0 +1,74 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node{
+    public:
+    
+    int data;
+    Node *next;
+    
+    Node(int key){
+        data = key;
+        next = NULL;
+    }
+};
+
+void addLast(Node **head, int data){
+    Node *temp = new Node(data);
+    if((*head) == NULL){
+        (*head) = temp;
+    }
+    else{
+        Node *ptr = (*head);
+        
+        while(ptr->next!=NULL)
+         ptr = ptr->next;
+         
+        ptr->next = temp;
+    }
+}
+
+void remove_duplicate(Node *head){
+    
+    Node *prev, *curr = head;
+    
+    while(curr!=NULL){
+        
+        prev = curr;
+        while(curr->next!=NULL and curr->data == curr->next->data){
+            curr = curr->next;
+        }
+        
+        prev->next = curr->next;
+        curr = curr->next;
+    }
+}
+
+void display(Node *head){
+    
+    while(head!=NULL){
+        cout<<head->data<<" ";
+        head = head->next;
+    }
+    cout<<endl;
+}
+
+int main(){
+    
+    int n;
+    cin>>n;
+     
+    Node *head = NULL;
+    for(int i=0; i<n; i++){
+        int x;
+        cin>>x;
+        addLast(&head, x);
+    }
+    
+   display(head);
+   
+   remove_duplicate(head);
+   
+   display(head);
+   return 0;
+}

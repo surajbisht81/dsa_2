@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int firstMissingPositive(vector<int>& arr) {
+        
+        int n = arr.size();
+        
+        bool one = false;
+        
+        // 1) mark presence of 1 and mark element -1 which are out of range(1<= arr[i] <=n)
+        for(int i=0; i<n; i++)
+        {
+            if(arr[i] == 1) one = true;
+            
+            if(arr[i] < 1 || arr[i] > n){
+                arr[i] = 1;
+            }
+        }
+        // if one is not present then it is our ans
+        
+        if(one == false) return 1;
+        
+        // 2) element which are present, will change its corresponding index value to -ve, and which is not present could not change it
+        for(int i=0; i<n; i++){
+            int val = abs(arr[i]);
+            arr[val-1] = -abs(arr[val-1]);
+        }
+        
+        // so if value is greater than 0 that means idx+1 is our ans
+        for(int i=0; i<n; i++){
+            if(arr[i] > 0){
+                return i+1;
+            }
+        }
+        
+        return n+1;
+    }
+};
