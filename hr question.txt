@@ -1,0 +1,78 @@
+Q.1) Tell me about yourself.
+Ans:- Good Morning sir/mam,
+      My name is Suraj Bisht, I am from Badarpur which is located at south delhi. I had done my schooling from Ganesh Shanker vidhyarthi, sarojin Nagar, and recently
+      I have completed my graduation in ece from msit.
+      Talking about my family background, our birth place is uttarakhand and My family has 4 members, my mother father, my elder brother and me. 
+      My skills are c, c++, datastructure, and I love programming and coding.
+      Apart from these, My hobbies are listening and singing music, playing games and watching hollywood movies.
+      That's all about myself sir.
+
+Q.2) What are your strengths and weaknesses.
+Ans:- My strengths are I am self motivated, honest, Hardworking, I have always positive thinking and I always look forward to learn new things.
+      Talking about my weaknesses, I am a confusing person and get tension shortly and I am a little bit shy.
+
+Q.3) Why should we hire you?
+Ans:- As a fresher, I am a dedicated and hardwoking person, I am highly interested to enhance my skill, If I get opportunity to work in such a good reputed company
+      I will give my 100% efforts in my side to complete my work.
+
+Q.4) why do you want to work at our company?
+Ans:- As a fresher, I need to prove my skills and abilities to myself and to the whole industry. For that, I need a better platform through which I will get great
+      exposure. And I believe that by working in your company, i will have the opportunity to do that sir.
+
+Q.5) what is difference between hardwork and smart work.
+Ans:- smart work is the origin of hard work sir. Hard work means completing work without any shortcuts. And only after completing that work perfectly we will be able
+      to understand the steps and strategies that can be skipped to achieve the same result, and sucha a simplified way of working is smart work sir.
+
+Q.6) can you work under pressure.
+Ans:- Yes, I can work under pressure in my views, it's not a challenge it's a responsibility to complete a specific task. As it's the responsibitlity of employees to 
+      work hard to give their 100% to the organization.
+
+Q.7) are you willing to relocate?
+Ans:- I am open to relocation. This is my first job after graduation and the job profile offered by your company has a lot of exposure to learning and meeting new
+      people, new work culture, so it will also be good for my personal growth sir.
+
+Q.8) what are your goals?
+Ans:- As a fresher, my short-term goal is to get a job where i can efficiently use my skills and improve my knowledge
+      My long-term goal is to become a good software enginner.
+
+Q.9) what motivates you to do a good job?
+Ans:- There are some rason for this:
+      a) Having a good carrier in my future. b) want to be get success as much as I think. c) to serve my family and to my society.
+
+Q.10) what makes you angry?
+Ans:- I am a person works things on time and If by any chance, things doesn't complete on time, then it makes me angry.
+
+Q.11) what are your carrier options right now?
+Ans:- As a fresher, I will like to improve my programming skills and want to learn new technologies as well to join a reputed company like yours.
+
+Q.12) Explain how would be an asset to this organization?
+Ans:- I have so many skills but being a fresher I believe this company will convert my theoritical skills into practical skills which would be a great asset to
+      me as well as the company.
+
+Q.13) Who inspired you in your life?
+Ans:- My mom/dad is not rich but I am happy and safe with them. Because my parents are a good hard worker so that's my inspiration sir.
+
+Q.14) what is the thoughest decision you take in your life?
+Ans:- In my life, I think there is no any toughest decision because its completely on me how did I take that situation, If I think its hard then its hard and if
+      its easy then its easy.
+
+Q.15) what is success in your terms?
+Ans:- As for me success is the way we see things. just like sir Edison he hasn't said that he failed to invent bulb 1000 times, he said that he found 1000 ways how
+      to not invent a bulb.
+
+Q.16) what do you know about our company?
+Ans:- TCS means Tata consultancy services. The founder of TCS is JRD Tata and f,c kohli, it was founded at 1968. The CEO of tcs is Rajesh Gopinathan and chairman is 
+      Natrajan Chandrasekaran. 
+      It provides services like It services, business consulting and outsourcing servies. The headquarter of tcs is in mumbai. 
+      It has excellent work culture, providing a good plateform and also has a good reputation in the industry.
+
+Q.17) What are your salery expectations?
+Ans:- Sir, I am a fresher and yes salary is a matter for me but my first priority is to gain knowledge and improve my skills, so I happily accept whatever you will 
+      offer.
+
+Q.18) where do you see yourself five years from now?
+Ans:- After x years, I would have learned new things and technologies, I will enjoying my carrier and I think I would no loger be a fresher but an experienced one
+      serving to the organization and to the society.
+
+Q.19) Do you have any question for me?
+Ans:- Yes sir, I have a question, what type of projects do freshers work on, If they join tcs? 
