@@ -53,3 +53,41 @@ int main() {
     Encoding(str, "");
     return 0;
 }
+
+
+
+// another method ------------------------------------------------
+
+#include <iostream>
+#include<string>
+using namespace std;
+
+void printEncoding(string str, string asf){
+
+    if(str.length() == 0 and asf.length()!=0){
+        cout<<asf<<endl;
+    }
+
+    if(str[0] == '0') return;
+
+    
+    for(int i=0; i<str.length(); i++){
+
+        int ch = stoi(str.substr(0, i+1));
+
+        char ans = 'a' + (ch - 1);
+        
+        if(ch>=1 and ch <= 26)
+            printEncoding(str.substr(i+1), asf + ans);
+        else 
+            break;
+    }
+    
+}
+
+int main(){
+    string str;
+    cin>>str;
+    printEncoding(str,"");
+    
+}
