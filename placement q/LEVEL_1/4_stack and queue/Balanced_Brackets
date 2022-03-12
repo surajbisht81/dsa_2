@@ -1,0 +1,74 @@
+/*
+
+1. You are given a string exp representing an expression.
+2. You are required to check if the expression is balanced i.e. closing brackets and opening brackets match up well.
+
+e.g.
+[(a + b) + {(c + d) * (e / f)}] -> true
+[(a + b) + {(c + d) * (e / f)]} -> false
+[(a + b) + {(c + d) * (e / f)} -> false
+([(a + b) + {(c + d) * (e / f)}] -> false
+
+*/
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+bool BalancedBrackets(string str)
+{
+    stack<char> st;
+    char x;
+
+    for(int i=0; i<str.length(); i++)
+    {
+        char ch = str[i];
+
+        if(ch=='(' or ch=='{' or ch=='['){
+            st.push(ch);
+            continue;
+        }
+
+        if( (ch==')' or ch=='}' or ch==']') && st.empty()){    // careful, if ch is not opening brackets, then ch must be a closing brackets and if st is empty that time
+            return false;                                      // then only return 0. otherwise if st is empty and ch is other than closing brackets like a, b, +, - then 
+        }                                                      // this condition must not run.
+
+        switch(ch) {
+            case ')':
+                x = st.top();
+                st.pop();
+                if( x=='{' or x=='[' ){
+                    return false;
+                }
+                break;
+
+            case '}':
+                x = st.top();
+                st.pop();
+                if( x=='(' or x=='[' ){
+                    return false;
+                }
+                break;
+
+            case ']':
+                x = st.top();
+                st.pop();
+                if( x=='(' or x=='{' ){
+                    return false;
+                }
+                break;
+        }
+    }
+
+    return (st.empty());
+
+}
+
+int main()
+{ 
+    string str;
+    getline(cin, str);
+
+    BalancedBrackets(str) == 1 ? cout<<"true" : cout<<"false";
+    return 0;
+}
