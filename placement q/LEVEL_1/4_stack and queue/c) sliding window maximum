@@ -1,0 +1,49 @@
+/*
+This question can be solved using n^2, priority queue 
+and then deque. loog gfg for more clearity.
+*/
+
+
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& arr, int k) {
+        
+        int n = arr.size();
+        
+        vector<int> res;
+
+        deque<int> dque(k);
+
+        int i;
+        for( i=0; i<k; i++)
+        {
+            while( !dque.empty() && arr[i] >= arr[dque.back()]){
+                dque.pop_back();
+            }
+
+            dque.push_back(i);
+        }
+
+        for(; i<n; i++)
+        {
+            res.push_back(arr[dque.front()]);
+
+            // if element at front of dque is out of bound(out of window) then remove it from dque
+
+            while( !dque.empty() && dque.front() <= i-k ){
+                dque.pop_front();
+            }
+
+            while( !dque.empty() && arr[i] >= arr[dque.back()] ){
+                dque.pop_back();
+            }
+
+            dque.push_back(i);
+        }
+
+        res.push_back(arr[dque.front()]);
+
+        return res;
+        
+    }
+};
