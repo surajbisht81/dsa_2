@@ -1,0 +1,74 @@
+
+/*
+Brute force approach is, we can find  the breadth of i in inner for loop. This will make complexity n^2;
+ this problem can be solved  using next smaller element on left and next smaller element on right concept. using stack.
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int histogram(vector<int> arr, int n)
+{
+    int nextSmallestRight[n];
+    stack<int> st;
+
+    for(int i=n-1; i>=0; i--)
+    {
+        while( !st.empty() && arr[i] <= arr[st.top()]){
+            st.pop();
+        }
+
+        if(st.empty()){
+            nextSmallestRight[i] = n;
+        }
+        else{
+            nextSmallestRight[i] = st.top();
+        }
+
+        st.push(i);
+    }
+
+    stack<int> st2;
+
+    int nextSmallestLeft[n];
+
+    for(int i=0; i<n; i++){
+        while(!st2.empty() && arr[i] <= arr[st2.top()]){
+            st2.pop();
+        }
+
+        if(st2.empty()){
+            nextSmallestLeft[i] = -1;
+        }
+        else{
+            nextSmallestLeft[i] = st2.top();
+        }
+
+        st2.push(i);
+    }
+
+    int area = 0;
+    for(int i=0; i<n; i++){
+        int breadth = nextSmallestRight[i] - nextSmallestLeft[i] - 1;
+        int maxArea = breadth * arr[i];
+
+        area = max(area, maxArea);
+    }
+
+    return area;
+}
+
+int main(int argc, char **argv)
+{  
+    int n;
+    cin>>n;
+    vector<int>arr(n,0);
+    for(int i=0;i<n;i++)
+    {
+        cin>>arr[i];
+    }
+
+    cout<<histogram(arr, n);
+
+   return 0;
+}
