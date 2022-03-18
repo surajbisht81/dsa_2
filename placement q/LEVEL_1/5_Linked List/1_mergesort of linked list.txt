@@ -127,3 +127,84 @@ int main(){
     
     return 0;
 }
+
+
+
+
+
+---------------------  leetcode solution ---------------------------------
+
+
+class Solution {
+public:
+    
+    void SplitListIntoTwoLists(ListNode *head, ListNode **list1, ListNode **list2){
+        
+        ListNode *slow = head;
+        ListNode *fast = head->next;
+        
+        while(fast!=NULL and fast->next!=NULL){
+            fast = fast->next->next;
+            slow = slow->next;
+        }
+        
+        *list1 = head;
+        *list2 = slow->next;
+        slow->next = NULL;
+    }
+    
+    ListNode *MergeSort(ListNode *list1, ListNode *list2)
+    {
+        
+        // cout<<"Bisht"<<endl;
+        if(!list1) return list2;
+        if(!list2) return list1;
+        
+        ListNode *dummy = new ListNode(0);
+        ListNode *result = dummy;
+        
+        while(list1!=NULL and list2!=NULL){
+            if(list1->val <= list2->val){
+                dummy->next = list1;
+                dummy = dummy->next;
+                list1 = list1->next;
+            }
+            else{
+                dummy->next = list2;
+                dummy = dummy->next;
+                list2 = list2->next;
+            }
+        }
+        
+        while(list1 != NULL){
+            dummy->next = list1;
+            dummy = dummy->next;
+            list1 = list1->next;
+        }
+        
+        while(list2!=NULL){
+            dummy->next = list2;
+            dummy = dummy->next;
+            list2 = list2->next;
+        }
+        
+        return result->next;
+    }
+    
+    ListNode* sortList(ListNode* head) {
+        
+        // Base cases;
+        if(head==NULL or head->next==NULL){
+            return head;
+        }
+        
+        ListNode *list1, *list2;
+
+        SplitListIntoTwoLists(head, &list1, &list2);
+        
+        ListNode *l1 = sortList(list1);
+        ListNode *l2 = sortList(list2);
+        
+        return MergeSort(l1, l2);
+    }
+};
