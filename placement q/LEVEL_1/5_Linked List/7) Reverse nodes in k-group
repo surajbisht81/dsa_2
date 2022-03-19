@@ -1,0 +1,41 @@
+
+
+//  leetcode solution O(n) tc and sc of O(n/k) 
+
+class Solution {
+public:
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        
+        ListNode *temp = head;
+        int cnt = 0;
+        
+        while(temp!=NULL && cnt < k){
+            cnt++;
+            temp = temp->next;
+        }
+        
+        if( cnt < k ){
+            return head;
+        }
+        
+        ListNode *prev = NULL, *next = NULL;
+        ListNode *curr = head;
+        
+        cnt = 0;
+        
+        while( cnt < k ){
+            next = curr->next;
+            curr->next = prev;
+            
+            prev = curr;
+            curr = next;
+            cnt++;
+        }
+        
+        if( next!= NULL){
+            head->next = reverseKGroup(next, k);
+        }
+        
+        return prev;
+    }
+};
