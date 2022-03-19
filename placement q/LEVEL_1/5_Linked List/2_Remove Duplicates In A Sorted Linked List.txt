@@ -1,3 +1,33 @@
+
+// leetcode solution 
+
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        
+        ListNode *curr = head;
+        
+        while( curr != NULL ){
+            
+            if(curr->next != NULL && curr->next->val == curr->val){
+                
+                while( curr->next!= NULL && curr->next->val == curr->val ){
+                    ListNode *temp = curr->next;
+                    curr->next = curr->next->next;
+                    
+                    delete temp;
+                }
+            }
+            
+            curr = curr->next;
+        }
+        
+        return head;
+    }
+};
+
+-------------------------------------------------
+
 #include<bits/stdc++.h>
 using namespace std;
 
