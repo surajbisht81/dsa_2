@@ -1,3 +1,65 @@
+//------------------------ leetcode solution -----------------------------
+
+class Solution {
+public:
+    
+    ListNode *reverseList(ListNode *head){
+        ListNode *curr = head;
+        ListNode *prev = NULL, *next = NULL;
+        
+        while( curr != NULL ){
+            next = curr->next;
+            curr->next = prev;
+            
+            prev = curr;
+            curr = next;
+        }
+        
+        return prev;
+    }
+    
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        
+        // first reverse both the linked lists
+        ListNode *list1 = reverseList(l1);
+        ListNode *list2 = reverseList(l2);
+        
+        // make a dummy node to store the sum
+        ListNode *dummy = new ListNode(-1);
+        ListNode *ptr = dummy;
+        
+        int carry = 0;
+        
+        // this loop will run till list 1 is not empty, list2 is not empty and last carry is there( because if both list are empty and carry is there
+        // then in this case we have to add the carry also)
+        while( list1!=NULL || list2!=NULL || carry!=0){
+            
+            // add value if list1, list2 is not empty
+            int sum = (!list1 ? 0 : list1->val) + (!list2 ? 0 : list2->val) + carry;
+            
+            int last_digit = sum % 10;
+            carry = sum / 10;
+            
+            // make a node and point ptr->next to that node and progress ptr to next
+            ptr->next = new ListNode(last_digit);;
+            ptr = ptr->next;
+            
+            // also increment the list if they are not empty
+            if(list1) list1 = list1->next;
+            if(list2) list2 = list2->next;
+        }
+        
+        return reverseList(dummy->next);
+    }
+};
+
+
+
+
+
+//----------------------- pepcoding solution using recurssion-------------------------------------
+
+
 #include<bits/stdc++.h>
 using namespace std;
 
