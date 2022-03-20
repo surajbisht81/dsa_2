@@ -1,0 +1,61 @@
+// leetcode solution  
+
+class Solution {
+public:
+    
+    ListNode *reverseList(ListNode *head){
+        ListNode *curr = head;
+        ListNode *prev = NULL, *next = NULL;
+        
+        while( curr != NULL ){
+            next = curr->next;
+            curr->next = prev;
+            
+            prev = curr;
+            curr = next;
+        }
+        
+        return prev;
+    }
+    
+    ListNode *findMid(ListNode *head){
+        if(head==NULL or head->next==NULL) return head;
+        
+        ListNode *slow = head;
+        ListNode *fast = head;
+        
+        while(fast->next!=NULL && fast->next->next!=NULL){
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        
+        return slow;
+    }
+    
+    void reorderList(ListNode* head) {
+        
+        ListNode *mid = findMid(head);
+        ListNode *list2 = reverseList(mid->next);
+        mid->next = NULL;
+        
+        ListNode *curr1 = head;
+        ListNode *curr2 = list2;
+        ListNode *next1 = NULL;
+        ListNode *next2 = NULL;
+        
+        while( curr2 != NULL ){
+            
+            // store the next nodes of both lists
+            next1 = curr1->next;
+            next2 = curr2->next;
+            
+            // make links
+            curr1->next = curr2;
+            curr2->next = next1;
+            
+            // update curr1, curr2
+            curr1 = next1;
+            curr2 = next2;
+        }
+    }
+};
