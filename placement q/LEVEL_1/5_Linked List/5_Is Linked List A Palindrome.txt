@@ -1,215 +1,89 @@
-#include<bits/stdc++.h>
-using namespace std;
+// ----------------- Is Lined List a Palindrome question --------------------------
 
-class Node
-{
-    public:
-   int data;
-   Node *next;
-   
-   Node(int key)
-   {
-       data = key;
-       next = NULL;
-   }
+// 1st approach using recusrsion
+
+class Solution {
+public:
+    
+    ListNode *pleft;
+    
+    bool isPalindromeHelper(ListNode *head)
+    {
+        if(head == NULL){
+            return true;
+        }
+        
+        bool rres = isPalindromeHelper(head->next);
+        
+        if(rres == false){
+            return false;
+        }
+        else if(pleft->val != head->val){
+            return false;
+        }
+        else{
+            pleft = pleft->next;
+            return true;
+        }
+    }
+    
+    bool isPalindrome(ListNode* head) {
+        pleft = head;
+        
+        return isPalindromeHelper(head->next);
+    }
 };
 
-void addLast(Node **head, int key)
-{
-    Node *temp = new Node(key);
-    
-    if((*head)==NULL)
-      (*head) = temp;
-    else
-    {
-        Node *ptr = (*head);
-        while(ptr->next!=NULL)
-         ptr = ptr->next;
-         
-        ptr->next = temp;
-    }
-}
 
-Node *pleft;                              // we are creating a node for preserving head to compare it with recursion stack top data
+// 2nd approach  ------ using iteration method
 
-bool IspalindromeHelper(Node *head)
-{
-    if(head == NULL)          // if we reach end of the list then return true
-     return true;
-     
-    bool rres = IspalindromeHelper(head->next);          // this is recursion and it will go upto end of list
+class Solution {
+public:
     
-    if(rres == false){                         // it indicates ab tak recursion comparison with pleft ka result kya hai if false then our list is not palindrome else return true
-        return false;
+    ListNode *reverseList(ListNode *head){
+        ListNode *curr = head;
+        ListNode *prev = NULL, *next = NULL;
+        
+        while( curr!= NULL ){
+            next = curr->next;
+            curr->next = prev;
+            
+            prev = curr;
+            curr = next;
+            
+        }
+        
+        return prev;
     }
-    else if(pleft->data != head->data){          // this is for current data of pleft and recurssion top
-        return false;
-    }
-    else{
-        pleft = pleft->next;             // this is for future pleft
+    
+    bool isPalindrome(ListNode* head) {
+        
+        ListNode *slow = head;
+        ListNode *fast = head;
+        
+        // first finding the node previous to middle node.
+        while(fast->next!=NULL && fast->next->next!=NULL){
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        
+        // reversing the list ahead of middle node 
+        slow->next = reverseList(slow->next);
+        
+        ListNode *ptr1 = head;
+        ListNode *ptr2 = slow->next;
+        
+        // checking for palindrome
+        while(ptr2 != NULL){
+            if(ptr1->val == ptr2->val){
+                ptr1 = ptr1->next;
+                ptr2 = ptr2->next;
+            }
+            else{
+                return false;
+            }
+        }
+        
         return true;
     }
-}
-
-bool Ispalindrome(Node *head)
-{
-    pleft = head;              // initializing pleft as head
-    
-    return IspalindromeHelper(head); 
-}
-
-int main()
-{
-    int n;
-    cin>>n;
-    
-    Node *head = NULL;
-    for(int i=0; i<n; i++)
-    {
-        int x;
-        cin>>x;
-      addLast(&head, x);
-    }
-    
-    if(Ispalindrome(head))
-     cout<<"true";
-    else
-     cout<<"false";
-     
-    return 0;
-}
-
-
-
-/* 2nd approach 
-
-#include<bits/stdc++.h>
-using namespace std;
-
-class Node
-{
-    public:
-   int data;
-   Node *next;
-   
-   Node(int key)
-   {
-       data = key;
-       next = NULL;
-   }
 };
-
-void addFirst(Node **head, int key)
-{
-    Node *temp = new Node(key);
-    
-    if((*head)==NULL)
-      (*head) = temp;
-    else
-    {
-        temp->next = (*head);
-        *head = temp;
-    }
-}
-
-void addLast(Node **head, int key)
-{
-    Node *temp = new Node(key);
-    
-    if((*head)==NULL)
-      (*head) = temp;
-    else
-    {
-        Node *ptr = (*head);
-        while(ptr->next!=NULL)
-         ptr = ptr->next;
-         
-        ptr->next = temp;
-    }
-}
-Node *pleft;                  // this is pointer basically 
-
-void FoldingHelper(Node *head, int flor, int cnt)
-{
-    if(head==NULL)
-      return;
-      
-    FoldingHelper(head->next, flor+1, cnt);         // calling recurssion and every time flor will incremented 
-    
-    if(flor > cnt/2)      //this condition will run for half the no of time i.e., half the elements count times
-    {
-        Node *temp = pleft->next;    // we are saving the next node of left pointer
-        head->next = temp;      // making last pointer point to temp;
-        pleft->next = head;        // making left most pointer point to last element
-        
-        pleft = temp; 
-    }
-    else if(flor == cnt/2)
-    { 
-        head->next = NULL;        // if both flor and cnt/2 become equal then head->next=NULL
-    }
-}
-
-Node* Folding(Node *head)
-{
-   pleft = head;          // pleft pointing to first element of list
-   Node *curr = head;      
-   int cnt=0;          // this is count of total no of elemnts in the list
-   
-   while(curr!=NULL)
-   {
-       curr = curr->next;
-       cnt++;
-   }
-   FoldingHelper(head, 0, cnt);
-   
-   curr = head;
-   while(head!=NULL){
-       cout<<head->data<<" ";
-       head = head->next;
-   }
-   cout<<endl;
-   return curr;
-}
-
-void display(Node *head)
-{
-   if(!head) 
-    return;
-    
-    while(head!=NULL){
-        cout<<head->data<<" ";
-        head = head->next;
-    }
-    cout<<endl;
-}
-
-int main()
-{
-    int n;
-    cin>>n;
-    
-    Node *head = NULL;
-    for(int i=0; i<n; i++)
-    {
-        int x;
-        cin>>x;
-      addLast(&head, x);
-    }
-    
-    display(head);
-    
-    head = Folding(head);
-    
-    int a, b;
-    cin>>a>>b;
-    
-    addFirst(&head, a);
-    addLast(&head, b);
-    
-   display(head); 
-     
-    return 0;
-}
-
-*/
