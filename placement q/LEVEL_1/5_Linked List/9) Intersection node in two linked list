@@ -1,0 +1,50 @@
+
+// ----------------- leetcode 1st solution( using length method)  --------------------------------------------
+
+class Solution {
+public:
+    
+    int lengthOfList(ListNode *head){
+        ListNode *curr = head;
+        int cnt = 0;
+        
+        while( curr != NULL ){
+            cnt++;
+            curr = curr->next;
+        }
+        
+        return cnt;
+    }
+    
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        
+        int list1_length = lengthOfList(headA);
+        int list2_length = lengthOfList(headB);
+        
+        int diff = abs(list1_length - list2_length);
+        
+        if(list1_length > list2_length){
+            while(diff--){
+                headA = headA->next;
+            }
+        }
+        else{
+            while(diff--){
+                headB = headB->next;
+            }
+        }
+        
+        while( headA != headB ){
+            headA = headA->next;
+            headB = headB->next;
+        }
+        
+        return headA;
+    }
+};
+
+
+
+// ----------------------------------- using two pointers approach (gfg) --------------------------------
+
+
