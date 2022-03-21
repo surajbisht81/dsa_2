@@ -48,3 +48,86 @@ public:
 // ----------------------------------- using two pointers approach (gfg) --------------------------------
 
 
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        
+        if(!headA or !headB){
+            return NULL;
+        }
+        
+        ListNode *ptr1 = headA;
+        ListNode *ptr2 = headB;
+        
+        while( ptr1 != ptr2 ){
+            
+            ptr1 = ptr1->next;
+            ptr2 = ptr2->next;
+            
+            if(ptr1 == ptr2){
+                return ptr1;
+            }
+            
+            if(ptr1 == NULL){
+                ptr1 = headB;
+            }
+            if(ptr2 == NULL){
+                ptr2 = headA;
+            }
+        }
+        
+        return ptr1;
+    }
+};
+
+
+//--------------------------------- using meeting point and cycle detection method.
+
+
+class Solution {
+public:
+    ListNode *_getIntersection(ListNode *head){
+        ListNode *slow = head;
+        ListNode *fast = head;
+        
+        // for finding meeting point
+        while(fast!=NULL and fast->next!=NULL){
+            fast = fast->next->next;
+            slow = slow->next;
+            
+            if(slow == fast) break;    // if meeting point is found
+        }
+        
+        if(slow != fast) return NULL;   // if meeting point is not found means, cycle is not there return null
+        
+        slow = head;
+        
+        while(slow != fast){
+            fast = fast->next;
+            slow = slow->next;
+        }
+        
+        return slow;
+    }
+    
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        
+        if(headA==NULL or headB==NULL) return NULL;
+        
+        ListNode *tailA = headA;
+        while(tailA->next != NULL){
+            tailA = tailA->next;
+        }
+        
+        // forming cycle using tail of one list and head of other list
+        
+        tailA->next = headB;
+        
+        ListNode *intersectionNode = _getIntersection(headA);
+        
+        tailA->next = NULL;    // making input same as it was given 
+        
+        return intersectionNode;
+    }
+};
+
