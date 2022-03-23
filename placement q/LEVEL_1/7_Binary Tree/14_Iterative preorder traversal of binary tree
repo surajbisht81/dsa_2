@@ -1,0 +1,26 @@
+
+
+
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+        
+            stack<TreeNode*> st;
+            vector<int> res;
+        
+            if(!root) return res;
+        
+            st.push(root);
+        
+            while( !st.empty() ){
+                TreeNode *topNode = st.top();
+                st.pop();
+                res.push_back(topNode->val);                          // since we are printing preorder, push node->val to res when we first get the node from stack
+                
+                if(topNode->right) st.push(topNode->right);           // first pushing right then left node so that, left is processed first from stack
+                if(topNode->left) st.push(topNode->left);
+            }
+        
+            return res;
+    }
+};
