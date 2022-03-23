@@ -1,0 +1,29 @@
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        
+        vector<int> inorder;
+        stack<TreeNode*> st;
+        
+        TreeNode *curr = root;
+        
+        while(curr!=NULL || !st.empty()){
+            
+            while( curr!=NULL ){
+                st.push(curr);
+                curr = curr->left;
+            }
+            
+            // at this point, curr must be null and stack top will have leftmost node so print it
+            curr = st.top();
+            
+            inorder.push_back(curr->val);
+            st.pop();
+            
+            // tree left part and root part is processed, so now it is right's time
+            curr = curr->right;
+        }
+        
+        return inorder;
+    }
+};
