@@ -156,3 +156,39 @@ int main()
      cout<<"]";
     return 0;
 }
+
+
+
+//------------------------------------ returning vector instead of true or false-----------------
+
+
+vector<int> nodeToRootPath(Node* node, int data){
+
+    if(node == NULL){
+      vector<int> base;
+      return base;
+    }
+
+    vector<int> res;
+
+    if( node->data == data ){
+      res.push_back(node->data);
+      return res;
+    }
+
+    // traversing to the left subtree
+    res = nodeToRootPath(node->left, data);
+    if(res.size() > 0){
+      res.push_back(node->data);
+      return res;
+    }
+
+    // traversing to the right subtree
+    res = nodeToRootPath(node->right, data);
+    if(res.size() > 0){
+      res.push_back(node->data);
+      return res;
+    }
+
+    return res;
+}
