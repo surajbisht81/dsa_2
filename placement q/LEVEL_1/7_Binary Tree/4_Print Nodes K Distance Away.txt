@@ -1,3 +1,62 @@
+
+// --------------------- without using array for storing node to root paths ----------------------------
+
+class Solution {
+public:
+    
+    void kLevelsDown(TreeNode *root, int k, vector<int> &ans, TreeNode *blocker){
+        if(!root || k < 0 || root==blocker){
+            return;
+        }
+        
+        if(k == 0){
+            ans.push_back(root->val);
+        }
+        
+        kLevelsDown(root->left, k-1, ans, blocker);
+        kLevelsDown(root->right, k-1, ans, blocker);
+    }
+    
+    int nodeToRootPath(TreeNode *root, int target, vector<int> &ans, int k){
+        
+        if(root == NULL){
+            return -1;                                                       // return -1 means, target node is not present in subtree
+        }
+        
+        if(root->val == target){                                         // if target node is found, then call kLevelsDown and return 1, because, target node
+            kLevelsDown(root, k, ans, NULL);                             // is 1 distance away from its parents
+            return 1;
+        }
+        
+        int leftDistance = nodeToRootPath(root->left, target, ans, k);     // making call to left and if we not found -1 that means, target node is present in left
+        if(leftDistance != -1){                                            // subtree then make call to klevelsDown. similarly for right subtree
+            kLevelsDown(root, k-leftDistance, ans, root->left);
+            return leftDistance + 1;
+        }
+        
+        int rightDistance = nodeToRootPath(root->right, target, ans, k);
+        if(rightDistance != -1){
+            kLevelsDown(root, k-rightDistance, ans, root->right);
+            return rightDistance +1 ;
+        }
+        
+        return -1;
+    }
+    
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+        
+        vector<int> ans;
+        
+        nodeToRootPath(root, target->val, ans, k);
+        
+        return ans;
+    }
+};
+
+
+//------------------------------------------------------------------------------------------------------
+
+
 #include<bits/stdc++.h>
 using namespace std;
 
