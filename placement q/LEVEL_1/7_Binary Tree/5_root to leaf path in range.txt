@@ -1,3 +1,39 @@
+//-------------- Root to leaf path in a binary tree leetcode solution-------------------------
+
+class Solution {
+public:
+    
+    void binaryTreePaths_(TreeNode* root, string path, vector<string> &ans) {
+        
+        if(!root){
+            return;
+        }
+        
+        if(!root->left && !root->right){
+            path += to_string(root->val);
+            ans.push_back(path);
+            return;
+        }
+        
+        string newPath = path + to_string(root->val) + "->";
+        
+        binaryTreePaths_(root->left, newPath, ans);
+        binaryTreePaths_(root->right, newPath, ans);
+    }
+    
+    vector<string> binaryTreePaths(TreeNode* root) {   
+        
+        vector<string> ans;
+        
+        binaryTreePaths_(root, "", ans);
+        
+        return ans;
+    }
+};
+
+//------------------------------------------------------------------------------------------
+
+
 /*1. You are given a partially written BinaryTree class.
 2. You are given a value lo and a value hi
 3. You are required to complete the body of pathToLeafFromRoot function. The function is expected to print all paths from root to leaves which have sum 
