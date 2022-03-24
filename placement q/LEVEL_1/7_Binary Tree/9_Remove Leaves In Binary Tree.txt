@@ -1,3 +1,27 @@
+//--------- leetcode: Delete Leaves With a Given Value--------------------
+
+class Solution {
+public:
+    TreeNode* removeLeafNodes(TreeNode* root, int target) {
+        
+        if(!root) return root;
+        
+        root->left = removeLeafNodes(root->left, target);
+        root->right = removeLeafNodes(root->right, target);
+        
+        if(root->val==target && !root->left && !root->right){
+            // TreeNode* temp = root;
+            // delete temp;
+            return NULL;
+        }
+        return root;
+    }
+};
+
+//-------------------------------------
+
+
+
 #include<bits/stdc++.h>
 using namespace std;
 
