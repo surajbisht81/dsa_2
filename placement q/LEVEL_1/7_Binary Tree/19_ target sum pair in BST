@@ -1,0 +1,319 @@
+// this question has 4 solution
+// -- first is using auxillary array, pushing all nodes into array in inorder, then applying 2 sum probelm. TC is O(n) and SC is O(n);
+// -- second solution is using doubly linked list, modify the given tree and convert it into doubly lined list and apply two sum. TC is O(n) and SC is O(1)
+// --third solution is using, inorder traversal, and for every node, compute the second value like x = target-node->data and find x into the tree using BST property
+// this solution has TC of O(nlogn) and SC of O(logn) for stack recursion space.
+// --fourth solution is using inorder and reverse inordeer traversal of tree, getting elements from inorder and reverse inorder traversal and applying two sum 
+// TC is O(n) and SC is O(h) or O(logn) and this is the best approach.
+
+
+// Third solution implimentation.
+
+#include <iostream>
+#include <vector>
+#include <stack>
+#include <string>
+
+using namespace std;
+
+class Node{
+public:
+  int data;
+  Node * left = nullptr;  
+  Node * right = nullptr;
+  Node (int data)
+  {
+      this->data=data;
+  }
+};
+
+class Pair{
+    Node *node = nullptr;
+    int state=0;
+
+    Pair(Node *node, int state) {
+      this->node = node;
+      this->state = state;
+    }
+};
+
+Node* construct(vector<int> & arr) {
+  Node* root = new Node(arr[0]);
+  pair<Node*, int> p = {root, 1};
+
+  stack<pair<Node*, int>> st;
+  st.push(p);
+
+  int idx = 1;
+  while (!st.empty()) {
+    if (st.top().second == 1) {
+      st.top().second++;
+      if (arr[idx] != -1) {
+        st.top().first->left = new Node(arr[idx]);
+        pair<Node*, int> lp = {st.top().first->left, 1};
+        st.push(lp);
+      }
+      else {
+        st.top().first->left = nullptr;
+      }
+      idx++;
+    }
+    else if (st.top().second == 2) {
+      st.top().second++;
+      if (arr[idx] != -1) {
+        st.top().first->right = new Node(arr[idx]);
+        pair<Node*, int> rp = {st.top().first->right, 1};
+        st.push(rp);
+      } else {
+        st.top().first->right = nullptr;
+      }
+      idx++;
+    }
+    else {
+      st.pop();
+    }
+
+  }
+  return root;
+}
+
+bool find(Node *root, int tar){
+  if(!root) return false;
+
+  if(tar < root->data){
+    return find(root->left, tar);
+  }
+  else if(tar > root->data){
+    return find(root->right, tar);
+  }
+  else{
+    return true;
+  }
+
+  return false;
+}
+
+void travelAndPrint(Node *root , Node *node , int tar){
+
+      if(!root) return;
+      
+      travelAndPrint(root->left, node, tar);
+
+      int x = tar - root->data;
+      if(x > root->data && find(node, x)){
+        cout<<root->data<<" "<<x<<endl;
+      }
+
+      travelAndPrint(root->right, node, tar);
+      
+}
+
+int main() {
+  int n;
+  cin>>n;
+  vector<int> arr(n,0);
+  
+  for(int i = 0; i < n; i++) {
+      string tmp;
+      cin>>tmp;
+    if (tmp=="n") {
+      arr[i] = -1;
+    } else {
+      arr[i] = stoi(tmp);
+    }
+  }
+
+  int k1;
+  cin>>k1;
+
+  Node* root = construct(arr);
+  travelAndPrint(root,root,k1);
+}
+
+
+
+
+// ------------------- fourth solution optimized solution. --------------------------------------------------
+
+#include <iostream>
+#include <vector>
+#include <stack>
+#include <string>
+
+using namespace std;
+
+class Node{
+public:
+  int data;
+  Node * left = nullptr;  
+  Node * right = nullptr;
+  Node (int data)
+  {
+      this->data=data;
+  }
+};
+
+Node* construct(vector<int> & arr) {
+  Node* root = new Node(arr[0]);
+  pair<Node*, int> p = {root, 1};
+
+  stack<pair<Node*, int>> st;
+  st.push(p);
+
+  int idx = 1;
+  while (!st.empty()) {
+    if (st.top().second == 1) {
+      st.top().second++;
+      if (arr[idx] != -1) {
+        st.top().first->left = new Node(arr[idx]);
+        pair<Node*, int> lp = {st.top().first->left, 1};
+        st.push(lp);
+      }
+      else {
+        st.top().first->left = nullptr;
+      }
+      idx++;
+    }
+    else if (st.top().second == 2) {
+      st.top().second++;
+      if (arr[idx] != -1) {
+        st.top().first->right = new Node(arr[idx]);
+        pair<Node*, int> rp = {st.top().first->right, 1};
+        st.push(rp);
+      } else {
+        st.top().first->right = nullptr;
+      }
+      idx++;
+    }
+    else {
+      st.pop();
+    }
+
+  }
+  return root;
+}
+
+class Pair{
+ 
+    public:
+      int state;
+      Node *root;
+
+    Pair(int state, Node *root){
+      this->state = state;
+      this->root = root;
+    }
+
+};
+
+// these are iterative inorder and reverse inorder traversal of tree
+
+int getNextFromInorder(stack<Pair*> &st){
+
+    while( !st.empty() ){
+      
+        Pair *top = st.top();
+
+        if(top->state == 0){
+            if(top->root->left){
+              st.push(new Pair(0, top->root->left));
+            }
+
+            (top->state)++;
+        }
+        else if(top->state == 1){
+            if(top->root->right){
+              st.push(new Pair(0, top->root->right));
+            }
+
+            (top->state)++;
+
+            return top->root->data;
+        }
+        else{
+            st.pop();
+        }
+    }
+}
+
+int getNextFromReverseInorder(stack<Pair*> &st){
+
+    while( !st.empty() ){
+      
+        Pair *top = st.top();
+
+        if(top->state == 0){
+            if(top->root->right){
+              st.push(new Pair(0, top->root->right));
+            }
+
+            (top->state)++;
+        }
+        else if(top->state == 1){
+            if(top->root->left){
+              st.push(new Pair(0, top->root->left));
+            }
+
+            (top->state)++;
+
+            return top->root->data;
+        }
+        else{
+            st.pop();
+        }
+    }
+}
+
+void travelAndPrint(Node *root ,int tar){
+    
+    // making Pair class of stack 
+    stack<Pair*> leftStack;
+    stack<Pair*> rightStack;
+    
+    // these stacks are for inorder and reverse iterative inorder traversal of tree;
+    leftStack.push(new Pair(0, root));
+    rightStack.push(new Pair(0, root));
+
+    int left = getNextFromInorder(leftStack);                // getting the leftmost data
+    int right = getNextFromReverseInorder(rightStack);       // getting the rightmost data
+
+    while( left < right ){
+      int sum = left + right;
+
+      // applying the two sum method
+      if(sum < tar){
+        left = getNextFromInorder(leftStack);                       // getting next element from left
+      }
+      else if(sum > tar){
+        right = getNextFromReverseInorder(rightStack);            // getting the next element from right
+      }
+      else{
+        cout<<left<<" "<<right<<endl;
+        left = getNextFromInorder(leftStack);
+        right = getNextFromReverseInorder(rightStack);
+      }
+    }
+    
+}
+
+int main() {
+  int n;
+  cin>>n;
+  vector<int> arr(n,0);
+  
+  for(int i = 0; i < n; i++) {
+      string tmp;
+      cin>>tmp;
+    if (tmp=="n") {
+      arr[i] = -1;
+    } else {
+      arr[i] = stoi(tmp);
+    }
+  }
+
+  int k1;
+  cin>>k1;
+
+  Node* root = construct(arr);
+  travelAndPrint(root,k1);
+}
