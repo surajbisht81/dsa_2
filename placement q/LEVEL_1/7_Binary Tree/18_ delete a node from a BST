@@ -1,0 +1,51 @@
+class Solution {
+public:
+    
+    TreeNode *maximum(TreeNode *root){
+    
+        while(root!=NULL && root->right!=NULL){
+            root = root->right;
+        }
+
+        return root;
+    }
+    
+    TreeNode* deleteNode(TreeNode* root, int data) {
+        
+        if(!root){
+            return NULL;
+        }
+
+        if(data < root->val){
+            root->left = deleteNode(root->left, data);
+        }
+        else if(data > root->val){
+            root->right = deleteNode(root->right, data);
+        }
+        else{
+            // root have both child
+            if(root->left!=NULL && root->right!=NULL){
+                TreeNode *leftMax = maximum(root->left);
+                root->val = leftMax->val;
+
+                root->left = deleteNode(root->left, leftMax->val);
+            }
+            // root having only one child. left child
+            else if(root->left != NULL){
+                TreeNode *temp = root->left;
+                delete root;
+                return temp;
+            }
+            else if(root->right != NULL){
+                TreeNode *temp = root->right;
+                delete root;
+                return temp;
+            }
+            else{                 // root having no child
+                return NULL;
+            }
+        }
+
+        return root;
+        }
+};
