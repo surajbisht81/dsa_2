@@ -1,0 +1,55 @@
+class Solution {
+public:
+    
+    bool _isBipartite(vector<vector<int>>& graph, int color[], int vertex) {
+        
+        queue<int> queue;
+        
+        queue.push(vertex);
+        color[vertex] = 1;
+        
+        while( !queue.empty() ){
+            
+            int qu_front = queue.front();
+            queue.pop();
+            
+            for(auto neighbour : graph[qu_front]){
+                
+                // if neighbour vertex is of same color as its adjacent then return false
+                if(color[neighbour] == color[qu_front]){
+                    return false;
+                }
+                
+                // else the neighbour is not yet colored, so we will color with opposite color and also push it into the queue
+                if(color[neighbour] == -1){
+                    color[neighbour] = 1 - color[qu_front];
+                    queue.push(neighbour);
+                }
+            }
+        }
+        
+        return true;
+    }
+    
+    bool isBipartite(vector<vector<int>>& graph) {
+        
+        int vertices = graph.size();
+        int color[vertices];   
+        memset(color, -1, sizeof(color) );   // indicating that, each vertices is not colored yet.
+        
+        // we will use color 0 and 1 to color the vertices. 
+        // and if we found neighbour of a vertex with same color that means, graph is
+        // not bipartite.
+        
+        for(int vertex=0; vertex<vertices; vertex++){
+            
+            if(color[vertex] == -1){
+                if(_isBipartite(graph, color, vertex) == false){
+                    return false;
+                }
+            }
+        }
+        
+        return true;
+    }
+};
