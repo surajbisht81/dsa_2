@@ -24,7 +24,7 @@ public:
             return -1;              // it will tell it's parent that i am covered, no need to worry about me
         }
         
-        return -1;
+        return -1;                   // this return statement will never hit, because all the conditions are checked above.
     }
     
     int minCameraCover(TreeNode *root){
