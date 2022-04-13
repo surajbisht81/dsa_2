@@ -1,0 +1,103 @@
+//You are given the root of a binary search tree (BST), where the values of exactly two nodes of the tree were swapped by mistake. Recover the tree without
+//changing its structure.
+
+public:
+    TreeNode *prev = NULL;
+    TreeNode *node1 = NULL, *node2 = NULL;
+    
+    bool recoverTree_(TreeNode *root){
+       if(!root) return true;
+        
+       if(!recoverTree_(root->left)){
+           return false;
+       }
+        
+        if(prev != NULL && prev->val >= root->val){
+            if(node1 == NULL) node1 = prev;
+            
+            node2 = root;
+        }
+        
+        prev = root;
+        
+       if(!recoverTree_(root->right)){
+           return false;
+       }
+        
+       return true;
+    }
+    
+    void recoverTree(TreeNode* root) {
+        
+        recoverTree_(root);
+        
+        int temp = node1->val;
+        node1->val = node2->val;
+        node2->val = temp;
+        
+    }
+};
+
+
+
+
+// ------------- using morris traversal O(1) space----------------------------
+
+class Solution {
+public:
+    
+    TreeNode *getRightMostNode(TreeNode *left, TreeNode *curr){
+        while(left->right != NULL && left->right != curr){
+            left = left->right;
+        }
+        
+        return left;
+    }
+    
+    void recoverTree(TreeNode* root) {
+        
+        if(!root) return;
+        
+        TreeNode *curr = root;
+        TreeNode *prev = NULL;
+        TreeNode *node1 = NULL, *node2 = NULL;
+        
+        while(curr != NULL){
+            TreeNode *leftNode = curr->left;
+            
+            if(leftNode == NULL){
+                if(prev!=NULL && prev->val >= curr->val){
+                    if(node1==NULL) node1 = prev;
+                    node2 = curr;
+                }
+                
+                prev = curr;
+                curr = curr->right;
+            }
+            else{
+                TreeNode *rightMostNode = getRightMostNode(leftNode, curr);
+                
+                if(rightMostNode->right == NULL){
+                    rightMostNode->right = curr;
+                    curr = curr->left;
+                }
+                else{
+                    if(prev!=NULL && prev->val >= curr->val){
+                        if(node1==NULL) node1 = prev;
+                        node2 = curr;
+                    }
+                    
+                    prev = curr;
+                    
+                    rightMostNode->right = NULL;
+                    curr = curr->right;
+                }
+            }
+        }
+        
+        int temp = node1->val;
+        node1->val = node2->val;
+        node2->val = temp;
+        
+    }
+};
