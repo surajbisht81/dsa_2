@@ -1,0 +1,44 @@
+Node *buildTree_(int inorder[], int isi, int iei, int levelOrder[]){
+    if(isi > iei){
+        return NULL;
+    }
+    
+    int n = sizeof(levelOrder)/ sizeof(levelOrder[0]);
+    
+    Node *root = new Node(levelOrder[0]);
+    
+    if(n==1) return root;
+    
+    int idx = isi;
+    while(inorder[idx] != root->key) idx++;
+    
+    set<int> st;
+    
+    for(int i=isi; i<idx; i++) st.insert(inorder[i]);
+    
+    int levelOrderLeft[idx-isi];
+    int levelOrderRight[iei-idx];
+    
+    int ll = 0, lr = 0;
+    
+    for(int i=1; i<n; i++){
+        if(st.find(levelOrder[i]) != st.end()){
+            levelOrderLeft[ll++] = levelOrder[i];
+            st.erase(levelOrder[i]);
+        }
+        else{
+            levelOrderRight[lr++] = levelOrder[i];
+        }
+    }
+    
+    root->left = buildTree_(inorder, isi, idx-1, levelOrderLeft);
+    root->right = buildTree_(inorder, idx+1, iei, levelOrderRight);
+    
+    return root;
+}
+
+Node* buildTree(int inorder[], int levelOrder[], int iStart, int iEnd,int n)
+{
+    cout<<"suraj"<<endl;
+    return buildTree_(inorder, 0, iEnd, levelOrder);
+}
