@@ -1,0 +1,31 @@
+class Solution {
+public:
+    
+    TreeNode *buildTree_(vector<int> &preorder, int psi, int pei, vector<int> &inorder, int isi, int iei, unordered_map<int, int> &mp){
+        
+        if(isi > iei){
+            return NULL;
+        }
+        int idx = mp[preorder[psi]];
+        
+        int total_ele = idx - isi;
+        
+        TreeNode *node = new TreeNode(preorder[psi]);
+        
+        node->left = buildTree_(preorder, psi+1, psi + total_ele, inorder, isi, idx-1, mp);
+        node->right = buildTree_(preorder, psi + total_ele + 1, pei, inorder, idx+1, iei, mp);
+        
+        return node;
+    }
+    
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        int n = inorder.size();
+        
+        unordered_map<int, int> mp;
+        for(int i=0; i<n; i++){
+            mp[inorder[i]] = i;
+        }
+        
+        return buildTree_(preorder, 0, n-1, inorder, 0, n-1, mp);
+    }
+};
