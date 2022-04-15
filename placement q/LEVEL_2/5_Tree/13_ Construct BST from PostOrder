@@ -1,0 +1,45 @@
+// -------------------------------1st method------------------------
+
+Node *constructBST(int post[], int min, int max, int &i){
+    
+    if( i < 0) return NULL;
+    
+    if(post[i] < min || post[i] > max) return NULL;
+    
+    Node *root = new Node(post[i--]);
+    
+    root->right = constructBST(post, root->data, max, i);
+    root->left = constructBST(post, min, root->data, i);
+    
+    return root;
+}
+
+Node *constructTree (int post[], int size)
+{
+    int i = size - 1;
+    return constructBST(post, INT_MIN, INT_MAX, i);
+}
+
+
+//----------------------2nd method-------------------------------------
+
+Node *constructBST(int post[], int si, int ei){
+    if(si > ei) return NULL;
+    
+    Node *root = new Node(post[ei]);
+    
+    if(si == ei) return root;
+    
+    int idx = si;
+    while(post[idx] < post[ei]) idx++;
+    
+    root->left = constructBST(post, si, idx-1);
+    root->right = constructBST(post, idx, ei-1);
+    
+    return root;
+}
+
+Node *constructTree (int post[], int size)
+{
+    return constructBST(post, 0, size-1);
+}
