@@ -1,0 +1,19 @@
+TreeNode *constructFromInOrder(vector<int> &inorder, int si, int ei){
+    if(si > ei) return NULL;
+
+    int mid = si + (ei-si)/2;
+
+    TreeNode *root = new TreeNode(inorder[mid]);
+
+    root->left = constructFromInOrder(inorder, si, mid-1);
+    root->right = constructFromInOrder(inorder, mid+1, ei);
+
+    return root;
+}
+
+TreeNode *constructFromInOrder(vector<int> &inorder)
+{
+    int n = inorder.size();
+    
+    return constructFromInOrder(inorder, 0, n-1);
+}
