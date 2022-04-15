@@ -1,0 +1,52 @@
+//----------------- method 1 using INT_MIN AND INT_MAX---------------
+
+TreeNode *bstFromPreorder(vector<int> &preorder, int min, int max, int &i){
+        if(i >= preorder.size()) return NULL;
+        
+        if(preorder[i] < min || preorder[i] > max) return NULL;
+        
+        TreeNode *root = new TreeNode(preorder[i++]);
+        
+        root->left = bstFromPreorder(preorder, min, root->val, i);
+        root->right = bstFromPreorder(preorder, root->val, max, i);
+        
+        return root;
+    }
+    
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        int min = INT_MIN;
+        int max = INT_MAX;
+        
+        int i = 0;
+        
+        return bstFromPreorder(preorder, min, max, i);
+    }
+    
+    
+    
+    
+    // ---------------- second method, using find in array-----------------------
+    
+    TreeNode *bstFromPreorder(vector<int> &preorder, int si, int ei){
+        if(si > ei) return NULL;
+        
+        TreeNode *root = new TreeNode(preorder[si]);
+        
+        if(si == ei) return root;
+        
+        int idx = si+1;
+        
+        while(idx<=ei && preorder[si] > preorder[idx]) idx++;
+        
+        root->left = bstFromPreorder(preorder, si+1, idx-1);
+        root->right = bstFromPreorder(preorder, idx, ei);
+        
+        return root;
+    }
+    
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        
+        int n = preorder.size();
+        
+        return bstFromPreorder(preorder, 0, n-1);
+    }
