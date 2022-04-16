@@ -1,0 +1,55 @@
+class Codec {
+public:
+
+    void serialize_(TreeNode *root, string &str){
+        if(root == NULL){
+            str += "N";
+            str += ",";
+            return;
+        }
+        
+        str += to_string(root->val);
+        str += ",";
+        
+        serialize_(root->left, str);
+        serialize_(root->right, str);
+    }
+    
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        string str = "";
+        serialize_(root, str);
+        return str;
+    }
+    
+    TreeNode *deserialize_(string data, int &i){
+        
+        string temp = "";
+        while(i < data.length() && data[i] != ','){
+            temp += data[i];
+            i++;
+        }
+        
+        i++;   // for ,
+        
+        if(temp == "N"){
+            return NULL;
+        }
+        
+        int val = stoi(temp);
+        
+        TreeNode *root = new TreeNode(val);
+        
+        root->left = deserialize_(data, i);
+        root->right = deserialize_(data, i); 
+        
+        return root;
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        int i = 0;
+        
+        return deserialize_(data, i);
+    }
+};
