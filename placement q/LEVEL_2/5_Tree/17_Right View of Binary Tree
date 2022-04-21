@@ -1,0 +1,30 @@
+class Solution {
+public:
+    
+    
+    // Right view is the last node of every level of binary tree
+    vector<int> rightSideView(TreeNode* root) {
+        
+        vector<int> ans;
+        if(!root) return ans;
+        
+        queue<TreeNode*> qu;
+        qu.push(root);
+        
+        while(!qu.empty()){
+            int size = qu.size();
+            
+            for(int i=0; i<size; i++){
+                TreeNode *p = qu.front();
+                qu.pop();
+                
+                if(i == size-1) ans.push_back(p->val);
+                
+                if(p->left) qu.push(p->left);
+                if(p->right) qu.push(p->right);
+            }
+        }
+        
+        return ans;
+    }
+};
